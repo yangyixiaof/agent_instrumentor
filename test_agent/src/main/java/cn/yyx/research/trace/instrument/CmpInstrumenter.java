@@ -38,7 +38,7 @@ public class CmpInstrumenter {
 			byte[] b = cw.toByteArray();
 			
 			// print to file.
-			File file = new File("C.class");
+			File file = new File("test_materials/transformed.class");
 			FileOutputStream fout = new FileOutputStream(file);
 			fout.write(b);
 			fout.close();
