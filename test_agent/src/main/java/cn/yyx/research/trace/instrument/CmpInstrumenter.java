@@ -15,14 +15,13 @@ import org.objectweb.asm.Opcodes;
 public class CmpInstrumenter {
 
 	public static byte[] InstrumentOneClass(byte[] input_class) {
+		byte[] b = input_class;
 		ByteArrayInputStream is = new ByteArrayInputStream(input_class);
-		ClassReader cr = null;
-		byte[] b = null;
 		try {
-			cr = new ClassReader(is);
+			ClassReader cr = new ClassReader(is);
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 			ClassVisitor cv = new ClassAdapter(cw);
-			cr.accept(cv, 0);
+			cr.accept(cv, ClassReader.SKIP_DEBUG);
 			b = cw.toByteArray();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -36,10 +35,12 @@ public class CmpInstrumenter {
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			ClassVisitor classAdapter = new ClassAdapter(cw);
 			cr.accept(classAdapter, ClassReader.SKIP_DEBUG);
-			byte[] data = cw.toByteArray();
+			byte[] b = cw.toByteArray();
+			
+			// print to file.
 			File file = new File("C.class");
 			FileOutputStream fout = new FileOutputStream(file);
-			fout.write(data);
+			fout.write(b);
 			fout.close();
 			System.out.println("success!");
 		} catch (Exception e) {
@@ -95,22 +96,22 @@ class MethodAdapter extends MethodVisitor {
 		// duplicate top of stack.
 		if (one_operand) {
 			if (length_for_two_words == 1) {
-				mv.visitInsn(Opcodes.DUP);
+				InstrumentInsn(Opcodes.DUP);
 			} else {
-				mv.visitInsn(Opcodes.DUP2);
+				InstrumentInsn(Opcodes.DUP2);
 			}
 		} else {
 			if (length_for_two_words == 1) {
-				mv.visitInsn(Opcodes.DUP_X1);
-				mv.visitInsn(Opcodes.DUP_X1);
+				InstrumentInsn(Opcodes.DUP_X1);
+				InstrumentInsn(Opcodes.DUP_X1);
 			} else {
-				mv.visitInsn(Opcodes.DUP2_X2);
-				mv.visitInsn(Opcodes.DUP2_X2);
+				InstrumentInsn(Opcodes.DUP2_X2);
+				InstrumentInsn(Opcodes.DUP2_X2);
 			}
 		}
 
 		// print tag information.
-		mv.visitLdcInsn("@Branch-Operand:" + cmp);
+		InstrumentLdcInsn("@Branch-Operand:" + cmp);
 		// mv.visitMethodInsn(Opcodes.INVOKESTATIC,
 		// "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 		// "(Ljava/lang/String;)V", false);
@@ -123,7 +124,7 @@ class MethodAdapter extends MethodVisitor {
 		// print second information.
 		if (one_operand) {
 			// do nothing.
-			mv.visitLdcInsn("" + constant);
+			InstrumentLdcInsn("" + constant);
 			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 					"Append", "(Ljava/lang/String;)V");
 			// mv.visitMethodInsn(Opcodes.INVOKESTATIC,
@@ -166,12 +167,6 @@ class MethodAdapter extends MethodVisitor {
 				// "cn/yyx/research/trace_recorder/TraceRecorder", "Append", "(L)V", false);
 			}
 		}
-	}
-
-	protected void InstrumentThroughMethodVisitor(int opc, String qualified_logger, String method, String signature) {
-		System.out.println("instructed_opc:" + opc + ";qualified_logger:" + qualified_logger + ";method:" + method
-				+ ";signature:" + signature);
-		mv.visitMethodInsn(opc, qualified_logger, method, signature, false);
 	}
 
 	@Override
@@ -247,6 +242,22 @@ class MethodAdapter extends MethodVisitor {
 			PrintBranchTwoValues("L$CMP", 2, false, null, false);
 		}
 		super.visitInsn(arg0);
+	}
+	
+	protected void InstrumentInsn(int opc) {
+		System.out.println("instructed_insn_opc:" + opc);
+		mv.visitInsn(opc);
+	}
+	
+	protected void InstrumentLdcInsn(Object insn) {
+		System.out.println("instructed_ldc_insn_insn:" + insn);
+		mv.visitLdcInsn(insn);
+	}
+
+	protected void InstrumentThroughMethodVisitor(int opc, String qualified_logger, String method, String signature) {
+		System.out.println("instructed_opc:" + opc + ";qualified_logger:" + qualified_logger + ";method:" + method
+				+ ";signature:" + signature);
+		mv.visitMethodInsn(opc, qualified_logger, method, signature, false);
 	}
 
 }
