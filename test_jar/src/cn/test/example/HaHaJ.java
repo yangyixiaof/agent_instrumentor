@@ -12,7 +12,7 @@ public class HaHaJ {
 	}
 	
 	public static void main(String[] args) {
-		int x = 0;
+		int x = -1;
 		if (args.length > x) {
 			System.err.println("hahah");
 		}
