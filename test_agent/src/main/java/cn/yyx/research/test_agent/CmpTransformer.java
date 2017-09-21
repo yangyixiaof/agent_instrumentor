@@ -22,7 +22,7 @@ public class CmpTransformer implements ClassFileTransformer {
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-		System.out.println("class_name:" + className);
+//		System.out.println("class_name:" + className);
 		if (InFilter(className)) {
 			return CmpInstrumenter.InstrumentOneClass(classfileBuffer);
 		}
