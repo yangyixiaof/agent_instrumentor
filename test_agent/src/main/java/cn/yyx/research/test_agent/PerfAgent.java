@@ -16,7 +16,7 @@ public class PerfAgent {
 		if (agentArgs != null && !agentArgs.equals("")) {
 			String[] agents = agentArgs.split(";|:|#");
 			for (String agent : agents) {
-				filters.add(agent);
+				filters.add(agent.replace('.', '/'));
 			}
 		}
 		

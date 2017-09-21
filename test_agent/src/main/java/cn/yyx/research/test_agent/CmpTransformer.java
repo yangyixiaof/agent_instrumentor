@@ -13,9 +13,9 @@ public class CmpTransformer implements ClassFileTransformer {
 	List<String> filters = new LinkedList<String>();
 	
 	public CmpTransformer(List<String> filters) {
-		for (String fileter : filters) {
-			System.out.println("filter:" + fileter);
-		}
+//		for (String fileter : filters) {
+//			System.out.println("filter:" + fileter);
+//		}
 		this.filters.addAll(filters);
 	}
 	
