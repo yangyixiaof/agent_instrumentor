@@ -9,7 +9,7 @@ import java.lang.instrument.Instrumentation;
 public class PerfAgent {
 
 	public static void premain(String agentArgs, Instrumentation _inst) {
-		System.err.println("agentArgs:" + agentArgs);
+		System.out.println("agentArgs:" + agentArgs);
 		CmpTransformer trans = new CmpTransformer();
 		_inst.addTransformer(trans);
 	}
