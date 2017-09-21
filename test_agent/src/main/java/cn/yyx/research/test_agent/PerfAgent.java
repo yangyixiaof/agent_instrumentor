@@ -15,10 +15,12 @@ public class PerfAgent {
 		List<String> filters = new LinkedList<String>();
 		if (agentArgs != null && !agentArgs.equals("")) {
 			String[] agents = agentArgs.split(";|:|#");
-			
+			for (String agent : agents) {
+				filters.add(agent);
+			}
 		}
 		
-		CmpTransformer trans = new CmpTransformer();
+		CmpTransformer trans = new CmpTransformer(filters);
 		_inst.addTransformer(trans);
 	}
 
