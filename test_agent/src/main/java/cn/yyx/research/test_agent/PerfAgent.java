@@ -12,15 +12,15 @@ public class PerfAgent {
 
 	public static void premain(String agentArgs, Instrumentation _inst) {
 		System.out.println("agentArgs:" + agentArgs);
-		List<String> filters = new LinkedList<String>();
+		List<String> flowers = new LinkedList<String>();
 		if (agentArgs != null && !agentArgs.equals("")) {
 			String[] agents = agentArgs.split(";|:|#");
 			for (String agent : agents) {
-				filters.add(agent.replace('.', '/'));
+				flowers.add(agent.replace('.', '/'));
 			}
 		}
 		
-		CmpTransformer trans = new CmpTransformer(filters);
+		CmpTransformer trans = new CmpTransformer(flowers);
 		_inst.addTransformer(trans);
 	}
 

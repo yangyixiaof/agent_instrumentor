@@ -10,13 +10,13 @@ import cn.yyx.research.trace.instrument.CmpInstrumenter;
 
 public class CmpTransformer implements ClassFileTransformer {
 	
-	List<String> filters = new LinkedList<String>();
+	List<String> flowers = new LinkedList<String>();
 	
-	public CmpTransformer(List<String> filters) {
+	public CmpTransformer(List<String> flowers) {
 //		for (String fileter : filters) {
 //			System.out.println("filter:" + fileter);
 //		}
-		this.filters.addAll(filters);
+		this.flowers.addAll(flowers);
 	}
 	
 	@Override
@@ -30,8 +30,8 @@ public class CmpTransformer implements ClassFileTransformer {
 	}
 	
 	protected boolean InFilter(String class_name) {
-		for (String filter : filters) {
-			if (class_name.startsWith(filter)) {
+		for (String flower : flowers) {
+			if (class_name.startsWith(flower)) {
 				return true;
 			}
 		}
