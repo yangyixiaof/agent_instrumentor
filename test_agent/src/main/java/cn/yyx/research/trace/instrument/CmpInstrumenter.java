@@ -91,10 +91,15 @@ class MethodAdapter extends MethodVisitor {
 	// "(Ljava/lang/String;)V", false);
 	// }
 
-	private void PrintBranchTwoValues(String cmp, int length_for_two_words, boolean one_operand, String constant,
+	private void PrintBranchTwoValues(String cmp, int length_for_two_words, int num_of_operands, String second_operand_default_value, 
 			boolean take_as_float_point) {
+		// print tag information.
+		InstrumentLdcInsn("@Branch-Operand:" + cmp);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+				"(Ljava/lang/String;)V");
+		
 		// duplicate top of stack.
-		if (one_operand) {
+		if (num_of_operands == 1) {
 			if (length_for_two_words == 1) {
 				InstrumentInsn(Opcodes.DUP);
 			} else {
@@ -110,116 +115,94 @@ class MethodAdapter extends MethodVisitor {
 			}
 		}
 
-		// print tag information.
-		InstrumentLdcInsn("@Branch-Operand:" + cmp);
-		// mv.visitMethodInsn(Opcodes.INVOKESTATIC,
-		// "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-		// "(Ljava/lang/String;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/String;)V");
-
 		// print first information.
 		PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
 
 		// print second information.
-		if (one_operand) {
+		if (num_of_operands == 1) {
 			// do nothing.
-			InstrumentLdcInsn("" + constant);
+			InstrumentLdcInsn("" + second_operand_default_value);
 			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 					"Append", "(Ljava/lang/String;)V");
-			// mv.visitMethodInsn(Opcodes.INVOKESTATIC,
-			// "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-			// "(Ljava/lang/String;)V", false);
 		} else {
 			PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
 		}
 
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
 				"()V");
-		// mv.visitMethodInsn(Opcodes.INVOKESTATIC,
-		// "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine", "()V", false);
-
 	}
 
-	public void PrintValueAccordingToLength(int length, boolean take_as_float_point) {
+	private void PrintValueAccordingToLength(int length, boolean take_as_float_point) {
 		if (length == 1) {
 			if (take_as_float_point) {
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(F)V");
-				// mv.visitMethodInsn(Opcodes.INVOKESTATIC,
-				// "cn/yyx/research/trace_recorder/TraceRecorder", "Append", "(F)V", false);
 			} else {
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(I)V");
-				// mv.visitMethodInsn(Opcodes.INVOKESTATIC,
-				// "cn/yyx/research/trace_recorder/TraceRecorder", "Append", "(I)V", false);
 			}
 		} else {
 			if (take_as_float_point) {
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(D)V");
-				// mv.visitMethodInsn(Opcodes.INVOKESTATIC,
-				// "cn/yyx/research/trace_recorder/TraceRecorder", "Append", "(D)V", false);
 			} else {
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(L)V");
-				// mv.visitMethodInsn(Opcodes.INVOKESTATIC,
-				// "cn/yyx/research/trace_recorder/TraceRecorder", "Append", "(L)V", false);
 			}
 		}
 	}
-
+	
 	@Override
 	public void visitJumpInsn(int opcode, Label label) {
 		// two operands.
 		if (opcode == Opcodes.IF_ICMPEQ) {
-			PrintBranchTwoValues("I$==", 1, false, null, false);
+			PrintBranchTwoValues("I$==", 1, 2, null, false);
 		}
 		if (opcode == Opcodes.IF_ICMPNE) {
-			PrintBranchTwoValues("I$!=", 1, false, null, false);
+			PrintBranchTwoValues("I$!=", 1, 2, null, false);
 		}
 		if (opcode == Opcodes.IF_ACMPEQ) {
-			PrintBranchTwoValues("A$==", 1, false, null, false);
+			PrintBranchTwoValues("A$==", 1, 2, null, false);
 		}
 		if (opcode == Opcodes.IF_ACMPNE) {
-			PrintBranchTwoValues("A$!=", 1, false, null, false);
+			PrintBranchTwoValues("A$!=", 1, 2, null, false);
 		}
 		if (opcode == Opcodes.IF_ICMPGE) {
-			PrintBranchTwoValues("I$>=", 1, false, null, false);
+			PrintBranchTwoValues("I$>=", 1, 2, null, false);
 		}
 		if (opcode == Opcodes.IF_ICMPGT) {
-			PrintBranchTwoValues("I$>", 1, false, null, false);
+			PrintBranchTwoValues("I$>", 1, 2, null, false);
 		}
 		if (opcode == Opcodes.IF_ICMPLE) {
-			PrintBranchTwoValues("I$<=", 1, false, null, false);
+			PrintBranchTwoValues("I$<=", 1, 2, null, false);
 		}
 		if (opcode == Opcodes.IF_ICMPLT) {
-			PrintBranchTwoValues("I$<", 1, false, null, false);
+			PrintBranchTwoValues("I$<", 1, 2, null, false);
 		}
 		// one operand.
 		if (opcode == Opcodes.IFEQ) {
-			PrintBranchTwoValues("I$==", 1, true, "0", false);
+			PrintBranchTwoValues("I$==", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFNE) {
-			PrintBranchTwoValues("I$!=", 1, true, "0", false);
+			PrintBranchTwoValues("I$!=", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFGE) {
-			PrintBranchTwoValues("I$>=", 1, true, "0", false);
+			PrintBranchTwoValues("I$>=", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFGT) {
-			PrintBranchTwoValues("I$>", 1, true, "0", false);
+			PrintBranchTwoValues("I$>", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFLE) {
-			PrintBranchTwoValues("I$<=", 1, true, "0", false);
+			PrintBranchTwoValues("I$<=", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFLT) {
-			PrintBranchTwoValues("I$<", 1, true, "0", false);
+			PrintBranchTwoValues("I$<", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFNONNULL) {
-			PrintBranchTwoValues("N$!=", 1, true, "null", false);
+			PrintBranchTwoValues("N$!=", 1, 1, "null", false);
 		}
 		if (opcode == Opcodes.IFNULL) {
-			PrintBranchTwoValues("N$==", 1, true, "null", false);
+			PrintBranchTwoValues("N$==", 1, 1, "null", false);
 		}
 		super.visitJumpInsn(opcode, label);
 	}
@@ -227,19 +210,19 @@ class MethodAdapter extends MethodVisitor {
 	@Override
 	public void visitInsn(int arg0) {
 		if (arg0 == Opcodes.DCMPG) {
-			PrintBranchTwoValues("D$CMP", 2, false, null, true);
+			PrintBranchTwoValues("D$CMP", 2, 2, null, true);
 		}
 		if (arg0 == Opcodes.DCMPL) {
-			PrintBranchTwoValues("D$CMP", 2, false, null, true);
+			PrintBranchTwoValues("D$CMP", 2, 2, null, true);
 		}
 		if (arg0 == Opcodes.FCMPG) {
-			PrintBranchTwoValues("F$CMP", 1, false, null, true);
+			PrintBranchTwoValues("F$CMP", 1, 2, null, true);
 		}
 		if (arg0 == Opcodes.FCMPG) {
-			PrintBranchTwoValues("F$CMP", 1, false, null, true);
+			PrintBranchTwoValues("F$CMP", 1, 2, null, true);
 		}
 		if (arg0 == Opcodes.LCMP) {
-			PrintBranchTwoValues("L$CMP", 2, false, null, false);
+			PrintBranchTwoValues("L$CMP", 2, 2, null, false);
 		}
 		super.visitInsn(arg0);
 	}
