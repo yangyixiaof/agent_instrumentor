@@ -105,29 +105,23 @@ class MethodAdapter extends MethodVisitor {
 			} else {
 				InstrumentInsn(Opcodes.DUP2);
 			}
-		} else {
-			if (length_for_two_words == 1) {
-				InstrumentInsn(Opcodes.DUP_X1);
-				InstrumentInsn(Opcodes.DUP_X1);
-			} else {
-				InstrumentInsn(Opcodes.DUP2_X2);
-				InstrumentInsn(Opcodes.DUP2_X2);
-			}
-		}
-
-		// print first information.
-		PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
-
-		// print second information.
-		if (num_of_operands == 1) {
-			// do nothing.
+			PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
 			InstrumentLdcInsn("" + second_operand_default_value);
 			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 					"Append", "(Ljava/lang/String;)V");
 		} else {
-			PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+			if (length_for_two_words == 1) {
+				InstrumentInsn(Opcodes.DUP_X1);
+				PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+				InstrumentInsn(Opcodes.DUP_X1);
+				PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+			} else {
+				InstrumentInsn(Opcodes.DUP2_X2);
+				PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+				InstrumentInsn(Opcodes.DUP2_X2);
+				PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+			}
 		}
-
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
 				"()V");
 	}
