@@ -1,7 +1,5 @@
 package cn.edu.tsinghua.thss.agent;
 
-import java.io.IOException;
-
 public class AttachTest {
 
     /*

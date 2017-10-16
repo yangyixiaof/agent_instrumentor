@@ -11,8 +11,8 @@ class PatchedClassWriter extends ClassWriter{
     }
 
     protected String getCommonSuperClass(String type1, String type2){ //返回共同的父类
-        Class c;
-        Class d;
+        Class<?> c;
+        Class<?> d;
         try{
             c = Class.forName(type1.replace('/', '.'), true, classLoader);
             d = Class.forName(type2.replace('/', '.'), true, classLoader);

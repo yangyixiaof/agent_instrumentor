@@ -1,7 +1,6 @@
 package cn.edu.tsinghua.thss.asm;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 

@@ -5,7 +5,7 @@ public class TestAddTimeClass {
             SecurityException, IllegalArgumentException, IllegalAccessException {
         C c = new C();
         c.m();
-        Class cc = c.getClass();
+        Class<?> cc = c.getClass();
         System.out.println(cc.getField("timer").get(c));
     }
 }

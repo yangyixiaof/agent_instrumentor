@@ -1,21 +1,5 @@
 package cn.edu.tsinghua.thss.agent;
 
-import com.sun.xml.internal.ws.org.objectweb.asm.ClassAdapter;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.MethodVisitor;
-import sun.rmi.runtime.Log;
-
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
-import java.lang.instrument.Instrumentation;
-import java.net.URISyntaxException;
-import java.security.ProtectionDomain;
-import java.util.Map;
-
-import static javax.swing.UIManager.put;
-
 public class RewriterAgent {
 
     /*

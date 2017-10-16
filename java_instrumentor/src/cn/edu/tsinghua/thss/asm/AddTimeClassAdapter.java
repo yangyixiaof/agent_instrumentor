@@ -51,7 +51,8 @@ public class AddTimeClassAdapter extends ClassVisitor {
             super(ASM5,mv);
         }
 
-        @Override
+        @SuppressWarnings("deprecation")
+		@Override
         public void visitCode() {
             mv.visitCode();
             mv.visitFieldInsn(Opcodes.GETSTATIC, owner, "timer", "J");
@@ -60,7 +61,8 @@ public class AddTimeClassAdapter extends ClassVisitor {
             mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, "timer", "J");
         }
 
-        @Override
+        @SuppressWarnings("deprecation")
+		@Override
         public void visitInsn(int opcode) {
             if ((opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) || opcode == Opcodes.ATHROW) {
                 mv.visitFieldInsn(Opcodes.GETSTATIC, owner, "timer", "J");

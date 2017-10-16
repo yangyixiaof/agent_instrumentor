@@ -12,7 +12,7 @@ import java.security.ProtectionDomain;
 public class AsmAgent {
     public static void premain(String agentArgs, Instrumentation inst) {//该方法在main方法前运行
         inst.addTransformer(new ClassFileTransformer() {
-            public byte[] transform(ClassLoader l, String name, Class c, ProtectionDomain d, byte[] b) throws IllegalClassFormatException {
+            public byte[] transform(ClassLoader l, String name, Class<?> c, ProtectionDomain d, byte[] b) throws IllegalClassFormatException {
                 ClassReader cr = new ClassReader(b);
                 ClassWriter cw = new ClassWriter(cr, 0);
                 ClassVisitor cv = new ChangeVersionAdapter(cw);
