@@ -9,6 +9,8 @@ import java.io.IOException;
  *
  */
 public class TraceRecorder {
+	
+	public static final String trace_file = System.getProperty("user.home") + "/" + "trace.txt";
 
 	private static StringBuffer buffer = new StringBuffer();
 	static {
@@ -44,7 +46,7 @@ public class TraceRecorder {
 	}
 	
 	public static void Flush() {
-		File f = new File(System.getProperty("user.home") + "/" + "trace.txt");
+		File f = new File(trace_file);
 		FileWriter writer = null;
 		try {
 			writer = new FileWriter(f);

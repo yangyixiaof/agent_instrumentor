@@ -74,7 +74,7 @@ class MethodAdapter extends MethodVisitor {
 
 	@Override
 	public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-		mv.visitLdcInsn("Enter:" + name);
+		mv.visitLdcInsn("@Method-Enter:" + name);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 				"Append", "(Ljava/lang/String;)V");
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
@@ -84,7 +84,7 @@ class MethodAdapter extends MethodVisitor {
 		// instrument original instruction
 		mv.visitMethodInsn(opcode, owner, name, desc, itf);
 
-		mv.visitLdcInsn("Exit:" + name);
+		mv.visitLdcInsn("@Method-Exit:" + name);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 				"Append", "(Ljava/lang/String;)V");
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
@@ -96,7 +96,7 @@ class MethodAdapter extends MethodVisitor {
 			String second_operand_default_value, boolean take_as_float_point) {
 		// print tag information.
 		relative_offset++;
-		InstrumentLdcInsn(relative_offset + "@Branch-Operand:" + cmp);
+		InstrumentLdcInsn("@Branch-Operand:“ + relative_offset + ”:" + cmp);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/String;)V");
 
@@ -195,10 +195,10 @@ class MethodAdapter extends MethodVisitor {
 			PrintBranchTwoValues("I$<", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFNONNULL) {
-			PrintBranchTwoValues("N$!=", 1, 1, "null", false);
+			PrintBranchTwoValues("N$!=", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFNULL) {
-			PrintBranchTwoValues("N$==", 1, 1, "null", false);
+			PrintBranchTwoValues("N$==", 1, 1, "0", false);
 		}
 		super.visitJumpInsn(opcode, label);
 	}
