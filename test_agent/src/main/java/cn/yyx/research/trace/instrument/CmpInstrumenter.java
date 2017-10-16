@@ -36,7 +36,7 @@ public class CmpInstrumenter {
 			ClassVisitor classAdapter = new ClassAdapter(cw);
 			cr.accept(classAdapter, ClassReader.SKIP_DEBUG);
 			byte[] b = cw.toByteArray();
-			
+
 			// print to file.
 			File file = new File("test_materials/transformed.class");
 			FileOutputStream fout = new FileOutputStream(file);
@@ -70,34 +70,31 @@ class MethodAdapter extends MethodVisitor {
 		super(Opcodes.ASM5, mv);
 	}
 
-	// @Override
-	// public void visitMethodInsn(int opcode, String owner, String name, String
-	// desc, boolean itf) {
-	// /* System.err.println("CALL" + name); */
-	// mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "err",
-	// "Ljava/io/PrintStream;");
-	// mv.visitLdcInsn("CALL " + name);
-	// mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println",
-	// "(Ljava/lang/String;)V", false);
-	//
-	// /* do call */
-	// mv.visitMethodInsn(opcode, owner, name, desc, itf);
-	//
-	// /* System.err.println("RETURN" + name); */
-	// mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "err",
-	// "Ljava/io/PrintStream;");
-	// mv.visitLdcInsn("RETURN " + name);
-	// mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println",
-	// "(Ljava/lang/String;)V", false);
-	// }
+	@Override
+	public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+		mv.visitLdcInsn("Enter:" + name);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+				"Append", "(Ljava/lang/String;)V");
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+				"()V");
 
-	private void PrintBranchTwoValues(String cmp, int length_for_two_words, int num_of_operands, String second_operand_default_value, 
-			boolean take_as_float_point) {
+		// instrument original instruction
+		mv.visitMethodInsn(opcode, owner, name, desc, itf);
+
+		mv.visitLdcInsn("Exit:" + name);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+				"Append", "(Ljava/lang/String;)V");
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+				"()V");
+	}
+
+	private void PrintBranchTwoValues(String cmp, int length_for_two_words, int num_of_operands,
+			String second_operand_default_value, boolean take_as_float_point) {
 		// print tag information.
 		InstrumentLdcInsn("@Branch-Operand:" + cmp);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/String;)V");
-		
+
 		// duplicate top of stack.
 		if (num_of_operands == 1) {
 			if (length_for_two_words == 1) {
@@ -145,7 +142,7 @@ class MethodAdapter extends MethodVisitor {
 			}
 		}
 	}
-	
+
 	@Override
 	public void visitJumpInsn(int opcode, Label label) {
 		// two operands.
@@ -220,12 +217,12 @@ class MethodAdapter extends MethodVisitor {
 		}
 		super.visitInsn(arg0);
 	}
-	
+
 	protected void InstrumentInsn(int opc) {
 		System.out.println("instructed_insn_opc:" + opc);
 		mv.visitInsn(opc);
 	}
-	
+
 	protected void InstrumentLdcInsn(Object insn) {
 		System.out.println("instructed_ldc_insn_insn:" + insn);
 		mv.visitLdcInsn(insn);
