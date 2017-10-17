@@ -1,6 +1,10 @@
 package cn.yyx.labtask.test_agent_trace_reader;
 
-public class ValuesOfBranch {
+import java.io.Serializable;
+
+public class ValuesOfBranch implements Serializable {
+	
+	private static final long serialVersionUID = 8325093925948900533L;
 	
 	private double branch_value1 = -1;
 	private double branch_value2 = -1;
