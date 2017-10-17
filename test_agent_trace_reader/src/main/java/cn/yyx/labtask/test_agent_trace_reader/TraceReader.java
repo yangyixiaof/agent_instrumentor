@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
@@ -13,12 +15,23 @@ import org.apache.commons.lang3.StringUtils;
 public class TraceReader {
 	
 	public static final String default_trace_file = System.getProperty("user.home") + "/" + "trace.txt";
-
-	public void ReadFromDefaultTrace() {
-		ReadFromSpecificFile(default_trace_file);
+	String previous_sequence_identify = null;
+	String sequence_identify = null;
+	
+	public TraceReader(String previous_sequence_identify, String sequence_identify) {
+		this.previous_sequence_identify = previous_sequence_identify;
+		this.sequence_identify = sequence_identify;
 	}
 	
-	public void ReadFromSpecificFile(String specific_file) {
+//	public void ReadFromDefaultTrace(String sequence_identify) {
+//		this.sequence_identify = sequence_identify;
+//		ReadFromSpecificFile(default_trace_file);
+//	}
+	
+	private void ReadFromSpecificFile() {
+		String specific_file = default_trace_file;
+		Stack<String> runtime_stack = new Stack<String>();
+		Map<String, ValuesOfBranch> branch_signature = new TreeMap<String, ValuesOfBranch>();
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(new File(specific_file)));
@@ -28,16 +41,16 @@ public class TraceReader {
 				if (!one_line.equals("")) {
 					String[] parts = one_line.split(":");
 					if (one_line.startsWith("@Method-Enter:")) {
-						ProcessMethodEnter(parts[1]);
+						ProcessMethodEnter(parts[1], runtime_stack);
 					}
 					if (one_line.startsWith("@Method-Exit:")) {
-						ProcessMethodExit(parts[1]);
+						ProcessMethodExit(parts[1], runtime_stack);
 					}
 					if (one_line.startsWith("@Branch-Operand:")) {
 						try {
 							double b1 = Double.parseDouble(parts[2]);
 							double b2 = Double.parseDouble(parts[3]);
-							ProcessBranchOperand(Integer.parseInt(parts[1]), b1, b2);
+							ProcessBranchOperand(Integer.parseInt(parts[1]), b1, b2, runtime_stack, branch_signature);
 						} catch (Exception e) {
 //							try {
 //								long b1 = Long.parseLong(parts[2]);
@@ -53,6 +66,22 @@ public class TraceReader {
 					break;
 				}
 			}
+			TraceSerializer.SerializeByIdentification(sequence_identify, branch_signature);
+			@SuppressWarnings("unchecked")
+			Map<String, ValuesOfBranch> previous_branch_signature = (Map<String, ValuesOfBranch>)TraceSerializer.DeserializeByIdentification(previous_sequence_identify);
+			Set<String> pset = previous_branch_signature.keySet();
+			Iterator<String> pitr = pset.iterator();
+			while (pitr.hasNext()) {
+				String sig = pitr.next();
+				ValuesOfBranch previous_vob = previous_branch_signature.get(sig);
+				ValuesOfBranch vob = branch_signature.get(sig);
+				if (vob == null) {
+					
+				} else {
+					
+				}
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -66,14 +95,11 @@ public class TraceReader {
 		}
 	}
 	
-	Stack<String> runtime_stack = new Stack<String>();
-	Map<String, ValuesOfBranch> branch_signature = new TreeMap<String, ValuesOfBranch>();
-	
-	private void ProcessMethodEnter(String method_name) {
+	private void ProcessMethodEnter(String method_name, Stack<String> runtime_stack) {
 		runtime_stack.push(method_name);
 	}
 	
-	private void ProcessMethodExit(String method_name) {
+	private void ProcessMethodExit(String method_name, Stack<String> runtime_stack) {
 		String mname = runtime_stack.pop();
 		if (!mname.equals(method_name)) {
 			System.err.println("very strange! stack not valid!");
@@ -89,7 +115,7 @@ public class TraceReader {
 //		branch_signature.put(catted, vob);
 //	}
 	
-	private void ProcessBranchOperand(int relative_offset, double branch_value1, double branch_value2) {
+	private void ProcessBranchOperand(int relative_offset, double branch_value1, double branch_value2, Stack<String> runtime_stack, Map<String, ValuesOfBranch> branch_signature) {
 		ValuesOfBranch vob = new ValuesOfBranch(branch_value1, branch_value2);
 		String[] target = new String[runtime_stack.size()];
 		runtime_stack.toArray(target);
