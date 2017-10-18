@@ -177,29 +177,29 @@ class MethodAdapter extends MethodVisitor {
 		}
 		// one operand.
 		if (opcode == Opcodes.IFEQ) {
-			PrintBranchTwoValues("I$==", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$==", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFNE) {
-			PrintBranchTwoValues("I$!=", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$!=", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFGE) {
-			PrintBranchTwoValues("I$>=", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$>=", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFGT) {
-			PrintBranchTwoValues("I$>", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$>", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFLE) {
-			PrintBranchTwoValues("I$<=", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$<=", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFLT) {
-			PrintBranchTwoValues("I$<", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$<", 1, 1, "0", false);
 		}
 		super.visitJumpInsn(opcode, label);
 		if (opcode == Opcodes.IFNONNULL) {
-			PrintBranchTwoValues("N$!=", 1, 1, "0", false);
+			PrintBranchTwoValues("N$!=", 1, 1, "1", false);
 		}
 		if (opcode == Opcodes.IFNULL) {
-			PrintBranchTwoValues("N$==", 1, 1, "0", false);
+			PrintBranchTwoValues("N$==", 1, 1, "1", false);
 		}
 	}
 

@@ -134,29 +134,36 @@ public class TraceReader {
 					case "L$CMP":
 						
 						break;
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
+					case "I$==":
+					case "I$!=":
+					case "A$==":
+					case "A$!=":
+						
 						break;
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
-					case "":
+					case "I$>=":
+					case "I$<=":
+						
+						break;
+						
+					case "I$>":
+					case "I$<":
+						
+						break;
+					case "IZ$==":
+					case "IZ$!=":
+						
+						break;
+					case "IZ$>=":
+					case "IZ$<=":
+						
+						break;
+					case "IZ$>":
+					case "IZ$<":
+						
+						break;
+					case "N$!=":
+					case "N$==":
+						
 						break;
 				}
 			}
