@@ -28,7 +28,7 @@ public class TraceReader {
 //		ReadFromSpecificFile(default_trace_file);
 //	}
 	
-	private void ReadFromSpecificFile() {
+	public void ReadFromDefaultTraceFile() {
 		String specific_file = default_trace_file;
 		Stack<String> runtime_stack = new Stack<String>();
 		Map<String, ValuesOfBranch> branch_signature = new TreeMap<String, ValuesOfBranch>();
@@ -48,9 +48,9 @@ public class TraceReader {
 					}
 					if (one_line.startsWith("@Branch-Operand:")) {
 						try {
-							double b1 = Double.parseDouble(parts[2]);
-							double b2 = Double.parseDouble(parts[3]);
-							ProcessBranchOperand(Integer.parseInt(parts[1]), b1, b2, runtime_stack, branch_signature);
+							double b1 = Double.parseDouble(parts[3]);
+							double b2 = Double.parseDouble(parts[4]);
+							ProcessBranchOperand(runtime_stack.peek(), Integer.parseInt(parts[1]), parts[2], b1, b2, runtime_stack, branch_signature);
 						} catch (Exception e) {
 //							try {
 //								long b1 = Long.parseLong(parts[2]);
@@ -69,18 +69,8 @@ public class TraceReader {
 			TraceSerializer.SerializeByIdentification(sequence_identify, branch_signature);
 			@SuppressWarnings("unchecked")
 			Map<String, ValuesOfBranch> previous_branch_signature = (Map<String, ValuesOfBranch>)TraceSerializer.DeserializeByIdentification(previous_sequence_identify);
-			Set<String> pset = previous_branch_signature.keySet();
-			Iterator<String> pitr = pset.iterator();
-			while (pitr.hasNext()) {
-				String sig = pitr.next();
-				ValuesOfBranch previous_vob = previous_branch_signature.get(sig);
-				ValuesOfBranch vob = branch_signature.get(sig);
-				if (vob == null) {
-					
-				} else {
-					
-				}
-			}
+			
+			BuildGuidedModel(previous_branch_signature, branch_signature);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -115,12 +105,62 @@ public class TraceReader {
 //		branch_signature.put(catted, vob);
 //	}
 	
-	private void ProcessBranchOperand(int relative_offset, double branch_value1, double branch_value2, Stack<String> runtime_stack, Map<String, ValuesOfBranch> branch_signature) {
-		ValuesOfBranch vob = new ValuesOfBranch(branch_value1, branch_value2);
+	private void ProcessBranchOperand(String enclosing_method, int relative_offset, String cmp_optr, double branch_value1, double branch_value2, Stack<String> runtime_stack, Map<String, ValuesOfBranch> branch_signature) {
+		ValuesOfBranch vob = new ValuesOfBranch(enclosing_method, relative_offset, cmp_optr, branch_value1, branch_value2);
 		String[] target = new String[runtime_stack.size()];
 		runtime_stack.toArray(target);
 		String catted = StringUtils.join(target, "#");
 		branch_signature.put(catted, vob);
+	}
+	
+	private void BuildGuidedModel(Map<String, ValuesOfBranch> previous_branch_signature, Map<String, ValuesOfBranch> branch_signature) {
+		Map<String, Integer> influcnce = new TreeMap<String, Integer>();
+		
+		Set<String> pset = previous_branch_signature.keySet();
+		Iterator<String> pitr = pset.iterator();
+		while (pitr.hasNext()) {
+			String sig = pitr.next();
+			ValuesOfBranch previous_vob = previous_branch_signature.get(sig);
+			ValuesOfBranch vob = branch_signature.get(sig);
+			if (vob == null) {
+				influcnce.put(sig, -5);
+			} else {
+				switch (vob.GetCmpOptr())
+				{
+					case "D$CMPG":
+					case "D$CMPL":
+					case "F$CMPG":
+					case "F$CMPL":
+					case "L$CMP":
+						
+						break;
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+						break;
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+					case "":
+						break;
+				}
+			}
+		}
 	}
 	
 }
