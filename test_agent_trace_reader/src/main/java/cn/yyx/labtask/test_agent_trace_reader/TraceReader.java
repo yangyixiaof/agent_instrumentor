@@ -12,13 +12,18 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 
+import cn.yyx.labtask.runtime.memory.state.BranchState;
+import cn.yyx.labtask.runtime.round.testgen.TestModel;
+
 public class TraceReader {
 	
 	public static final String default_trace_file = System.getProperty("user.home") + "/" + "trace.txt";
+	TestModel model = null;
 	String previous_sequence_identify = null;
 	String sequence_identify = null;
 	
-	public TraceReader(String previous_sequence_identify, String sequence_identify) {
+	public TraceReader(TestModel model, String previous_sequence_identify, String sequence_identify) {
+		this.model = model;
 		this.previous_sequence_identify = previous_sequence_identify;
 		this.sequence_identify = sequence_identify;
 	}
@@ -113,13 +118,18 @@ public class TraceReader {
 		branch_signature.put(catted, vob);
 	}
 	
-	private void BuildGuidedModel(Map<String, ValuesOfBranch> previous_branch_signature, Map<String, ValuesOfBranch> branch_signature) {
+	private Map<String, Integer> BuildGuidedModel(Map<String, ValuesOfBranch> previous_branch_signature, Map<String, ValuesOfBranch> branch_signature) {
 		Map<String, Integer> influcnce = new TreeMap<String, Integer>();
+		
+		BranchState branch_state = model.GetState();
 		
 		Set<String> pset = previous_branch_signature.keySet();
 		Iterator<String> pitr = pset.iterator();
 		while (pitr.hasNext()) {
 			String sig = pitr.next();
+			if (branch_state.BranchHasBeenIteratedOver(sig)) {
+				continue;
+			}
 			ValuesOfBranch previous_vob = previous_branch_signature.get(sig);
 			ValuesOfBranch vob = branch_signature.get(sig);
 			if (vob == null) {
@@ -132,6 +142,22 @@ public class TraceReader {
 					case "F$CMPG":
 					case "F$CMPL":
 					case "L$CMP":
+						Integer state = branch_state.GetBranchState(sig);
+						if (state == null) {
+							state = 0b111;
+							branch_state.PutBranchState(sig, state);
+						}
+						double v1 = vob.GetBranchValue1();
+						double v2 = vob.GetBranchValue2();
+						if (v1 == v2) {
+							state &= 0b101;
+						} else {
+							if (v1 > v2) {
+								state &= 0b110;
+							} else {
+								state &= 0b011;
+							}
+						}
 						
 						break;
 					case "I$==":
@@ -144,7 +170,6 @@ public class TraceReader {
 					case "I$<=":
 						
 						break;
-						
 					case "I$>":
 					case "I$<":
 						
@@ -168,6 +193,7 @@ public class TraceReader {
 				}
 			}
 		}
+		return influcnce;
 	}
 	
 }
