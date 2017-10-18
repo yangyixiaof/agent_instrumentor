@@ -145,8 +145,10 @@ public class TraceReader {
 						Integer state = branch_state.GetBranchState(sig);
 						if (state == null) {
 							state = 0b111;
-							branch_state.PutBranchState(sig, state);
 						}
+						double prev_v1 = previous_vob.GetBranchValue1();
+						double prev_v2 = previous_vob.GetBranchValue2();
+						
 						double v1 = vob.GetBranchValue1();
 						double v2 = vob.GetBranchValue2();
 						if (v1 == v2) {
@@ -158,7 +160,43 @@ public class TraceReader {
 								state &= 0b011;
 							}
 						}
-						
+						branch_state.PutBranchState(sig, state);
+						int state_copy = state;
+						int position = 1;
+						while (state_copy > 0) {
+							int bit = state_copy & 0b1;
+							if (bit == 1) {
+								switch (position) {
+								case 1:
+								{
+									double gap = (v1-v2) - (prev_v1-prev_v2);
+									if (gap > 0) {
+										// TODO positive
+									}
+								}
+									break;
+								case 2:
+								{
+									double gap = Math.abs(v1-v2);
+									double prev_gap = Math.abs(prev_v1-prev_v2);
+									if (prev_gap - gap > 0) {
+										// TODO positive
+									}
+								}
+									break;
+								case 3:
+								{
+									double gap = (v1-v2) - (prev_v1-prev_v2);
+									if (gap < 0) {
+										// TODO positive
+									}
+								}
+									break;
+								}
+							}
+							state_copy >>= 1;
+							position++;
+						}
 						break;
 					case "I$==":
 					case "I$!=":
