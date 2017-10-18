@@ -142,6 +142,7 @@ public class TraceReader {
 					case "F$CMPG":
 					case "F$CMPL":
 					case "L$CMP":
+					{
 						Integer state = branch_state.GetBranchState(sig);
 						if (state == null) {
 							state = 0b111;
@@ -177,8 +178,8 @@ public class TraceReader {
 									break;
 								case 2:
 								{
-									double gap = Math.abs(v1-v2);
-									double prev_gap = Math.abs(prev_v1-prev_v2);
+									double gap = v1-v2;
+									double prev_gap = prev_v1-prev_v2;
 									if (prev_gap - gap > 0) {
 										// TODO positive
 									}
@@ -197,36 +198,259 @@ public class TraceReader {
 							state_copy >>= 1;
 							position++;
 						}
+					}
 						break;
 					case "I$==":
 					case "I$!=":
 					case "A$==":
 					case "A$!=":
-						
-						break;
-					case "I$>=":
-					case "I$<=":
-						
-						break;
-					case "I$>":
-					case "I$<":
-						
-						break;
 					case "IZ$==":
 					case "IZ$!=":
-						
-						break;
-					case "IZ$>=":
-					case "IZ$<=":
-						
-						break;
-					case "IZ$>":
-					case "IZ$<":
-						
-						break;
 					case "N$!=":
 					case "N$==":
+					{
+						Integer state = branch_state.GetBranchState(sig);
+						if (state == null) {
+							state = 0b11;
+						}
+						double prev_v1 = previous_vob.GetBranchValue1();
+						double prev_v2 = previous_vob.GetBranchValue2();
 						
+						double v1 = vob.GetBranchValue1();
+						double v2 = vob.GetBranchValue2();
+						if (v1 == v2) {
+							state &= 0b01;
+						} else {
+							state &= 0b10;
+						}
+						branch_state.PutBranchState(sig, state);
+						int state_copy = state;
+						int position = 1;
+						while (state_copy > 0) {
+							int bit = state_copy & 0b1;
+							if (bit == 1) {
+								switch (position) {
+								case 1:
+								{
+									double gap = v1-v2;
+									if (gap != 0) {
+										// TODO positive
+									}
+								}
+									break;
+								case 2:
+								{
+									double gap = v1-v2;
+									double prev_gap = prev_v1-prev_v2;
+									if (prev_gap - gap > 0) {
+										// TODO positive
+									}
+								}
+									break;
+								}
+							}
+							state_copy >>= 1;
+							position++;
+						}
+					}
+						break;
+					case "I$>=":
+					case "IZ$>=":
+					{
+						Integer state = branch_state.GetBranchState(sig);
+						if (state == null) {
+							state = 0b11;
+						}
+						double prev_v1 = previous_vob.GetBranchValue1();
+						double prev_v2 = previous_vob.GetBranchValue2();
+						
+						double v1 = vob.GetBranchValue1();
+						double v2 = vob.GetBranchValue2();
+						if (v1 >= v2) {
+							state &= 0b10;
+						} else {
+							state &= 0b01;
+						}
+						branch_state.PutBranchState(sig, state);
+						int state_copy = state;
+						int position = 1;
+						while (state_copy > 0) {
+							int bit = state_copy & 0b1;
+							if (bit == 1) {
+								switch (position) {
+								case 1:
+								{
+									double gap = v1-v2;
+									double prev_gap = prev_v1-prev_v2;
+									if (prev_gap - gap < 0) {
+										// TODO positive
+									}
+								}
+									break;
+								case 2:
+								{
+									double gap = v1-v2;
+									double prev_gap = prev_v1-prev_v2;
+									if (prev_gap - gap > 0) {
+										// TODO positive
+									}
+								}
+									break;
+								}
+							}
+							state_copy >>= 1;
+							position++;
+						}
+					}
+						break;
+					case "I$<=":
+					case "IZ$<=":
+					{
+						{
+							Integer state = branch_state.GetBranchState(sig);
+							if (state == null) {
+								state = 0b11;
+							}
+							double prev_v1 = previous_vob.GetBranchValue1();
+							double prev_v2 = previous_vob.GetBranchValue2();
+							
+							double v1 = vob.GetBranchValue1();
+							double v2 = vob.GetBranchValue2();
+							if (v1 <= v2) {
+								state &= 0b01;
+							} else {
+								state &= 0b10;
+							}
+							branch_state.PutBranchState(sig, state);
+							int state_copy = state;
+							int position = 1;
+							while (state_copy > 0) {
+								int bit = state_copy & 0b1;
+								if (bit == 1) {
+									switch (position) {
+									case 1:
+									{
+										double gap = v1-v2;
+										double prev_gap = prev_v1-prev_v2;
+										if (prev_gap - gap < 0) {
+											// TODO positive
+										}
+									}
+										break;
+									case 2:
+									{
+										double gap = v1-v2;
+										double prev_gap = prev_v1-prev_v2;
+										if (prev_gap - gap > 0) {
+											// TODO positive
+										}
+									}
+										break;
+									}
+								}
+								state_copy >>= 1;
+								position++;
+							}
+						}
+					}
+						break;
+					case "I$>":
+					case "IZ$>":
+					{
+						Integer state = branch_state.GetBranchState(sig);
+						if (state == null) {
+							state = 0b11;
+						}
+						double prev_v1 = previous_vob.GetBranchValue1();
+						double prev_v2 = previous_vob.GetBranchValue2();
+						
+						double v1 = vob.GetBranchValue1();
+						double v2 = vob.GetBranchValue2();
+						if (v1 > v2) {
+							state &= 0b10;
+						} else {
+							state &= 0b01;
+						}
+						branch_state.PutBranchState(sig, state);
+						int state_copy = state;
+						int position = 1;
+						while (state_copy > 0) {
+							int bit = state_copy & 0b1;
+							if (bit == 1) {
+								switch (position) {
+								case 1:
+								{
+									double gap = v1-v2;
+									double prev_gap = prev_v1-prev_v2;
+									if (prev_gap - gap < 0) {
+										// TODO positive
+									}
+								}
+									break;
+								case 2:
+								{
+									double gap = v1-v2;
+									double prev_gap = prev_v1-prev_v2;
+									if (prev_gap - gap > 0) {
+										// TODO positive
+									}
+								}
+									break;
+								}
+							}
+							state_copy >>= 1;
+							position++;
+						}
+					}
+						break;
+					case "I$<":
+					case "IZ$<":
+					{
+						Integer state = branch_state.GetBranchState(sig);
+						if (state == null) {
+							state = 0b11;
+						}
+						double prev_v1 = previous_vob.GetBranchValue1();
+						double prev_v2 = previous_vob.GetBranchValue2();
+						
+						double v1 = vob.GetBranchValue1();
+						double v2 = vob.GetBranchValue2();
+						if (v1 < v2) {
+							state &= 0b01;
+						} else {
+							state &= 0b10;
+						}
+						branch_state.PutBranchState(sig, state);
+						int state_copy = state;
+						int position = 1;
+						while (state_copy > 0) {
+							int bit = state_copy & 0b1;
+							if (bit == 1) {
+								switch (position) {
+								case 1:
+								{
+									double gap = v1-v2;
+									double prev_gap = prev_v1-prev_v2;
+									if (prev_gap - gap < 0) {
+										// TODO positive
+									}
+								}
+									break;
+								case 2:
+								{
+									double gap = v1-v2;
+									double prev_gap = prev_v1-prev_v2;
+									if (prev_gap - gap > 0) {
+										// TODO positive
+									}
+								}
+									break;
+								}
+							}
+							state_copy >>= 1;
+							position++;
+						}
+					}
 						break;
 				}
 			}
