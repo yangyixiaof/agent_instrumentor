@@ -132,9 +132,8 @@ public class TraceReader {
 			}
 			ValuesOfBranch previous_vob = previous_branch_signature.get(sig);
 			ValuesOfBranch vob = branch_signature.get(sig);
-			if (vob == null) {
-				influcnce.put(sig, -5);
-			} else {
+			influcnce.put(sig, -1);
+			if (vob != null) {
 				switch (vob.GetCmpOptr())
 				{
 					case "D$CMPG":
@@ -172,7 +171,7 @@ public class TraceReader {
 								{
 									double gap = (v1-v2) - (prev_v1-prev_v2);
 									if (gap > 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -181,7 +180,7 @@ public class TraceReader {
 									double gap = v1-v2;
 									double prev_gap = prev_v1-prev_v2;
 									if (prev_gap - gap > 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -189,7 +188,7 @@ public class TraceReader {
 								{
 									double gap = (v1-v2) - (prev_v1-prev_v2);
 									if (gap < 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -234,7 +233,7 @@ public class TraceReader {
 								{
 									double gap = v1-v2;
 									if (gap != 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -243,7 +242,7 @@ public class TraceReader {
 									double gap = v1-v2;
 									double prev_gap = prev_v1-prev_v2;
 									if (prev_gap - gap > 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -283,7 +282,7 @@ public class TraceReader {
 									double gap = v1-v2;
 									double prev_gap = prev_v1-prev_v2;
 									if (prev_gap - gap < 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -292,7 +291,7 @@ public class TraceReader {
 									double gap = v1-v2;
 									double prev_gap = prev_v1-prev_v2;
 									if (prev_gap - gap > 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -333,7 +332,7 @@ public class TraceReader {
 										double gap = v1-v2;
 										double prev_gap = prev_v1-prev_v2;
 										if (prev_gap - gap < 0) {
-											// TODO positive
+											influcnce.put(sig, 1);
 										}
 									}
 										break;
@@ -342,7 +341,7 @@ public class TraceReader {
 										double gap = v1-v2;
 										double prev_gap = prev_v1-prev_v2;
 										if (prev_gap - gap > 0) {
-											// TODO positive
+											influcnce.put(sig, 1);
 										}
 									}
 										break;
@@ -383,7 +382,7 @@ public class TraceReader {
 									double gap = v1-v2;
 									double prev_gap = prev_v1-prev_v2;
 									if (prev_gap - gap < 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -392,7 +391,7 @@ public class TraceReader {
 									double gap = v1-v2;
 									double prev_gap = prev_v1-prev_v2;
 									if (prev_gap - gap > 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -432,7 +431,7 @@ public class TraceReader {
 									double gap = v1-v2;
 									double prev_gap = prev_v1-prev_v2;
 									if (prev_gap - gap < 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
@@ -441,7 +440,7 @@ public class TraceReader {
 									double gap = v1-v2;
 									double prev_gap = prev_v1-prev_v2;
 									if (prev_gap - gap > 0) {
-										// TODO positive
+										influcnce.put(sig, 1);
 									}
 								}
 									break;
