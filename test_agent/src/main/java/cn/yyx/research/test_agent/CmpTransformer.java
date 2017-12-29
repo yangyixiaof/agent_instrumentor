@@ -10,28 +10,28 @@ import cn.yyx.research.trace.instrument.CmpInstrumenter;
 
 public class CmpTransformer implements ClassFileTransformer {
 	
-	List<String> flowers = new LinkedList<String>();
+	List<String> filters = new LinkedList<String>();
 	
-	public CmpTransformer(List<String> flowers) {
+	public CmpTransformer(List<String> filters) {
 //		for (String fileter : filters) {
 //			System.out.println("filter:" + fileter);
 //		}
-		this.flowers.addAll(flowers);
+		this.filters.addAll(filters);
 	}
 	
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 //		System.out.println("class_name:" + className);
-		if (InFlower(className)) {
+		if (!InFilters(className)) {
 			return CmpInstrumenter.InstrumentOneClass(classfileBuffer);
 		}
 		return classfileBuffer;
 	}
 	
-	protected boolean InFlower(String class_name) {
-		for (String flower : flowers) {
-			if (class_name.startsWith(flower)) {
+	protected boolean InFilters(String class_name) {
+		for (String filter : filters) {
+			if (class_name.startsWith(filter)) {
 				return true;
 			}
 		}

@@ -11,7 +11,7 @@ import java.util.List;
 public class PerfAgent {
 
 	public static void premain(String agentArgs, Instrumentation _inst) {
-		System.out.println("agentArgs:" + agentArgs);
+		System.out.println("Received Filters:" + agentArgs);
 		List<String> flowers = new LinkedList<String>();
 		if (agentArgs != null && !agentArgs.equals("")) {
 			String[] agents = agentArgs.split(";|:|#");
