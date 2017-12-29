@@ -1,5 +1,6 @@
 package cn.yyx.research.test_agent;
 
+import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class PerfAgent {
 			}
 		}
 		
-		CmpTransformer trans = new CmpTransformer(flowers);
+		ClassFileTransformer trans = new InverseCmpTransformer(flowers); // CmpTransformer
 		_inst.addTransformer(trans);
 	}
 
