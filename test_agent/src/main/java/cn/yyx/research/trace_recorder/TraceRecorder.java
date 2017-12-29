@@ -10,7 +10,18 @@ import java.io.IOException;
  */
 public class TraceRecorder {
 	
-	public static final String trace_file = System.getProperty("user.home") + "/" + "trace.txt";
+	public static final String trace_file = System.getProperty("user.home") + "/Test_Generation" + "/" + "trace.txt";
+	
+	static {
+		File f = new File(System.getProperty("user.home") + "/Test_Generation");
+		if (!f.exists()) {
+			f.mkdirs();
+		}
+		File f_trace = new File(trace_file);
+		if (f_trace.exists()) {
+			f_trace.delete();
+		}
+	}
 
 	private static StringBuffer buffer = new StringBuffer();
 	static {
