@@ -31,6 +31,9 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 	}
 	
 	protected boolean InFlowers(String class_name) {
+		if (flowers.size() == 0) {
+			return true;
+		}
 		for (String flower : flowers) {
 			if (class_name.startsWith(flower)) {
 				return true;
