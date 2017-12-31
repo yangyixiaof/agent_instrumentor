@@ -29,8 +29,8 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-		System.out.println("Skipping ...:" + className);
 		if (forbid.contains(className)) {
+			System.out.println("Skipping ...:" + className);
 			return classfileBuffer;
 		}
 		System.out.println("Transforming ...:" + className);
