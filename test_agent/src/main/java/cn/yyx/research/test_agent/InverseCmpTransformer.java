@@ -11,6 +11,7 @@ import cn.yyx.research.trace.instrument.SimpleInstrumenter;
 public class InverseCmpTransformer implements ClassFileTransformer {
 	
 	List<String> flowers = new LinkedList<String>();
+	SimpleInstrumenter simple_inst = new SimpleInstrumenter();
 	
 	public InverseCmpTransformer(List<String> flowers) {
 		for (String flower : flowers) {
@@ -24,7 +25,7 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 		String classname = className.replace('/', '.');
 		if (InFlowers(classname)) {
-			return SimpleInstrumenter.InstrumentOneClass(className, classfileBuffer);
+			return simple_inst.InstrumentOneClass(className, classfileBuffer);
 		}
 		return null;
 	}

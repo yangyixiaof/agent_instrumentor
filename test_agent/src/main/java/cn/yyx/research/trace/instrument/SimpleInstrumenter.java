@@ -11,12 +11,22 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import util.FileUtil;
+
 public class SimpleInstrumenter {
-
+	
+	String user_dir = System.getProperty("user.home");
+	String test_visual = user_dir + "/" + "TestVisual";
+	
 	public SimpleInstrumenter() {
+		File tv = new File(test_visual);
+		if (tv.exists()) {
+			FileUtil.DeleteFile(tv);
+		}
+		tv.mkdirs();
 	}
-
-	public static byte[] InstrumentOneClass(String classname, byte[] input_class) {
+	
+	public byte[] InstrumentOneClass(String classname, byte[] input_class) {
 		byte[] b = input_class;
 		ByteArrayInputStream is = new ByteArrayInputStream(input_class);
 		try {
@@ -33,7 +43,7 @@ public class SimpleInstrumenter {
 		int c_last_idx = classname.lastIndexOf('/');
 		String filename = classname.substring(c_last_idx+1);
 		try {
-			fos = new FileOutputStream(new File(filename + ".class"));
+			fos = new FileOutputStream(new File(test_visual + "/" + filename + ".class"));
 			fos.write(b);
 		} catch (Exception e) {
 			e.printStackTrace();
