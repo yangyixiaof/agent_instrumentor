@@ -13,9 +13,9 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 	List<String> flowers = new LinkedList<String>();
 	
 	public InverseCmpTransformer(List<String> flowers) {
-//		for (String flower : flowers) {
-//			System.out.println("flower:" + flowers);
-//		}
+		for (String flower : flowers) {
+			System.out.println("flower:" + flower);
+		}
 		this.flowers.addAll(flowers);
 	}
 	
