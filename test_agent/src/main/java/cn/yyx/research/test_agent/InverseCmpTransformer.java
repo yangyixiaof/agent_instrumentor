@@ -38,11 +38,14 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 		if (InFlowers(classname)) {
 			byte[] bt = null;
 			try {
-				simple_inst.InstrumentOneClass(className, classfileBuffer);
+				bt = simple_inst.InstrumentOneClass(className, classfileBuffer);
 			} catch (Exception e) {
 				e.printStackTrace();
 			} catch (Error er) {
 				er.printStackTrace();
+			}
+			if (bt == null) {
+				bt = classfileBuffer;
 			}
 			return bt;
 		}
