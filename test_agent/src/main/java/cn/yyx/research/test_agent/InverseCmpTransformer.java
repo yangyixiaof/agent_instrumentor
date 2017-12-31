@@ -23,6 +23,7 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+		System.out.println("Transforming ...:" + className);
 		String classname = className.replace('/', '.');
 		if (InFlowers(classname)) {
 			return simple_inst.InstrumentOneClass(className, classfileBuffer);
