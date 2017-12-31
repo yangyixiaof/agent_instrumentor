@@ -16,7 +16,7 @@ public class SimpleInstrumenter {
 	public SimpleInstrumenter() {
 	}
 
-	public static byte[] InstrumentOneClass(byte[] input_class) {
+	public static byte[] InstrumentOneClass(String classname, byte[] input_class) {
 		byte[] b = input_class;
 		ByteArrayInputStream is = new ByteArrayInputStream(input_class);
 		try {
@@ -29,8 +29,10 @@ public class SimpleInstrumenter {
 			e1.printStackTrace();
 		}
 		FileOutputStream fos = null;
+		int c_last_idx = classname.lastIndexOf('/');
+		String filename = classname.substring(c_last_idx+1);
 		try {
-			fos = new FileOutputStream(new File("HaHa.class"));
+			fos = new FileOutputStream(new File(filename + ".class"));
 			fos.write(b);
 		} catch (Exception e) {
 			e.printStackTrace();
