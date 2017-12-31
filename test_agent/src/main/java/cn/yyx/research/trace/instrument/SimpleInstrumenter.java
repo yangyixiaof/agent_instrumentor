@@ -83,22 +83,22 @@ class SimpleMethodAdapter extends MethodVisitor {
 		super(Opcodes.ASM5, mv);
 	}
 
-	@Override
-	public void visitCode() {
-		InstrumentLdcInsn("@Enter-Method-Code:");
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/String;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-				"()V", false);
-
-		mv.visitCode();
-
-		InstrumentLdcInsn("@Exit-Method-Code:");
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/String;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-				"()V", false);
-	}
+//	@Override
+//	public void visitCode() {
+//		InstrumentLdcInsn("@Enter-Method-Code:");
+//		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+//				"(Ljava/lang/String;)V", false);
+//		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+//				"()V", false);
+//
+//		mv.visitCode();
+//
+//		InstrumentLdcInsn("@Exit-Method-Code:");
+//		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+//				"(Ljava/lang/String;)V", false);
+//		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+//				"()V", false);
+//	}
 
 	@Override
 	public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
