@@ -36,7 +36,15 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 		System.out.println("Transforming ...:" + className);
 		String classname = className.replace('/', '.');
 		if (InFlowers(classname)) {
-			return simple_inst.InstrumentOneClass(className, classfileBuffer);
+			byte[] bt = null;
+			try {
+				simple_inst.InstrumentOneClass(className, classfileBuffer);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} catch (Error er) {
+				er.printStackTrace();
+			}
+			return bt;
 		}
 		return classfileBuffer;
 	}
