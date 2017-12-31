@@ -5,12 +5,18 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import cn.yyx.research.trace.instrument.SimpleInstrumenter;
 
 public class InverseCmpTransformer implements ClassFileTransformer {
 	
 	List<String> flowers = new LinkedList<String>();
+	Set<String> forbid = new TreeSet<String>();
+	{
+		forbid.add("java/lang/invoke/MethodHandleImpl");
+	}
 	SimpleInstrumenter simple_inst = new SimpleInstrumenter();
 	
 	public InverseCmpTransformer(List<String> flowers) {
@@ -23,6 +29,10 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+		System.out.println("Skipping ...:" + className);
+		if (forbid.contains(className)) {
+			return classfileBuffer;
+		}
 		System.out.println("Transforming ...:" + className);
 		String classname = className.replace('/', '.');
 		if (InFlowers(classname)) {
