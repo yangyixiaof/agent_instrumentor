@@ -28,7 +28,7 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 		if (InFlowers(classname)) {
 			return simple_inst.InstrumentOneClass(className, classfileBuffer);
 		}
-		return null;
+		return classfileBuffer;
 	}
 	
 	protected boolean InFlowers(String class_name) {
