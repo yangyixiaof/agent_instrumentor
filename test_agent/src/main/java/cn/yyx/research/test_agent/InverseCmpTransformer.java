@@ -3,19 +3,21 @@ package cn.yyx.research.test_agent;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import cn.yyx.research.trace.instrument.SimpleInstrumenter;
-import cn.yyx.research.util.Trie;
 
 public class InverseCmpTransformer implements ClassFileTransformer {
 	
 	List<String> flowers = new LinkedList<String>();
-	Trie forbid = new Trie();
+	Set<String> forbid = new TreeSet<String>();
 	{
 		// forbid.insert("java/lang/invoke/MethodHandleImpl");
-		forbid.insert("cn/yyx/research");
+		forbid.add("cn/yyx/research");
 	}
 	SimpleInstrumenter simple_inst = new SimpleInstrumenter();
 	
@@ -26,10 +28,21 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 		this.flowers.addAll(flowers);
 	}
 	
+	public boolean PrefixContains(String full) {
+		Iterator<String> fitr = forbid.iterator();
+		while (fitr.hasNext()) {
+			String pfx = fitr.next();
+			if (full.startsWith(pfx)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-		if (forbid.prefixSearch(className)) {
+		if (PrefixContains(className)) {
 			System.out.println("Skipping ...:" + className);
 			return classfileBuffer;
 		}
