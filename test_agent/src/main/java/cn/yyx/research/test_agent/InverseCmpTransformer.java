@@ -15,6 +15,7 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 	Trie forbid = new Trie();
 	{
 		// forbid.insert("java/lang/invoke/MethodHandleImpl");
+		forbid.insert("cn.yyx.research");
 	}
 	SimpleInstrumenter simple_inst = new SimpleInstrumenter();
 	
