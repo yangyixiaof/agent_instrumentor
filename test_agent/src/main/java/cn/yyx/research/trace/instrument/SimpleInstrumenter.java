@@ -27,6 +27,7 @@ public class SimpleInstrumenter {
 	}
 	
 	public byte[] InstrumentOneClass(String classname, byte[] input_class) {
+		System.out.println("Instrumenting begin:" + classname);
 		byte[] b = input_class;
 		ByteArrayInputStream is = new ByteArrayInputStream(input_class);
 		try {
@@ -38,7 +39,7 @@ public class SimpleInstrumenter {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		System.out.println("instrumenting:" + classname);
+		System.out.println("Instrumenting end:" + classname);
 		// int c_last_idx = classname.lastIndexOf('/');
 		String filename = classname.replace('/', '.');
 		FileOutputStream fos_transform = null;
@@ -66,6 +67,7 @@ public class SimpleInstrumenter {
 				}
 			}
 		}
+		System.out.println("Instrumenting test post end:" + classname);
 		return b;
 	}
 

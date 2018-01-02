@@ -34,7 +34,6 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 			System.out.println("Skipping ...:" + className);
 			return classfileBuffer;
 		}
-		System.out.println("Transforming ...:" + className);
 		String classname = className.replace('/', '.');
 		if (InFlowers(classname)) {
 			byte[] bt = null;
