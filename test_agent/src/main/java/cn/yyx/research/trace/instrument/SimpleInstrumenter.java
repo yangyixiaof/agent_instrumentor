@@ -39,18 +39,28 @@ public class SimpleInstrumenter {
 			e1.printStackTrace();
 		}
 		System.out.println("instrumenting:" + classname);
-		FileOutputStream fos = null;
 		int c_last_idx = classname.lastIndexOf('/');
 		String filename = classname.substring(c_last_idx+1);
+		FileOutputStream fos_transform = null;
+		FileOutputStream fos_original = null;
 		try {
-			fos = new FileOutputStream(new File(test_visual + "/" + filename + ".class"));
-			fos.write(b);
+			fos_transform = new FileOutputStream(new File(test_visual + "/" + "transform_" + filename + ".class"));
+			fos_transform.write(b);
+			fos_original = new FileOutputStream(new File(test_visual + "/" + "original_" + filename + ".class"));
+			fos_original.write(input_class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (fos != null) {
+			if (fos_transform != null) {
 				try {
-					fos.close();
+					fos_transform.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (fos_original != null) {
+				try {
+					fos_original.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
