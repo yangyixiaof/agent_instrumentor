@@ -1,4 +1,4 @@
-package util;
+package cn.yyx.research.util;
 
 import java.util.HashMap;
 import java.util.Map;

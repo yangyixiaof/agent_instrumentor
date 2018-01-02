@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import cn.yyx.research.trace.instrument.SimpleInstrumenter;
-import util.Trie;
+import cn.yyx.research.util.Trie;
 
 public class InverseCmpTransformer implements ClassFileTransformer {
 	
@@ -15,7 +15,7 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 	Trie forbid = new Trie();
 	{
 		// forbid.insert("java/lang/invoke/MethodHandleImpl");
-		forbid.insert("cn.yyx.research");
+		forbid.insert("cn/yyx/research");
 	}
 	SimpleInstrumenter simple_inst = new SimpleInstrumenter();
 	
