@@ -39,8 +39,8 @@ public class SimpleInstrumenter {
 			e1.printStackTrace();
 		}
 		System.out.println("instrumenting:" + classname);
-		int c_last_idx = classname.lastIndexOf('/');
-		String filename = classname.substring(c_last_idx+1);
+		// int c_last_idx = classname.lastIndexOf('/');
+		String filename = classname.replace('/', '.');
 		FileOutputStream fos_transform = null;
 		FileOutputStream fos_original = null;
 		try {

@@ -16,6 +16,7 @@ public class InverseCmpTransformer implements ClassFileTransformer {
 	Set<String> forbid = new TreeSet<String>();
 	{
 		forbid.add("java/lang/invoke/MethodHandleImpl");
+		forbid.add("java/lang/invoke/MethodHandleImpl$1");
 	}
 	SimpleInstrumenter simple_inst = new SimpleInstrumenter();
 	
