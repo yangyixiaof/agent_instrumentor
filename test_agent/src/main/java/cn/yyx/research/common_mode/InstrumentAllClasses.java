@@ -7,12 +7,4 @@ public class InstrumentAllClasses {
 	public InstrumentAllClasses() {
 	}
 	
-	
-	
-	public static void main(String[] args) {
-		String directory = args[0];
-		File f = new File(directory);
-		
-	}
-	
 }
