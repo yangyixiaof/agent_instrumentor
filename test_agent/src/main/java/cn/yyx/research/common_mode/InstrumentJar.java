@@ -3,7 +3,6 @@ package cn.yyx.research.common_mode;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import cn.yyx.research.trace.instrument.SimpleInstrumenter;
 import cn.yyx.research.util.FileIterator;
