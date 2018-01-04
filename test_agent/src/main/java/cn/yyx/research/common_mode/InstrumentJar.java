@@ -57,7 +57,7 @@ public class InstrumentJar {
 					classname = classname.substring(1);
 				}
 				byte[] instrumented_bytes = inst.InstrumentOneClass(classname, bytes);
-				
+				FileUtil.WriteBytesToFile(instrumented_bytes, class_f);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
