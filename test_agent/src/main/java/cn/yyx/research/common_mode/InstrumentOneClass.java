@@ -1,15 +1,12 @@
 package cn.yyx.research.common_mode;
 
+import java.io.File;
+
 public class InstrumentOneClass {
 	
-	public InstrumentOneClass() {
-	}
-	
-	public void Instrument() {
+	public static void Instrument(File class_f) {
 		
-	}
-	
-	public static void main(String[] args) {
+		
 		
 	}
 	

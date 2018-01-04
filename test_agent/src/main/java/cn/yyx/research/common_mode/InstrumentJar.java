@@ -2,14 +2,19 @@ package cn.yyx.research.common_mode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 
+import cn.yyx.research.trace.instrument.SimpleInstrumenter;
+import cn.yyx.research.util.FileIterator;
 import cn.yyx.research.util.FileUtil;
 
 public class InstrumentJar {
 	
 	public static final String work_dir = "InstrumentDirectory";
 	public static final String backup_work_dir = "BackupInstrumentDirectory";
+	
+	public static SimpleInstrumenter inst = new SimpleInstrumenter();
 	
 	static {
 		File dir = new File(work_dir);
@@ -38,7 +43,25 @@ public class InstrumentJar {
 			e.printStackTrace();
 		}
 		FileUtil.DeleteFile(new_jar_path);
-		
+		File wdir = new File(work_dir);
+		String wdir_abs_path = wdir.getAbsolutePath();
+		String wdir_abs_path_norm = wdir_abs_path.replace('\\', '/'); 
+		FileIterator fi = new FileIterator(work_dir, "*.class");
+		Iterator<File> fi_itr = fi.EachFileIterator();
+		while (fi_itr.hasNext()) {
+			File class_f = fi_itr.next();
+			try {
+				byte[] bytes = FileUtil.ReadBytesFromFile(class_f);
+				String classname = class_f.getAbsolutePath().replace('\\', '/').substring(wdir_abs_path_norm.length());
+				while (classname.startsWith("/")) {
+					classname = classname.substring(1);
+				}
+				byte[] instrumented_bytes = inst.InstrumentOneClass(classname, bytes);
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }

@@ -1,7 +1,9 @@
 package cn.yyx.research.util;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,7 +22,7 @@ public class FileUtil {
 			d.mkdirs();
 		}
 	}
-	
+
 	public static List<String> ReadLineFromFile(File f) {
 		List<String> result = new LinkedList<String>();
 		BufferedReader reader = null;
@@ -168,6 +170,42 @@ public class FileUtil {
 				file.delete();
 			}
 		}
+	}
+
+	public static byte[] ReadBytesFromFile(File f) throws IOException {
+		if (!f.exists()) {
+			throw new FileNotFoundException(f.getName());
+		}
+		ByteArrayOutputStream bos = new ByteArrayOutputStream((int) f.length());
+		BufferedInputStream in = null;
+		try {
+			in = new BufferedInputStream(new FileInputStream(f));
+			int buf_size = 1024;
+			byte[] buffer = new byte[buf_size];
+			int len = 0;
+			while (-1 != (len = in.read(buffer, 0, buf_size))) {
+				bos.write(buffer, 0, len);
+			}
+			return bos.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			bos.close();
+		}
+	}
+
+	public static void WriteBytesToFile(byte[] class_buffer, File f) throws IOException {
+		FileOutputStream fos = new FileOutputStream(f);
+		fos.write(class_buffer);
+		fos.close();
 	}
 
 }
