@@ -130,7 +130,7 @@ public class InstrumentJar {
 		File new_jar_path = new File(work_dir + "/" + jar_name);
 		FileUtil.CopyFile(new File(jar_file_path), new File(work_dir + "/" + jar_name));
 		{
-			ProcessBuilder pb = new ProcessBuilder("jar", "xvf ", jar_name + ".jar");
+			ProcessBuilder pb = new ProcessBuilder("jar", "xvf ", jar_name);
 			pb.directory(new File(work_dir));
 			try {
 				Process p = pb.start();
@@ -162,7 +162,7 @@ public class InstrumentJar {
 			}
 		}
 		{
-			ProcessBuilder pb = new ProcessBuilder("jar", "cvf ", jar_name);
+			ProcessBuilder pb = new ProcessBuilder("jar", "cvf ", jar_name, ".");
 			pb.directory(new File(work_dir));
 			try {
 				Process p = pb.start();
