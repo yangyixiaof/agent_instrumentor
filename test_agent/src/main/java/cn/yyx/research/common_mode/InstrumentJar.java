@@ -77,7 +77,7 @@ public class InstrumentJar {
 							int index = norm_name.lastIndexOf(".dex");
 							String raw_norm_name = norm_name.substring(0, index);
 							String jar_name = raw_norm_name + "-dex2jar.jar";
-							InstrumentOneJar(dex_work_dir + jar_name);
+							InstrumentOneJar(dex_work_dir + "/" + jar_name);
 							
 							{
 								ProcessBuilder pb = new ProcessBuilder("d2j-jar2dex.sh", jar_name);
@@ -162,7 +162,7 @@ public class InstrumentJar {
 			}
 		}
 		{
-			ProcessBuilder pb = new ProcessBuilder("jar", "cvf ", jar_name + ".jar");
+			ProcessBuilder pb = new ProcessBuilder("jar", "cvf ", jar_name);
 			pb.directory(new File(work_dir));
 			try {
 				Process p = pb.start();
