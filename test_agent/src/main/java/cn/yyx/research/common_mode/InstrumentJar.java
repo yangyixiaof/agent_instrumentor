@@ -62,7 +62,7 @@ public class InstrumentJar {
 							fos.close();
 							
 							{
-								ProcessBuilder pb = new ProcessBuilder("d2j-dex2jar", norm_name);
+								ProcessBuilder pb = new ProcessBuilder("d2j-dex2jar.sh", norm_name);
 								pb.directory(new File(dex_work_dir));
 								try {
 									Process p = pb.start();
@@ -80,7 +80,7 @@ public class InstrumentJar {
 							InstrumentOneJar(dex_work_dir + jar_name);
 							
 							{
-								ProcessBuilder pb = new ProcessBuilder("d2j-jar2dex", jar_name);
+								ProcessBuilder pb = new ProcessBuilder("d2j-jar2dex.sh", jar_name);
 								pb.directory(new File(dex_work_dir));
 								try {
 									Process p = pb.start();
