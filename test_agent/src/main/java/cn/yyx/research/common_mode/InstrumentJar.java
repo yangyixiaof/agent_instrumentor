@@ -45,7 +45,7 @@ public class InstrumentJar {
 					if (!ze.isDirectory()) {
 						String norm_name = ze.getName().replace('\\', '/');
 						if (!norm_name.contains("/") && norm_name.endsWith(".dex")) {
-							System.err.println("file - " + ze.getName() + " : " + ze.getSize() + " bytes");
+							System.err.println("file - " + norm_name + "; " + ze.getName() + " : " + ze.getSize() + " bytes");
 							InputStream is = zf.getInputStream(ze);
 							String unzipped_dex_file_path = dex_work_dir + "/" + norm_name;
 							FileOutputStream fos = new FileOutputStream(new File(unzipped_dex_file_path));
@@ -128,9 +128,10 @@ public class InstrumentJar {
 		}
 		dir.mkdirs();
 		File new_jar_path = new File(work_dir + "/" + jar_name);
-		FileUtil.CopyFile(new File(jar_file_path), new File(work_dir + "/" + jar_name));
+		FileUtil.CopyFile(new File(jar_file_path), new_jar_path);
+		
 		{
-			ProcessBuilder pb = new ProcessBuilder("jar", "xvf ", jar_name);
+			ProcessBuilder pb = new ProcessBuilder("jar", "xvf", jar_name);
 			pb.directory(new File(work_dir));
 			try {
 				Process p = pb.start();
@@ -141,7 +142,9 @@ public class InstrumentJar {
 				e.printStackTrace();
 			}
 		}
+		
 		FileUtil.DeleteFile(new_jar_path);
+		
 		File wdir = new File(work_dir);
 		String wdir_abs_path = wdir.getAbsolutePath();
 		String wdir_abs_path_norm = wdir_abs_path.replace('\\', '/');
@@ -162,7 +165,7 @@ public class InstrumentJar {
 			}
 		}
 		{
-			ProcessBuilder pb = new ProcessBuilder("jar", "cvf ", jar_name, ".");
+			ProcessBuilder pb = new ProcessBuilder("jar", "cvf", jar_name, ".");
 			pb.directory(new File(work_dir));
 			try {
 				Process p = pb.start();
