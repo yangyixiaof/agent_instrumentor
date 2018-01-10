@@ -44,7 +44,7 @@ public class InstrumentJar {
 				try {
 					if (!ze.isDirectory()) {
 						String norm_name = ze.getName().replace('\\', '/');
-						if (!norm_name.contains("/") && norm_name.endsWith(".dex")) {
+						if (!norm_name.contains("/") && norm_name.endsWith("classes.dex")) {
 							System.err.println("file - " + norm_name + "; " + ze.getName() + " : " + ze.getSize() + " bytes");
 							InputStream is = zf.getInputStream(ze);
 							String unzipped_dex_file_path = dex_work_dir + "/" + norm_name;
@@ -77,8 +77,9 @@ public class InstrumentJar {
 							int index = norm_name.lastIndexOf(".dex");
 							String raw_norm_name = norm_name.substring(0, index);
 							String jar_name = raw_norm_name + "-dex2jar.jar";
-							InstrumentOneJar(dex_work_dir + "/" + jar_name);
+							InstrumentOneJar(dex_work_dir + "/" + jar_name, 100);
 							
+							System.err.println("generate instrumented dex:d2j-jar2dex.sh " + jar_name);
 							{
 								ProcessBuilder pb = new ProcessBuilder("d2j-jar2dex.sh", jar_name);
 								pb.directory(new File(dex_work_dir));
@@ -117,10 +118,10 @@ public class InstrumentJar {
 		}
 	}
 	
-	public static void InstrumentOneJar(String jar_file_path) {
+	public static void InstrumentOneJar(String jar_file_path, int max_instrument_file_num) {
 		File jar_file = new File(jar_file_path);
 		String jar_name = jar_file.getName();
-		System.out.println("jar_name:" + jar_name);
+		System.err.println("Depackaging " + jar_name);
 
 		File dir = new File(work_dir);
 		if (dir.exists()) {
@@ -143,6 +144,7 @@ public class InstrumentJar {
 			}
 		}
 		
+		System.err.println("Deleting " + new_jar_path);
 		FileUtil.DeleteFile(new_jar_path);
 		
 		File wdir = new File(work_dir);
@@ -150,8 +152,10 @@ public class InstrumentJar {
 		String wdir_abs_path_norm = wdir_abs_path.replace('\\', '/');
 		FileIterator fi = new FileIterator(work_dir, "*.class");
 		Iterator<File> fi_itr = fi.EachFileIterator();
+		int count = 0;
 		while (fi_itr.hasNext()) {
 			File class_f = fi_itr.next();
+			System.err.println("Instrumenting " + class_f.getName());
 			try {
 				byte[] bytes = FileUtil.ReadBytesFromFile(class_f);
 				String classname = class_f.getAbsolutePath().replace('\\', '/').substring(wdir_abs_path_norm.length());
@@ -163,7 +167,13 @@ public class InstrumentJar {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			count++;
+			if (max_instrument_file_num >= 0 && count >= max_instrument_file_num) {
+				System.err.println("We will stop soon!");
+				break;
+			}
 		}
+		System.err.println("Repackaging " + jar_name);
 		{
 			ProcessBuilder pb = new ProcessBuilder("jar", "cvf", jar_name, ".");
 			pb.directory(new File(work_dir));
@@ -176,6 +186,7 @@ public class InstrumentJar {
 				e.printStackTrace();
 			}
 		}
+		System.err.println("Replacing original jar:" + jar_file_path);
 		FileUtil.CopyFile(new File(work_dir + "/" + jar_name), new File(jar_file_path));
 	}
 
