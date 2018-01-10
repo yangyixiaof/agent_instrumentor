@@ -88,9 +88,7 @@ class SimpleClassAdapter extends ClassVisitor {
 }
 
 class SimpleMethodAdapter extends MethodVisitor {
-
-	int relative_offset = 0;
-
+	
 	public SimpleMethodAdapter(final MethodVisitor mv) {
 		super(Opcodes.ASM5, mv);
 	}
@@ -114,27 +112,21 @@ class SimpleMethodAdapter extends MethodVisitor {
 
 	@Override
 	public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-		InstrumentLdcInsn("@Method-Enter:" + name);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/String;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-				"()V", false);
-		relative_offset = 0;
-
+		InstrumentFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "java/io/PrintStream");
+		InstrumentLdcInsn("Invoking method:" + name);
+		InstrumentMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", itf);
 		// instrument original instruction
-		InstrumentThroughMethodVisitor(opcode, owner, name, desc, itf);
-
-		InstrumentLdcInsn("@Method-Exit:" + name);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/String;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-				"()V", false);
-		relative_offset = 0;
+		InstrumentMethodInsn(opcode, owner, name, desc, itf);
 	}
 
 	protected void InstrumentInsn(int opc) {
 		// System.out.println("instructed_insn_opc:" + opc);
 		mv.visitInsn(opc);
+	}
+	
+	protected void InstrumentFieldInsn(int opc, String owner, String name, String desc) {
+		// System.out.println("instructed_insn_opc:" + opc);
+		mv.visitFieldInsn(opc, owner, name, desc);
 	}
 
 	protected void InstrumentLdcInsn(Object insn) {
@@ -142,7 +134,7 @@ class SimpleMethodAdapter extends MethodVisitor {
 		mv.visitLdcInsn(insn);
 	}
 
-	protected void InstrumentThroughMethodVisitor(int opc, String qualified_logger, String method, String signature,
+	protected void InstrumentMethodInsn(int opc, String qualified_logger, String method, String signature,
 			boolean itf) {
 		// System.out.println("instructed_opc:" + opc + ";qualified_logger:" +
 		// qualified_logger + ";method:" + method
