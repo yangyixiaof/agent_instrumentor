@@ -32,9 +32,9 @@ public class SimpleInstrumenter {
 		ByteArrayInputStream is = new ByteArrayInputStream(input_class);
 		try {
 			ClassReader cr = new ClassReader(is);
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			ClassVisitor cv = new SimpleClassAdapter(cw);
-			cr.accept(cv, ClassReader.SKIP_DEBUG);
+			cr.accept(cv, ClassReader.SKIP_FRAMES);
 			b = cw.toByteArray();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -112,9 +112,9 @@ class SimpleMethodAdapter extends MethodVisitor {
 
 	@Override
 	public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-		InstrumentFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "java/io/PrintStream");
+		InstrumentFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
 		InstrumentLdcInsn("Invoking method:" + name);
-		InstrumentMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", itf);
+		InstrumentMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
 		// instrument original instruction
 		InstrumentMethodInsn(opcode, owner, name, desc, itf);
 	}

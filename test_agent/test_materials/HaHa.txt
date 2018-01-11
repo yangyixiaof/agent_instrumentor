@@ -1,0 +1,713 @@
+//  (version 1.6 : 50.0, super bit)
+public class afcq extends afcl implements android.os.Handler$Callback {
+  
+  // Field descriptor #8 I
+  private int a;
+  
+  // Field descriptor #9 J
+  private long a;
+  
+  // Field descriptor #10 Landroid/os/Handler;
+  private android.os.Handler a;
+  
+  // Field descriptor #8 I
+  private int b;
+  
+  // Field descriptor #9 J
+  private long b;
+  
+  // Field descriptor #12 Lcom/tencent/mobileqq/statistics/battery/BatteryStatsImpl;
+  final synthetic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl b;
+  
+  // Field descriptor #9 J
+  private long c;
+  
+  // Field descriptor #9 J
+  private long d;
+  
+  // Field descriptor #9 J
+  private long e;
+  
+  // Field descriptor #9 J
+  private long f;
+  
+  // Field descriptor #9 J
+  private long g;
+  
+  // Field descriptor #9 J
+  private long h;
+  
+  // Field descriptor #9 J
+  private long i;
+  
+  // Field descriptor #9 J
+  private long j;
+  
+  // Field descriptor #9 J
+  private long k;
+  
+  // Field descriptor #9 J
+  private long l;
+  
+  // Field descriptor #9 J
+  private long m;
+  
+  // Method descriptor #25 (Lcom/tencent/mobileqq/statistics/battery/BatteryStatsImpl;Ljava/lang/String;)V
+  // Stack: 5, Locals: 3
+  public afcq(com.tencent.mobileqq.statistics.battery.BatteryStatsImpl arg0, java.lang.String arg1);
+      0  aload_0 [this]
+      1  aload_1 [arg0]
+      2  putfield afcq.b : com.tencent.mobileqq.statistics.battery.BatteryStatsImpl [27]
+      5  aload_0 [this]
+      6  aload_1 [arg0]
+      7  aload_2 [arg1]
+      8  invokespecial afcl(com.tencent.mobileqq.statistics.battery.BatteryStatsImpl, java.lang.String) [29]
+     11  aload_0 [this]
+     12  ldc2_w <Long 300000> [30]
+     15  putfield afcq.a : long [33]
+     18  aload_0 [this]
+     19  ldc2_w <Long 1800000> [34]
+     22  putfield afcq.b : long [37]
+     25  aload_0 [this]
+     26  ldc2_w <Long 3600000> [38]
+     29  putfield afcq.c : long [41]
+     32  aload_0 [this]
+     33  ldc2_w <Long 300000> [30]
+     36  putfield afcq.d : long [43]
+     39  aload_0 [this]
+     40  iconst_1
+     41  putfield afcq.a : int [45]
+     44  aload_0 [this]
+     45  new android.os.Handler [47]
+     48  dup
+     49  invokestatic com.tencent.mobileqq.app.ThreadManager.b() : android.os.Looper [52]
+     52  aload_0 [this]
+     53  invokespecial android.os.Handler(android.os.Looper, android.os.Handler$Callback) [55]
+     56  putfield afcq.a : android.os.Handler [57]
+     59  aload_0 [this]
+     60  getfield afcq.a : java.lang.String[][] [60]
+     63  arraylength
+     64  iconst_1
+     65  if_icmplt 157
+     68  aload_0 [this]
+     69  getfield afcq.a : java.lang.String[][] [60]
+     72  iconst_0
+     73  aaload
+     74  arraylength
+     75  iconst_3
+     76  if_icmplt 157
+     79  aload_0 [this]
+     80  aload_0 [this]
+     81  getfield afcq.a : java.lang.String[][] [60]
+     84  iconst_0
+     85  aaload
+     86  iconst_0
+     87  aaload
+     88  invokestatic java.lang.Integer.valueOf(java.lang.String) : java.lang.Integer [66]
+     91  invokevirtual java.lang.Integer.intValue() : int [70]
+     94  bipush 60
+     96  imul
+     97  i2l
+     98  ldc2_w <Long 1000> [71]
+    101  lmul
+    102  putfield afcq.a : long [33]
+    105  aload_0 [this]
+    106  aload_0 [this]
+    107  getfield afcq.a : java.lang.String[][] [60]
+    110  iconst_0
+    111  aaload
+    112  iconst_1
+    113  aaload
+    114  invokestatic java.lang.Integer.valueOf(java.lang.String) : java.lang.Integer [66]
+    117  invokevirtual java.lang.Integer.intValue() : int [70]
+    120  bipush 60
+    122  imul
+    123  i2l
+    124  ldc2_w <Long 1000> [71]
+    127  lmul
+    128  putfield afcq.b : long [37]
+    131  aload_0 [this]
+    132  aload_0 [this]
+    133  getfield afcq.a : java.lang.String[][] [60]
+    136  iconst_0
+    137  aaload
+    138  iconst_2
+    139  aaload
+    140  invokestatic java.lang.Integer.valueOf(java.lang.String) : java.lang.Integer [66]
+    143  invokevirtual java.lang.Integer.intValue() : int [70]
+    146  bipush 60
+    148  imul
+    149  i2l
+    150  ldc2_w <Long 1000> [71]
+    153  lmul
+    154  putfield afcq.c : long [41]
+    157  aload_0 [this]
+    158  getfield afcq.a : java.lang.String[][] [60]
+    161  arraylength
+    162  iconst_2
+    163  if_icmplt 221
+    166  aload_0 [this]
+    167  getfield afcq.a : java.lang.String[][] [60]
+    170  iconst_1
+    171  aaload
+    172  arraylength
+    173  iconst_1
+    174  if_icmplt 221
+    177  aload_0 [this]
+    178  aload_0 [this]
+    179  getfield afcq.a : java.lang.String[][] [60]
+    182  iconst_1
+    183  aaload
+    184  iconst_0
+    185  aaload
+    186  invokestatic java.lang.Integer.valueOf(java.lang.String) : java.lang.Integer [66]
+    189  invokevirtual java.lang.Integer.intValue() : int [70]
+    192  bipush 60
+    194  imul
+    195  i2l
+    196  ldc2_w <Long 1000> [71]
+    199  lmul
+    200  putfield afcq.d : long [43]
+    203  aload_0 [this]
+    204  aload_0 [this]
+    205  getfield afcq.a : java.lang.String[][] [60]
+    208  iconst_1
+    209  aaload
+    210  iconst_1
+    211  aaload
+    212  invokestatic java.lang.Integer.valueOf(java.lang.String) : java.lang.Integer [66]
+    215  invokevirtual java.lang.Integer.intValue() : int [70]
+    218  putfield afcq.a : int [45]
+    221  return
+
+  
+  // Method descriptor #74 ()V
+  // Stack: 4, Locals: 2
+  public void a();
+      0  aload_0 [this]
+      1  invokespecial afcl.a() : void [78]
+      4  invokestatic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl.a() : boolean [83]
+      7  ifeq 161
+     10  aload_0 [this]
+     11  invokestatic com.tencent.common.app.BaseApplicationImpl.getApplication() : com.tencent.common.app.BaseApplicationImpl [89]
+     14  invokevirtual com.tencent.common.app.BaseApplicationImpl.getPackageManager() : android.content.pm.PackageManager [93]
+     17  ldc <String "com.tencent.mobileqq"> [95]
+     19  sipush 128
+     22  invokevirtual android.content.pm.PackageManager.getApplicationInfo(java.lang.String, int) : android.content.pm.ApplicationInfo [101]
+     25  getfield android.content.pm.ApplicationInfo.uid : int [106]
+     28  putfield afcq.b : int [108]
+     31  aload_0 [this]
+     32  getfield afcq.b : int [108]
+     35  ifeq 161
+     38  aload_0 [this]
+     39  aload_0 [this]
+     40  getfield afcq.b : int [108]
+     43  invokestatic android.net.TrafficStats.getUidRxBytes(int) : long [114]
+     46  putfield afcq.e : long [116]
+     49  aload_0 [this]
+     50  aload_0 [this]
+     51  getfield afcq.b : int [108]
+     54  invokestatic android.net.TrafficStats.getUidTxBytes(int) : long [119]
+     57  putfield afcq.f : long [121]
+     60  aload_0 [this]
+     61  invokestatic android.net.TrafficStats.getTotalRxBytes() : long [125]
+     64  putfield afcq.g : long [127]
+     67  aload_0 [this]
+     68  invokestatic android.net.TrafficStats.getTotalTxBytes() : long [130]
+     71  putfield afcq.h : long [132]
+     74  aload_0 [this]
+     75  getfield afcq.a : android.os.Handler [57]
+     78  iconst_0
+     79  aload_0 [this]
+     80  getfield afcq.a : long [33]
+     83  invokestatic java.lang.Long.valueOf(long) : java.lang.Long [137]
+     86  invokevirtual android.os.Handler.obtainMessage(int, java.lang.Object) : android.os.Message [141]
+     89  astore_1
+     90  aload_0 [this]
+     91  getfield afcq.a : android.os.Handler [57]
+     94  aload_1
+     95  aload_0 [this]
+     96  getfield afcq.a : long [33]
+     99  invokevirtual android.os.Handler.sendMessageDelayed(android.os.Message, long) : boolean [145]
+    102  pop
+    103  aload_0 [this]
+    104  getfield afcq.a : android.os.Handler [57]
+    107  iconst_0
+    108  aload_0 [this]
+    109  getfield afcq.b : long [37]
+    112  invokestatic java.lang.Long.valueOf(long) : java.lang.Long [137]
+    115  invokevirtual android.os.Handler.obtainMessage(int, java.lang.Object) : android.os.Message [141]
+    118  astore_1
+    119  aload_0 [this]
+    120  getfield afcq.a : android.os.Handler [57]
+    123  aload_1
+    124  aload_0 [this]
+    125  getfield afcq.b : long [37]
+    128  invokevirtual android.os.Handler.sendMessageDelayed(android.os.Message, long) : boolean [145]
+    131  pop
+    132  aload_0 [this]
+    133  getfield afcq.a : android.os.Handler [57]
+    136  iconst_0
+    137  aload_0 [this]
+    138  getfield afcq.c : long [41]
+    141  invokestatic java.lang.Long.valueOf(long) : java.lang.Long [137]
+    144  invokevirtual android.os.Handler.obtainMessage(int, java.lang.Object) : android.os.Message [141]
+    147  astore_1
+    148  aload_0 [this]
+    149  getfield afcq.a : android.os.Handler [57]
+    152  aload_1
+    153  aload_0 [this]
+    154  getfield afcq.c : long [41]
+    157  invokevirtual android.os.Handler.sendMessageDelayed(android.os.Message, long) : boolean [145]
+    160  pop
+    161  return
+    162  astore_1
+    163  ldc <String "BatteryStats"> [147]
+    165  iconst_1
+    166  ldc <String ""> [149]
+    168  aload_1
+    169  invokestatic com.tencent.qphone.base.util.QLog.e(java.lang.String, int, java.lang.String, java.lang.Throwable) : void [154]
+    172  goto 31
+      Exception Table:
+        [pc: 10, pc: 31] -> 162 when : java.lang.Throwable
+  
+  // Method descriptor #74 ()V
+  // Stack: 4, Locals: 1
+  public void b();
+     0  aload_0 [this]
+     1  invokespecial afcl.b() : void [156]
+     4  invokestatic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl.a() : boolean [83]
+     7  ifeq 80
+    10  aload_0 [this]
+    11  getfield afcq.b : int [108]
+    14  ifeq 80
+    17  aload_0 [this]
+    18  getfield afcq.a : int [45]
+    21  ifle 80
+    24  aload_0 [this]
+    25  invokestatic java.lang.System.currentTimeMillis() : long [161]
+    28  putfield afcq.m : long [163]
+    31  aload_0 [this]
+    32  aload_0 [this]
+    33  getfield afcq.b : int [108]
+    36  invokestatic android.net.TrafficStats.getUidRxBytes(int) : long [114]
+    39  putfield afcq.i : long [165]
+    42  aload_0 [this]
+    43  aload_0 [this]
+    44  getfield afcq.b : int [108]
+    47  invokestatic android.net.TrafficStats.getUidTxBytes(int) : long [119]
+    50  putfield afcq.j : long [167]
+    53  aload_0 [this]
+    54  invokestatic android.net.TrafficStats.getTotalRxBytes() : long [125]
+    57  putfield afcq.k : long [169]
+    60  aload_0 [this]
+    61  invokestatic android.net.TrafficStats.getTotalTxBytes() : long [130]
+    64  putfield afcq.l : long [171]
+    67  aload_0 [this]
+    68  getfield afcq.a : android.os.Handler [57]
+    71  iconst_3
+    72  aload_0 [this]
+    73  getfield afcq.d : long [43]
+    76  invokevirtual android.os.Handler.sendEmptyMessageDelayed(int, long) : boolean [175]
+    79  pop
+    80  return
+
+  
+  // Method descriptor #74 ()V
+  // Stack: 2, Locals: 1
+  public void c();
+     0  aload_0 [this]
+     1  invokespecial afcl.c() : void [177]
+     4  invokestatic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl.a() : boolean [83]
+     7  ifeq 18
+    10  aload_0 [this]
+    11  getfield afcq.a : android.os.Handler [57]
+    14  iconst_3
+    15  invokevirtual android.os.Handler.removeMessages(int) : void [181]
+    18  return
+
+  
+  // Method descriptor #183 (Landroid/os/Message;)Z
+  // Stack: 6, Locals: 11
+  public boolean handleMessage(android.os.Message arg0);
+      0  aload_0 [this]
+      1  getfield afcq.b : int [108]
+      4  ifne 9
+      7  iconst_0
+      8  ireturn
+      9  aload_1 [arg0]
+     10  getfield android.os.Message.what : int [188]
+     13  ifne 331
+     16  aload_0 [this]
+     17  getfield afcq.b : int [108]
+     20  invokestatic android.net.TrafficStats.getUidRxBytes(int) : long [114]
+     23  aload_0 [this]
+     24  getfield afcq.e : long [116]
+     27  lsub
+     28  lstore_3
+     29  aload_0 [this]
+     30  getfield afcq.b : int [108]
+     33  invokestatic android.net.TrafficStats.getUidTxBytes(int) : long [119]
+     36  aload_0 [this]
+     37  getfield afcq.f : long [121]
+     40  lsub
+     41  lstore 5
+     43  invokestatic android.net.TrafficStats.getTotalRxBytes() : long [125]
+     46  aload_0 [this]
+     47  getfield afcq.g : long [127]
+     50  lsub
+     51  lstore 7
+     53  invokestatic android.net.TrafficStats.getTotalTxBytes() : long [130]
+     56  aload_0 [this]
+     57  getfield afcq.h : long [132]
+     60  lsub
+     61  lstore 9
+     63  aload_1 [arg0]
+     64  getfield android.os.Message.obj : java.lang.Object [192]
+     67  checkcast java.lang.Long [134]
+     70  invokevirtual java.lang.Long.longValue() : long [195]
+     73  ldc2_w <Long 1000> [71]
+     76  ldiv
+     77  l2i
+     78  istore_2
+     79  new java.lang.StringBuilder [197]
+     82  dup
+     83  bipush 50
+     85  invokespecial java.lang.StringBuilder(int) [199]
+     88  astore_1 [arg0]
+     89  aload_1 [arg0]
+     90  ldc <String "on startup "> [201]
+     92  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+     95  iload_2
+     96  invokevirtual java.lang.StringBuilder.append(int) : java.lang.StringBuilder [208]
+     99  pop
+    100  aload_1 [arg0]
+    101  ldc <String "secs, network:"> [210]
+    103  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+    106  pop
+    107  aload_1 [arg0]
+    108  lload_3
+    109  ldc2_w <Long 1000> [71]
+    112  ldiv
+    113  invokevirtual java.lang.StringBuilder.append(long) : java.lang.StringBuilder [213]
+    116  ldc <String "/"> [215]
+    118  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+    121  lload 7
+    123  ldc2_w <Long 1000> [71]
+    126  ldiv
+    127  invokevirtual java.lang.StringBuilder.append(long) : java.lang.StringBuilder [213]
+    130  ldc <String "|"> [217]
+    132  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+    135  pop
+    136  aload_1 [arg0]
+    137  lload 5
+    139  ldc2_w <Long 1000> [71]
+    142  ldiv
+    143  invokevirtual java.lang.StringBuilder.append(long) : java.lang.StringBuilder [213]
+    146  ldc <String "/"> [215]
+    148  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+    151  lload 9
+    153  ldc2_w <Long 1000> [71]
+    156  ldiv
+    157  invokevirtual java.lang.StringBuilder.append(long) : java.lang.StringBuilder [213]
+    160  pop
+    161  aload_0 [this]
+    162  getfield afcq.b : com.tencent.mobileqq.statistics.battery.BatteryStatsImpl [27]
+    165  aload_1 [arg0]
+    166  invokevirtual java.lang.StringBuilder.toString() : java.lang.String [221]
+    169  invokestatic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl.a(com.tencent.mobileqq.statistics.battery.BatteryStatsImpl, java.lang.String) : void [223]
+    172  aload_0 [this]
+    173  getfield afcq.b : com.tencent.mobileqq.statistics.battery.BatteryStatsImpl [27]
+    176  bipush 10
+    178  anewarray java.lang.String [225]
+    181  dup
+    182  iconst_0
+    183  ldc <String "nt|fg|"> [227]
+    185  aastore
+    186  dup
+    187  iconst_1
+    188  iload_2
+    189  invokestatic java.lang.String.valueOf(int) : java.lang.String [230]
+    192  aastore
+    193  dup
+    194  iconst_2
+    195  ldc <String "|"> [217]
+    197  aastore
+    198  dup
+    199  iconst_3
+    200  lload_3
+    201  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    204  aastore
+    205  dup
+    206  iconst_4
+    207  ldc <String "|"> [217]
+    209  aastore
+    210  dup
+    211  iconst_5
+    212  lload 5
+    214  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    217  aastore
+    218  dup
+    219  bipush 6
+    221  ldc <String "|"> [217]
+    223  aastore
+    224  dup
+    225  bipush 7
+    227  lload 7
+    229  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    232  aastore
+    233  dup
+    234  bipush 8
+    236  ldc <String "|"> [217]
+    238  aastore
+    239  dup
+    240  bipush 9
+    242  lload 9
+    244  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    247  aastore
+    248  invokestatic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl.a(com.tencent.mobileqq.statistics.battery.BatteryStatsImpl, java.lang.String[]) : void [236]
+    251  iload_2
+    252  sipush 1800
+    255  if_icmpne 329
+    258  aload_0 [this]
+    259  getfield afcq.b : com.tencent.mobileqq.statistics.battery.BatteryStatsImpl [27]
+    262  bipush 9
+    264  anewarray java.lang.String [225]
+    267  dup
+    268  iconst_0
+    269  ldc <String "fg30Trf"> [238]
+    271  aastore
+    272  dup
+    273  iconst_1
+    274  ldc <String "|"> [217]
+    276  aastore
+    277  dup
+    278  iconst_2
+    279  lload_3
+    280  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    283  aastore
+    284  dup
+    285  iconst_3
+    286  ldc <String "|"> [217]
+    288  aastore
+    289  dup
+    290  iconst_4
+    291  lload 5
+    293  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    296  aastore
+    297  dup
+    298  iconst_5
+    299  ldc <String "|"> [217]
+    301  aastore
+    302  dup
+    303  bipush 6
+    305  lload 7
+    307  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    310  aastore
+    311  dup
+    312  bipush 7
+    314  ldc <String "|"> [217]
+    316  aastore
+    317  dup
+    318  bipush 8
+    320  lload 9
+    322  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    325  aastore
+    326  invokestatic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl.b(com.tencent.mobileqq.statistics.battery.BatteryStatsImpl, java.lang.String[]) : void [240]
+    329  iconst_0
+    330  ireturn
+    331  aload_1 [arg0]
+    332  getfield android.os.Message.what : int [188]
+    335  iconst_3
+    336  if_icmpne 329
+    339  aload_0 [this]
+    340  aload_0 [this]
+    341  getfield afcq.a : int [45]
+    344  iconst_1
+    345  isub
+    346  putfield afcq.a : int [45]
+    349  invokestatic java.lang.System.currentTimeMillis() : long [161]
+    352  aload_0 [this]
+    353  getfield afcq.m : long [163]
+    356  lsub
+    357  aload_0 [this]
+    358  getfield afcq.d : long [43]
+    361  ldc2_w <Long 2000> [241]
+    364  ladd
+    365  lcmp
+    366  ifge 329
+    369  aload_0 [this]
+    370  getfield afcq.b : int [108]
+    373  invokestatic android.net.TrafficStats.getUidRxBytes(int) : long [114]
+    376  aload_0 [this]
+    377  getfield afcq.i : long [165]
+    380  lsub
+    381  lstore_3
+    382  aload_0 [this]
+    383  getfield afcq.b : int [108]
+    386  invokestatic android.net.TrafficStats.getUidTxBytes(int) : long [119]
+    389  aload_0 [this]
+    390  getfield afcq.j : long [167]
+    393  lsub
+    394  lstore 5
+    396  invokestatic android.net.TrafficStats.getTotalRxBytes() : long [125]
+    399  aload_0 [this]
+    400  getfield afcq.k : long [169]
+    403  lsub
+    404  lstore 7
+    406  invokestatic android.net.TrafficStats.getTotalTxBytes() : long [130]
+    409  aload_0 [this]
+    410  getfield afcq.l : long [171]
+    413  lsub
+    414  lstore 9
+    416  aload_0 [this]
+    417  getfield afcq.d : long [43]
+    420  ldc2_w <Long 1000> [71]
+    423  ldiv
+    424  l2i
+    425  istore_2
+    426  new java.lang.StringBuilder [197]
+    429  dup
+    430  bipush 50
+    432  invokespecial java.lang.StringBuilder(int) [199]
+    435  astore_1 [arg0]
+    436  aload_1 [arg0]
+    437  ldc <String "onBG"> [244]
+    439  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+    442  iload_2
+    443  invokevirtual java.lang.StringBuilder.append(int) : java.lang.StringBuilder [208]
+    446  ldc <String "secs, network:"> [210]
+    448  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+    451  pop
+    452  aload_1 [arg0]
+    453  lload_3
+    454  ldc2_w <Long 1000> [71]
+    457  ldiv
+    458  invokevirtual java.lang.StringBuilder.append(long) : java.lang.StringBuilder [213]
+    461  ldc <String "/"> [215]
+    463  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+    466  lload 7
+    468  ldc2_w <Long 1000> [71]
+    471  ldiv
+    472  invokevirtual java.lang.StringBuilder.append(long) : java.lang.StringBuilder [213]
+    475  ldc <String "|"> [217]
+    477  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+    480  pop
+    481  aload_1 [arg0]
+    482  lload 5
+    484  ldc2_w <Long 1000> [71]
+    487  ldiv
+    488  invokevirtual java.lang.StringBuilder.append(long) : java.lang.StringBuilder [213]
+    491  ldc <String "/"> [215]
+    493  invokevirtual java.lang.StringBuilder.append(java.lang.String) : java.lang.StringBuilder [205]
+    496  lload 9
+    498  ldc2_w <Long 1000> [71]
+    501  ldiv
+    502  invokevirtual java.lang.StringBuilder.append(long) : java.lang.StringBuilder [213]
+    505  pop
+    506  aload_0 [this]
+    507  getfield afcq.b : com.tencent.mobileqq.statistics.battery.BatteryStatsImpl [27]
+    510  aload_1 [arg0]
+    511  invokevirtual java.lang.StringBuilder.toString() : java.lang.String [221]
+    514  invokestatic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl.a(com.tencent.mobileqq.statistics.battery.BatteryStatsImpl, java.lang.String) : void [223]
+    517  aload_0 [this]
+    518  getfield afcq.b : com.tencent.mobileqq.statistics.battery.BatteryStatsImpl [27]
+    521  bipush 10
+    523  anewarray java.lang.String [225]
+    526  dup
+    527  iconst_0
+    528  ldc <String "nt|bg|"> [246]
+    530  aastore
+    531  dup
+    532  iconst_1
+    533  iload_2
+    534  invokestatic java.lang.String.valueOf(int) : java.lang.String [230]
+    537  aastore
+    538  dup
+    539  iconst_2
+    540  ldc <String "|"> [217]
+    542  aastore
+    543  dup
+    544  iconst_3
+    545  lload_3
+    546  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    549  aastore
+    550  dup
+    551  iconst_4
+    552  ldc <String "|"> [217]
+    554  aastore
+    555  dup
+    556  iconst_5
+    557  lload 5
+    559  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    562  aastore
+    563  dup
+    564  bipush 6
+    566  ldc <String "|"> [217]
+    568  aastore
+    569  dup
+    570  bipush 7
+    572  lload 7
+    574  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    577  aastore
+    578  dup
+    579  bipush 8
+    581  ldc <String "|"> [217]
+    583  aastore
+    584  dup
+    585  bipush 9
+    587  lload 9
+    589  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    592  aastore
+    593  invokestatic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl.a(com.tencent.mobileqq.statistics.battery.BatteryStatsImpl, java.lang.String[]) : void [236]
+    596  iload_2
+    597  sipush 300
+    600  if_icmpne 329
+    603  aload_0 [this]
+    604  getfield afcq.b : com.tencent.mobileqq.statistics.battery.BatteryStatsImpl [27]
+    607  bipush 9
+    609  anewarray java.lang.String [225]
+    612  dup
+    613  iconst_0
+    614  ldc <String "bg5Trf"> [248]
+    616  aastore
+    617  dup
+    618  iconst_1
+    619  ldc <String "|"> [217]
+    621  aastore
+    622  dup
+    623  iconst_2
+    624  lload_3
+    625  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    628  aastore
+    629  dup
+    630  iconst_3
+    631  ldc <String "|"> [217]
+    633  aastore
+    634  dup
+    635  iconst_4
+    636  lload 5
+    638  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    641  aastore
+    642  dup
+    643  iconst_5
+    644  ldc <String "|"> [217]
+    646  aastore
+    647  dup
+    648  bipush 6
+    650  lload 7
+    652  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    655  aastore
+    656  dup
+    657  bipush 7
+    659  ldc <String "|"> [217]
+    661  aastore
+    662  dup
+    663  bipush 8
+    665  lload 9
+    667  invokestatic java.lang.String.valueOf(long) : java.lang.String [233]
+    670  aastore
+    671  invokestatic com.tencent.mobileqq.statistics.battery.BatteryStatsImpl.b(com.tencent.mobileqq.statistics.battery.BatteryStatsImpl, java.lang.String[]) : void [240]
+    674  goto 329
+
+}

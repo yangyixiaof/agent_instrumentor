@@ -185,6 +185,8 @@ public class InstrumentJar {
 		{
 			ProcessBuilder pb = new ProcessBuilder("jar", "cvf", jar_name, ".");
 			pb.directory(new File(work_dir));
+			pb.redirectOutput(Redirect.INHERIT);
+			pb.redirectError(Redirect.INHERIT);
 			try {
 				Process p = pb.start();
 				p.waitFor();
