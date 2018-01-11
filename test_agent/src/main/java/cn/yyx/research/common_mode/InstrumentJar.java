@@ -45,7 +45,7 @@ public class InstrumentJar {
 				try {
 					if (!ze.isDirectory()) {
 						String norm_name = ze.getName().replace('\\', '/');
-						if (!norm_name.contains("/") && norm_name.endsWith("classes.dex")) {
+						if (!norm_name.contains("/") && norm_name.endsWith(".dex")) {
 							System.out.println("file - " + norm_name + "; " + ze.getName() + " : " + ze.getSize() + " bytes");
 							InputStream is = zf.getInputStream(ze);
 							String unzipped_dex_file_path = dex_work_dir + "/" + norm_name;
