@@ -29,6 +29,7 @@ public class AddTimeClassAdapter extends ClassVisitor {
         MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
         if (!name.equals("<init>") && !isInterface && mv != null) {
             //为方法添加计时功能
+            System.out.println(name);
             mv = new AddTimeMethodAdapter(mv);
         }
         return mv;
