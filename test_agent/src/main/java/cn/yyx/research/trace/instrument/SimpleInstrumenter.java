@@ -39,6 +39,7 @@ public class SimpleInstrumenter {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+
 		System.out.println("Instrumenting end:" + classname);
 		// int c_last_idx = classname.lastIndexOf('/');
 		String filename = classname.replace('/', '.');
