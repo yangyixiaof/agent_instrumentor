@@ -16,21 +16,25 @@
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
-  	<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ow2.asm</groupId>
-			<artifactId>asm</artifactId>
-			<version>6.0</version>
-		</dependency>
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco</artifactId>
-            <version>0.8.0</version>
+
+      <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>4.12</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.ow2.asm</groupId>
+          <artifactId>asm</artifactId>
+          <version>6.0</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco</artifactId>
+          <version>0.8.0</version>
         </dependency>
 	</dependencies>
 </project>

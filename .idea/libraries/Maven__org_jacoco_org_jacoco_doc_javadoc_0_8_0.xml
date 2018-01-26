@@ -1,8 +1,6 @@
 <component name="libraryTable">
   <library name="Maven: org.jacoco:org.jacoco.doc:javadoc:0.8.0">
-    <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/jacoco/org.jacoco.doc/0.8.0/org.jacoco.doc-0.8.0-javadoc.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/org/jacoco/org.jacoco.doc/0.8.0/org.jacoco.doc-0.8.0-javadoc.jar!/" />
     </JAVADOC>
