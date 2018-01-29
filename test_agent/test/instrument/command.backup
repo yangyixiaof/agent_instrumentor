@@ -1,0 +1,5 @@
+# jarsigner
+jarsigner -verbose -keystore yyx_apk.keystore -signedjar operation_pool/sample_signed.apk operation_pool/sample.apk yyx_apk.keystore
+
+# run test
+./run.sh operation_pool/sample_signed.apk com.tsinghua.date.sample SettingsActivity

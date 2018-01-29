@@ -1,0 +1,5 @@
+Generate key:
+keytool -genkey -alias yyx_apk.keystore -keyalg RSA -validity 20000 -keystore yyx_apk.keystore
+
+Sign key:
+jarsigner -verbose -keystore yyx_apk.keystore -signedjar QQ_762_signed.apk QQ_762.apk yyx_apk.keystore

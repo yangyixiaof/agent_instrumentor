@@ -3,7 +3,11 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/org/jacoco/org.jacoco.report/0.8.0/org.jacoco.report-0.8.0.jar!/" />
     </CLASSES>
-    <JAVADOC />
-    <SOURCES />
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jacoco/org.jacoco.report/0.8.0/org.jacoco.report-0.8.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jacoco/org.jacoco.report/0.8.0/org.jacoco.report-0.8.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
