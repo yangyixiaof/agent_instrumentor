@@ -26,8 +26,9 @@ public class InstrumentJar {
 	public static final String work_dir = "InstrumentDirectory";
 	// public static final String backup_work_dir = "BackupInstrumentDirectory";
 
-	public static final String dex2jar = "/home/ren/MyProject/Instrument/agent_instrumentor/test_agent/commands/dex2jar/d2j-dex2jar.sh";
-	public static final String jar2dex = "/home/ren/MyProject/Instrument/agent_instrumentor/test_agent/commands/dex2jar/d2j-jar2dex.sh";
+	public static final String dex2jar = "/home/ren/MyProject/Instrument/agent_instrumentor/test_agent/resource/dex2jar/d2j-dex2jar.sh";
+	public static final String jar2dex = "/home/ren/MyProject/Instrument/agent_instrumentor/test_agent/resource/dex2jar/d2j-jar2dex.sh";
+	public static final String jacococli = "/home/ren/Software/jacoco-0.8.0/lib/jacococli.jar";
 
 	public static SimpleInstrumenter inst = new SimpleInstrumenter();
 
@@ -87,7 +88,8 @@ public class InstrumentJar {
 							int index = norm_name.lastIndexOf(".dex");
 							String raw_norm_name = norm_name.substring(0, index);
 							String jar_name = raw_norm_name + "-dex2jar.jar";
-							InstrumentOneJar(dex_work_dir + "/" + jar_name, 100);
+//							InstrumentOneJar(dex_work_dir + "/" + jar_name, 100);
+                            InstrumentOneJar(dex_work_dir + "/" + jar_name);
 							
 							System.out.println("generate instrumented dex:d2j-jar2dex.sh " + jar_name);
 							{
@@ -217,71 +219,23 @@ public class InstrumentJar {
             FileUtil.DeleteFile(dir);
         }
         dir.mkdirs();
-        File new_jar_path = new File(work_dir + "/" + jar_name);
-        FileUtil.CopyFile(new File(jar_file_path), new_jar_path);
+//        File new_jar_path = new File(work_dir + "/" + jar_name);
+//        FileUtil.CopyFile(new File(jar_file_path), new_jar_path);
 
-        System.out.println("Depackaging " + jar_name);
-        {
-            ProcessBuilder pb = new ProcessBuilder("jar", "xvf", jar_name);
+        try {
+            ProcessBuilder pb = new ProcessBuilder("java", "-jar", jacococli, "instrument", jar_file.getCanonicalPath(), "--dest", ".");
             pb.directory(new File(work_dir));
             pb.redirectOutput(Redirect.INHERIT);
             pb.redirectError(Redirect.INHERIT);
-            try {
-                Process p = pb.start();
-                p.waitFor();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            Process p = pb.start();
+            p.waitFor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        System.out.println("Deleting " + new_jar_path);
-        FileUtil.DeleteFile(new_jar_path);
-
-        File wdir = new File(work_dir);
-        String wdir_abs_path = wdir.getAbsolutePath();
-        String wdir_abs_path_norm = wdir_abs_path.replace('\\', '/');
-        FileIterator fi = new FileIterator(work_dir, ".*\\.class");
-        Iterator<File> fi_itr = fi.EachFileIterator();
-        int count = 0;
-        while (fi_itr.hasNext()) {
-            File class_f = fi_itr.next();
-            System.out.println("Instrumenting " + class_f.getName());
-            try {
-                byte[] bytes = FileUtil.ReadBytesFromFile(class_f);
-                String classname = class_f.getCanonicalPath().replace('\\', '/').substring(wdir_abs_path_norm.length());
-                while (classname.startsWith("/")) {
-                    classname = classname.substring(1);
-                }
-//                byte[] instrumented_bytes = inst.InstrumentOneClass(classname, bytes);
-
-                final IRuntime runtime = new LoggerRuntime();
-                final Instrumenter instr = new Instrumenter(runtime);
-                final byte[] instrumented_bytes = instr.instrument(bytes, classname);
-
-
-                FileUtil.WriteBytesToFile(instrumented_bytes, class_f);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            count++;
-        }
-        System.out.println("Repackaging " + jar_name);
-        {
-            ProcessBuilder pb = new ProcessBuilder("jar", "cvf", jar_name, ".");
-            pb.directory(new File(work_dir));
-            pb.redirectOutput(Redirect.INHERIT);
-            pb.redirectError(Redirect.INHERIT);
-            try {
-                Process p = pb.start();
-                p.waitFor();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         System.out.println("Replacing original jar:" + jar_file_path);
         FileUtil.CopyFile(new File(work_dir + "/" + jar_name), new File(jar_file_path));
     }
@@ -291,5 +245,4 @@ public class InstrumentJar {
 		ReadZipFile(apk_file_path);
 		return;
 	}
-
 }

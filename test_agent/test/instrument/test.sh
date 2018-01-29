@@ -8,7 +8,7 @@ do
 done
 
 # Add the config of jacoco to classpath
-export CLASSPATH=/sdcard/app_test/jacoco_agent.properties:$CLASSPATH
+export CLASSPATH=/sdcard/app_test/:$CLASSPATH
 
 echo -e "\033[32m	run app...\033[0m"
 if [ -n "$1" ];
