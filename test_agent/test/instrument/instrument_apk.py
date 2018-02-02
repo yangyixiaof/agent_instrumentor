@@ -50,14 +50,12 @@ class UpdateableZipFile(ZipFile):
         # mark the entry, and create a temp-file for it
         # we allow this only if the with statement is used
         if self._allow_updates and arcname in self.namelist():
-            temp_file = self._replace[arcname] = self._replace.get(arcname,
-                                                                   tempfile.TemporaryFile())
+            temp_file = self._replace[arcname] = self._replace.get(arcname, tempfile.TemporaryFile())
             with open(filename, "rb") as source:
                 shutil.copyfileobj(source, temp_file)
         # Otherwise just act normally
         else:
-            super(UpdateableZipFile, self).write(filename,
-                                                 arcname=arcname, compress_type=compress_type)
+            super(UpdateableZipFile, self).write(filename, arcname=arcname, compress_type=compress_type)
 
     def __enter__(self):
         # Allow updates
@@ -172,10 +170,10 @@ def InstrumentDex(apk_file_path):
     _, file_str = os.path.split(apk_file_path)
     optr_file = "operation_pool/" + file_str
     shutil.copyfile(apk_file_path, optr_file)
-    os.system("java -jar test_agent.jar " + apk_file_path)
+    os.system("java -XX:-UseGCOverheadLimit -Xmx1024m -jar test_agent.jar " + apk_file_path)
     f = zipfile.ZipFile(optr_file, 'r')
     for file_name in f.namelist():
-        pattern = re.compile(r'classes([1-9]*)\.dex')
+        pattern = re.compile(r'classes([1]*)\.dex')
         if_match = re.match(pattern, file_name)
         if if_match:
             filename, _ = os.path.splitext(file_name)

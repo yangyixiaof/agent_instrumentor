@@ -90,10 +90,19 @@ public class InstrumentJar {
 							String jar_name = raw_norm_name + "-dex2jar.jar";
 //							InstrumentOneJar(dex_work_dir + "/" + jar_name, 100);
                             InstrumentOneJar(dex_work_dir + "/" + jar_name);
-							
-							System.out.println("generate instrumented dex:d2j-jar2dex.sh " + jar_name);
+
+							File jacocoJar = new File("/home/ren/MyProject/Instrument/agent_instrumentor/test_agent/resource/jacocoagent.jar");
+							FileUtil.CopyFile(jacocoJar, new File(dex_work_dir + "/jacocoagent.jar"));
+
+							System.out.println("generate instrumented dex: dx " + jar_name);
 							{
-								ProcessBuilder pb = new ProcessBuilder(jar2dex, jar_name);
+//								ProcessBuilder pb = new ProcessBuilder(jar2dex, jar_name);
+								ProcessBuilder pb = null;
+								if (jar_name.contains("classes-")) {
+									pb = new ProcessBuilder("/home/ren/Research/Android/aosp/prebuilts/sdk/tools/dx", "-JXX:-UseGCOverheadLimit", "-JXmx2048m", "--dex", "--num-threads=4", "--output=" + jar_name.replace(".jar", "") + "-jar2dex.dex", jar_name, "jacocoagent.jar");
+								} else if (! jar_name.contains("classes3-") && ! jar_name.contains("classes4-")){
+									pb = new ProcessBuilder("/home/ren/Research/Android/aosp/prebuilts/sdk/tools/dx", "-JXX:-UseGCOverheadLimit", "-JXmx2048m", "--dex", "--num-threads=4", "--output=" + jar_name.replace(".jar", "") + "-jar2dex.dex", jar_name);
+								}
 								pb.directory(new File(dex_work_dir));
 								pb.redirectOutput(Redirect.INHERIT);
 								pb.redirectError(Redirect.INHERIT);
@@ -144,7 +153,7 @@ public class InstrumentJar {
 		dir.mkdirs();
 		File new_jar_path = new File(work_dir + "/" + jar_name);
 		FileUtil.CopyFile(new File(jar_file_path), new_jar_path);
-		
+
 		System.out.println("Depackaging " + jar_name);
 		{
 			ProcessBuilder pb = new ProcessBuilder("jar", "xvf", jar_name);
@@ -219,22 +228,24 @@ public class InstrumentJar {
             FileUtil.DeleteFile(dir);
         }
         dir.mkdirs();
-//        File new_jar_path = new File(work_dir + "/" + jar_name);
-//        FileUtil.CopyFile(new File(jar_file_path), new_jar_path);
 
-        try {
-            ProcessBuilder pb = new ProcessBuilder("java", "-jar", jacococli, "instrument", jar_file.getCanonicalPath(), "--dest", ".");
-            pb.directory(new File(work_dir));
-            pb.redirectOutput(Redirect.INHERIT);
-            pb.redirectError(Redirect.INHERIT);
+		if (! jar_file.getName().contains("classes3-") && ! jar_file.getName().contains("classes4-")) {
+			try {
+				ProcessBuilder pb = new ProcessBuilder("java", "-jar", jacococli, "instrument", jar_file.getCanonicalPath(), "--dest", ".");
+				pb.directory(new File(work_dir));
+				pb.redirectOutput(Redirect.INHERIT);
+				pb.redirectError(Redirect.INHERIT);
 
-            Process p = pb.start();
-            p.waitFor();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+				Process p = pb.start();
+				p.waitFor();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		} else {
+			FileUtil.CopyFile(jar_file, new File(work_dir + "/" + jar_name));
+		}
 
         System.out.println("Replacing original jar:" + jar_file_path);
         FileUtil.CopyFile(new File(work_dir + "/" + jar_name), new File(jar_file_path));
