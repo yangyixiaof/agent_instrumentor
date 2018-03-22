@@ -43,6 +43,7 @@
                     <Premain-Class>cn.yyx.research.test_agent.PerfAgent</Premain-Class>
                     <Can-Redefine-Classes>true</Can-Redefine-Classes>
                   </manifestEntries>
+                  <mainClass>cn.yyx.research.common_mode.InstrumentJar</mainClass>
                 </transformer>
               </transformers>
             </configuration>

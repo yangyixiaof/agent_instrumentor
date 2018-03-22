@@ -30,7 +30,7 @@ public class GeneratorClass {
         //定义类的方法
         cw.visitMethod(Opcodes.ACC_PUBLIC+Opcodes.ACC_ABSTRACT, "compareTo",
                 "(Ljava/lang/Object;)I", null, null).visitEnd();
-        cw.visitEnd(); //使cw类已经完成
+        cw.visitEnd();        //使cw类已经完成
         //将cw转换成字节数组写到文件里面去
         byte[] data = cw.toByteArray();
         File file = new File(".//Comparable.class");

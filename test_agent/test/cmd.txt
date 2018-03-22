@@ -1,0 +1,1 @@
+java -Xbootclasspath/p:../test_agent-0.0.1-SNAPSHOT.jar -javaagent:../test_agent-0.0.1-SNAPSHOT.jar HaHa

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="java_instrumentor" />
+        <module name="test_agent" />
+        <module name="test_agent (2)" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.8">
+      <module name="java_instrumentor" target="1.8" />
+      <module name="test_agent" target="1.8" />
+      <module name="test_agent (1)" target="1.5" />
+      <module name="test_agent (2)" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

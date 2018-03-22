@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/agent_instrumentor.iml" filepath="$PROJECT_DIR$/.idea/agent_instrumentor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java_instrumentor/java_instrumentor.iml" filepath="$PROJECT_DIR$/java_instrumentor/java_instrumentor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test_agent/test_agent.iml" filepath="$PROJECT_DIR$/test_agent/test_agent.iml" />
+    </modules>
+  </component>
+</project>
