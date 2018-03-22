@@ -1,0 +1,7 @@
+java -Xbootclasspath/p:D:/TestAgentWorkspace/test_agent.jar -javaagent:D:/TestAgentWorkspace/test_agent.jar -cp .;haha_run.jar;trace_recorder.jar cn.test.example.HaHaJ
+java -Xbootclasspath/p:D:/TestAgentWorkspace/test_agent.jar -javaagent:D:/TestAgentWorkspace/test_agent.jar=cn.test.example.HaHaJ -cp .;haha_run.jar cn.test.example.HaHaJ
+
+
+
+
+java -Xbootclasspath/p:test_agent2.jar -javaagent:D:/TestAgentWorkspace/test_agent2.jar=D:/TestAgentWorkspace -cp .;haha_run.jar cn.test.example.HaHaJ
