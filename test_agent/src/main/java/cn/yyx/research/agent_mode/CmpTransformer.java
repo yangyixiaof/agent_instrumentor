@@ -24,7 +24,7 @@ public class CmpTransformer implements ClassFileTransformer {
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 //		System.out.println("class_name:" + className);
 		if (!InFilters(className)) {
-			return CmpInstrumenter.InstrumentOneClass(classfileBuffer);
+			return CmpInstrumenter.InstrumentOneClass(className, classfileBuffer);
 		}
 		return classfileBuffer;
 	}
