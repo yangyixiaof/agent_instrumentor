@@ -97,7 +97,7 @@ class MethodAdapter extends MethodVisitor {
 			String second_operand_default_value, boolean take_as_float_point) {
 		// print tag information.
 		relative_offset++;
-		InstrumentLdcInsn("@Branch-Operand:“ + relative_offset + ”:" + cmp + ":");
+		InstrumentLdcInsn("@Branch-Operand:" + relative_offset + ":" + cmp + ":");
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/String;)V", false);
 
