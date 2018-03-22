@@ -47,7 +47,8 @@ public class TraceRecorder {
 	}
 	
 	public static void Flush() {
-		File f = new File(trace_dir + "trace.txt");
+		File f = new File(trace_dir + "/" + "trace.txt");
+		
 		FileWriter writer = null;
 		try {
 			writer = new FileWriter(f);
