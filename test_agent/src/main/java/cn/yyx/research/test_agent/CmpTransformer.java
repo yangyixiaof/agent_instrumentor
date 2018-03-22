@@ -29,13 +29,13 @@ public class CmpTransformer implements ClassFileTransformer {
 //		return classfileBuffer;
 	}
 	
-	protected boolean InFlower(String class_name) {
-		for (String flower : flowers) {
-			if (class_name.startsWith(flower)) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	protected boolean InFlower(String class_name) {
+//		for (String flower : flowers) {
+//			if (class_name.startsWith(flower)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
 }
