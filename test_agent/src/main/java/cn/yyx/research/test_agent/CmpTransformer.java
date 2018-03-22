@@ -23,10 +23,10 @@ public class CmpTransformer implements ClassFileTransformer {
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 //		System.out.println("class_name:" + className);
-		if (InFlower(className)) {
-			return CmpInstrumenter.InstrumentOneClass(classfileBuffer);
-		}
-		return classfileBuffer;
+//		if (InFlower(className)) {
+		return CmpInstrumenter.InstrumentOneClass(classfileBuffer);
+//		}
+//		return classfileBuffer;
 	}
 	
 	protected boolean InFlower(String class_name) {
