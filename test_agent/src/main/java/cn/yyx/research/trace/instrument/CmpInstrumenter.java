@@ -14,7 +14,8 @@ import org.objectweb.asm.Opcodes;
 
 public class CmpInstrumenter {
 
-	public static byte[] InstrumentOneClass(byte[] input_class) {
+	public static byte[] InstrumentOneClass(String class_name, byte[] input_class) {
+		System.out.println("class_name:" + class_name);
 		byte[] b = input_class;
 		ByteArrayInputStream is = new ByteArrayInputStream(input_class);
 		try {
