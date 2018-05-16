@@ -58,8 +58,10 @@ public class TraceReader {
           }
           if (one_line.startsWith("@Branch-Operand:")) {
             try {
-              double b1 = Double.parseDouble(parts[3]);
-              double b2 = Double.parseDouble(parts[4]);
+              String operandPart=parts[3];
+              String[] operandParts=operandPart.split("#");
+              double b1 = Double.parseDouble(operandParts[1]);
+              double b2 = Double.parseDouble(operandParts[2]);
               ProcessBranchOperand(
                   runtime_stack.peek(),
                   Integer.parseInt(parts[1]),
