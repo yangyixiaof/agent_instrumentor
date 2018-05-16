@@ -1,0 +1,1 @@
+被读的 trace 放到 `~/trace.txt`
