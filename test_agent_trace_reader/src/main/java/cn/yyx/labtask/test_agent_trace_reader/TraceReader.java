@@ -17,7 +17,7 @@ import cn.yyx.labtask.runtime.round.testgen.TestModel;
 
 public class TraceReader {
 
-  public static final String default_trace_file =
+  private static final String default_trace_file =
       System.getProperty("user.home") + "/" + "trace.txt";
   String specific_file = null;
   TestModel model = null;
@@ -25,7 +25,7 @@ public class TraceReader {
   String sequence_identify = null;
 
   public TraceReader(TestModel model, String previous_sequence_identify, String sequence_identify) {
-    new TraceReader(model, previous_sequence_identify, sequence_identify, default_trace_file);
+    this(model, previous_sequence_identify, sequence_identify, default_trace_file);
   }
 
   public TraceReader(

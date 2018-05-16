@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 
 public class TraceSerializer {
 
-  public static final String user_home = System.getProperty("user.dir");
+  public static final String user_home = System.getProperty("user.home");
 
   public static void SerializeByIdentification(String identify, Object object) {
     try {
