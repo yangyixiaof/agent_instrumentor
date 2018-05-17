@@ -8,8 +8,7 @@ import java.util.List;
 import cn.yyx.research.trace_recorder.TraceRecorder;
 
 /**
- * Hello world!
- *
+ * @deprecated
  */
 public class PerfAgent {
 

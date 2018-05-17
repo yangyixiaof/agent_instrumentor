@@ -11,6 +11,9 @@ import java.util.TreeSet;
 
 import cn.yyx.research.trace.instrument.SimpleInstrumenter;
 
+/**
+ * @deprecated
+ */
 public class InverseCmpTransformer implements ClassFileTransformer {
 	
 	List<String> flowers = new LinkedList<String>();

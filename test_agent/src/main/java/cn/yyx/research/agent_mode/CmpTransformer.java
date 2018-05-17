@@ -8,6 +8,9 @@ import java.util.List;
 
 import cn.yyx.research.trace.instrument.CmpInstrumenter;
 
+/**
+ * @deprecated
+ */
 public class CmpTransformer implements ClassFileTransformer {
 	
 	List<String> filters = new LinkedList<String>();
