@@ -39,6 +39,10 @@ public class TraceReader {
     this.specific_file = traceFilePath;
   }
 
+  static int enter = 0, exit = 0, operand = 0;
+  static int currentLineFrom1 = 0; // start from 1
+  static String lastPop = null;
+
   public void ReadFromTraceFile() {
     Stack<String> runtime_stack = new Stack<String>();
     Map<String, ValuesOfBranch> branch_signature = new TreeMap<String, ValuesOfBranch>();
@@ -47,19 +51,23 @@ public class TraceReader {
       br = new BufferedReader(new FileReader(new File(specific_file)));
       String one_line = null;
       while ((one_line = br.readLine()) != null) {
+        currentLineFrom1++;
         one_line = one_line.trim();
         if (!one_line.equals("")) {
           String[] parts = one_line.split(":");
           if (one_line.startsWith("@Method-Enter:")) {
+            enter++;
             ProcessMethodEnter(parts[1], runtime_stack);
           }
           if (one_line.startsWith("@Method-Exit:")) {
+            exit++;
             ProcessMethodExit(parts[1], runtime_stack);
           }
           if (one_line.startsWith("@Branch-Operand:")) {
+            operand++;
             try {
-              String operandPart=parts[3];
-              String[] operandParts=operandPart.split("#");
+              String operandPart = parts[3];
+              String[] operandParts = operandPart.split("#");
               double b1 = Double.parseDouble(operandParts[1]);
               double b2 = Double.parseDouble(operandParts[2]);
               ProcessBranchOperand(
@@ -71,14 +79,10 @@ public class TraceReader {
                   runtime_stack,
                   branch_signature);
             } catch (Exception e) {
-              //							try {
-              //								long b1 = Long.parseLong(parts[2]);
-              //								long b2 = Long.parseLong(parts[3]);
-              //								ProcessBranchOperand(Integer.parseInt(parts[1]), b1, b2);
-              //							} catch (Exception e2) {
+              System.out.println("lastPop: " + lastPop);
+              System.out.println("currentLineFrom1 " + currentLineFrom1);
               e.printStackTrace();
               System.exit(1);
-              //							}
             }
           }
         } else {
@@ -104,6 +108,7 @@ public class TraceReader {
         }
       }
     }
+    System.out.printf("!!!!!enter %d, exit %d, operand %d\n", enter, exit, operand);
   }
 
   private void ProcessMethodEnter(String method_name, Stack<String> runtime_stack) {
@@ -112,6 +117,7 @@ public class TraceReader {
 
   private void ProcessMethodExit(String method_name, Stack<String> runtime_stack) {
     String mname = runtime_stack.pop();
+    lastPop = mname;
     if (!mname.equals(method_name)) {
       System.err.println("very strange! stack not valid!");
       System.exit(1);
