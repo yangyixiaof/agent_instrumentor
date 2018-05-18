@@ -115,6 +115,9 @@ public class TraceReader {
     runtime_stack.push(method_name);
   }
 
+  /**
+   * pop 并检查配对儿。
+   */
   private void ProcessMethodExit(String method_name, Stack<String> runtime_stack) {
     String mname = runtime_stack.pop();
     lastPop = mname;

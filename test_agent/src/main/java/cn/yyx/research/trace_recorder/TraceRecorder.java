@@ -23,6 +23,13 @@ public class TraceRecorder {
                 }));
   }
 
+  /**
+   * 这些小函数是被插桩插进去的代码调用的！
+   *
+   * <p>见 cn.yyx.research.trace.instrument.CmpInstrumenter
+   *
+   * <p>TODO 所以可以在这种类里记全局变量来做过滤？搜搜 TraceRecorder 所有出现
+   */
   public static void Append(String x) {
     buffer.append(x + "#");
   }
@@ -47,6 +54,7 @@ public class TraceRecorder {
     buffer.append(System.getProperty("line.separator"));
   }
 
+  /** Ensure writing to file. */
   public static void Flush() {
     File f = new File(trace_dir + "/" + "trace.txt");
 

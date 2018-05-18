@@ -16,3 +16,16 @@ Running with this configuration will execute `src/test/java/cn/yyx/research/test
 Prerequisite: The `TraceWorkingDirectory/`, specified in `-javaagent` options, must exist.
 
 Notice that `TraceWorkingDirectory/` is .gitignore-d.
+
+
+# Naming style issue
+
+The mixture of CamelCase, camelCase and snake_case is by design.
+
+# Formatting
+
+We format Java sources files in this module into Google Java Format, using one of:
+
++ https://github.com/google/google-java-format#eclipse
++ https://github.com/google/google-java-format#intellij
++ https://github.com/google/google-java-format#from-the-command-line

@@ -4,6 +4,9 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+/**
+ * deprecated?
+ */
 public class ComparasionInstrument extends ClassVisitor {
 
   public ComparasionInstrument() {

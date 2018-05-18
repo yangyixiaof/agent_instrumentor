@@ -7,9 +7,9 @@ import java.util.List;
 
 public class FileIterator {
 
-  String dir = null;
-  String pattern = null;
-  List<File> files = new LinkedList<File>();
+  String dir;
+  String pattern;
+  List<File> files = new LinkedList<>();
 
   public FileIterator(String dir, String pattern) {
     this.dir = dir;
