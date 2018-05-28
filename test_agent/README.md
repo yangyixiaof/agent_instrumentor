@@ -1,5 +1,18 @@
 # Usage
 
+## 工作流 workflow
+
+1. 测 ClassAdapter 所指定的插桩配置的效果
+
+```
+cn.yyx.research.trace.instrument.CmpInstrumenter.TestInstrumentOneClass(String sourceClassName, String targetClassFile)
+```
+
+用 ClassAdapter 所指定的插桩配置，插桩 sourceClassName 输出到文件 targetClassFile。
+
+
+
+
 ## Running in IntelliJ IDEA
 
 1.
