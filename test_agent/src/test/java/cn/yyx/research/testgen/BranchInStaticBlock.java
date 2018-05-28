@@ -1,6 +1,6 @@
 package cn.yyx.research.testgen;
 
-public class BranchInStatic {
+public class BranchInStaticBlock {
 
   static {
     int n = 1;
@@ -13,5 +13,11 @@ public class BranchInStatic {
 
   public static void main(String[] args) {
     System.out.println("BranchInStaticcccc");
+    int n = 1;
+    if (n > 292929) {
+      System.out.println("static n>191919");
+    } else {
+      System.out.println("static !n>191919");
+    }
   }
 }
