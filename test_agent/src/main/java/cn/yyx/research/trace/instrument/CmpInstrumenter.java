@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.*;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -14,6 +15,13 @@ import org.objectweb.asm.Opcodes;
 
 public class CmpInstrumenter {
 
+  /**
+   * 用于 java.lang.instrument 插桩框架。
+   *
+   * @param class_name
+   * @param input_class
+   * @return
+   */
   public static byte[] InstrumentOneClass(String class_name, byte[] input_class) {
     System.out.println("class_name:" + class_name);
     byte[] b = input_class;
@@ -30,16 +38,36 @@ public class CmpInstrumenter {
     return b;
   }
 
-  public static void TestInstrumentOneClass() {
+  /**
+   * 仅为了调起 TestInstrumentOneClass(String,String)。
+   *
+   * @param args
+   */
+  public static void main(String[] args) {
+    //    TestInstrumentOneClass("cn/yyx/research/trace/test/HaHaJ", "test_materials/HaHaJ.class");
+    // 嘿，只能读到代码目录里的类，读不到测试目录里的类。暂且先 copy 到代码目录 TODO
+    TestInstrumentOneClass("cn/yyx/research/trace/test/IfDNF", "test_materials/IfDNF.class");
+  }
+
+  /**
+   * 用 ClassAdapter 所指定的插桩配置，插桩 sourceClassName 输出到文件 targetClassFile。
+   *
+   * <p>E.g. TestInstrumentOneClass("cn/yyx/research/trace/test/HaHaJ",
+   * "test_materials/HaHaJ.class");
+   *
+   * @param sourceClassName
+   * @param targetClassFile
+   */
+  public static void TestInstrumentOneClass(String sourceClassName, String targetClassFile) {
     try {
-      ClassReader cr = new ClassReader("cn/yyx/research/trace/test/HaHaJ");
+      ClassReader cr = new ClassReader(sourceClassName);
       ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
       ClassVisitor classAdapter = new ClassAdapter(cw);
       cr.accept(classAdapter, ClassReader.SKIP_DEBUG);
       byte[] b = cw.toByteArray();
 
       // print to file.
-      File file = new File("test_materials/transformed.class");
+      File file = new File(targetClassFile);
       FileOutputStream fout = new FileOutputStream(file);
       fout.write(b);
       fout.close();
@@ -52,10 +80,13 @@ public class CmpInstrumenter {
 
 class ClassAdapter extends ClassVisitor {
 
+  private String className;
+
   public ClassAdapter(final ClassVisitor cw) {
-    super(Opcodes.ASM5, cw);
+    super(Opcodes.ASM6, cw);
   }
 
+  // asm 为啥不搞个 AsmMethod 结构呢？( ﾟ∀。)
   @Override
   public MethodVisitor visitMethod(
       final int access,
@@ -63,22 +94,38 @@ class ClassAdapter extends ClassVisitor {
       final String desc,
       final String signature,
       final String[] exceptions) {
+    System.out.println("---- visitMethod, name = " + name);
     MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-    return mv == null ? null : new MethodAdapter(mv);
+    return mv == null ? null : new MethodAdapter(mv, name, desc, signature);
+    // 这个先 visit 再返回，TODO 完整看一遍
   }
 }
 
 class MethodAdapter extends MethodVisitor {
 
   int relative_offset = 0;
+  String methodName;
+  String methodDesc; // descriptor 更有用些
+  String methodSignature; // TODO signature 为何经常是 null？
 
   public MethodAdapter(final MethodVisitor mv) {
-    super(Opcodes.ASM5, mv);
+    super(Opcodes.ASM6, mv);
+  }
+
+  public MethodAdapter(
+      final MethodVisitor mv, String methodName, String methodDesc, String methodSignature) {
+    super(Opcodes.ASM6, mv); // 该放前？后？TODO
+    this.methodName = methodName;
+    this.methodDesc = methodDesc;
+    this.methodSignature = methodSignature;
   }
 
   @Override
-  public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-    InstrumentLdcInsn("@Method-Enter:" + name);
+  public void visitCode() {
+    InstrumentLdcInsn(
+        "@Method-Enter:" + methodName + "~" + methodDesc
+        //            + "~" + methodSignature
+        );
     InstrumentThroughMethodVisitor(
         Opcodes.INVOKESTATIC,
         "cn/yyx/research/trace_recorder/TraceRecorder",
@@ -91,26 +138,59 @@ class MethodAdapter extends MethodVisitor {
         "NewLine",
         "()V",
         false);
-    relative_offset = 0;
+    relative_offset = 0; // TODO 啥
 
-    // instrument original instruction
-    InstrumentThroughMethodVisitor(opcode, owner, name, desc, itf);
-
-    InstrumentLdcInsn("@Method-Exit:" + name);
-    InstrumentThroughMethodVisitor(
-        Opcodes.INVOKESTATIC,
-        "cn/yyx/research/trace_recorder/TraceRecorder",
-        "Append",
-        "(Ljava/lang/String;)V",
-        false);
-    InstrumentThroughMethodVisitor(
-        Opcodes.INVOKESTATIC,
-        "cn/yyx/research/trace_recorder/TraceRecorder",
-        "NewLine",
-        "()V",
-        false);
-    relative_offset = 0;
+    // 原句
+    super.visitCode();
   }
+
+  //    // owner  是类名！！
+  //    @Override
+  //    public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf)
+  // {
+  //  //    System.out.println("-------- visitMethodInsn, name = " + name);
+  //  //    if (name.contains("main")) {
+  //  //      System.out.println("++++++++ visitMethodInsn 回调，name.contains(\"main\")");
+  //  //    }
+  //  //    if (name.contains("clinit")) {
+  //  //      System.out.println("++++++++ visitMethodInsn 回调，name.contains(\"clinit\")");
+  //  //    }
+  //      InstrumentLdcInsn(
+  //          "@Method-Enter:" + name
+  //  //                    + "~" + methodSignature
+  //          );
+  //      InstrumentThroughMethodVisitor(
+  //          Opcodes.INVOKESTATIC,
+  //          "cn/yyx/research/trace_recorder/TraceRecorder",
+  //          "Append",
+  //          "(Ljava/lang/String;)V",
+  //          false);
+  //      InstrumentThroughMethodVisitor(
+  //          Opcodes.INVOKESTATIC,
+  //          "cn/yyx/research/trace_recorder/TraceRecorder",
+  //          "NewLine",
+  //          "()V",
+  //          false);
+  //      relative_offset = 0;
+  //
+  //      // instrument original instruction
+  //      InstrumentThroughMethodVisitor(opcode, owner, name, desc, itf);
+  //
+  //      InstrumentLdcInsn("@Method-Exit:" + name);
+  //      InstrumentThroughMethodVisitor(
+  //          Opcodes.INVOKESTATIC,
+  //          "cn/yyx/research/trace_recorder/TraceRecorder",
+  //          "Append",
+  //          "(Ljava/lang/String;)V",
+  //          false);
+  //      InstrumentThroughMethodVisitor(
+  //          Opcodes.INVOKESTATIC,
+  //          "cn/yyx/research/trace_recorder/TraceRecorder",
+  //          "NewLine",
+  //          "()V",
+  //          false);
+  //      relative_offset = 0;
+  //    }
 
   private void PrintBranchTwoValues(
       String cmp,
@@ -246,7 +326,7 @@ class MethodAdapter extends MethodVisitor {
     if (opcode == Opcodes.IFLT) {
       PrintBranchTwoValues("IZ$<", 1, 1, "0", false);
     }
-    super.visitJumpInsn(opcode, label);
+    super.visitJumpInsn(opcode, label); // 放这个位置的原因？TODO 箫说我看下
     if (opcode == Opcodes.IFNONNULL) {
       PrintBranchTwoValues("N$!=", 1, 1, "1", false);
     }
@@ -257,6 +337,7 @@ class MethodAdapter extends MethodVisitor {
 
   @Override
   public void visitInsn(int arg0) {
+    // 比较
     if (arg0 == Opcodes.DCMPG) {
       PrintBranchTwoValues("D$CMPG", 2, 2, null, true);
     }
@@ -272,6 +353,37 @@ class MethodAdapter extends MethodVisitor {
     if (arg0 == Opcodes.LCMP) {
       PrintBranchTwoValues("L$CMP", 2, 2, null, false);
     }
+
+    // 插到 method 的返回指令之前
+    // IRETURN, LRETURN, FRETURN, DRETURN, ARETURN, RETURN TODO 风险：这些还没见全。
+    List<Integer> returns =
+        Arrays.asList(
+            Opcodes.IRETURN,
+            Opcodes.LRETURN,
+            Opcodes.FRETURN,
+            Opcodes.DRETURN,
+            Opcodes.ARETURN,
+            Opcodes.RETURN);
+    if (returns.contains(arg0)) {
+      InstrumentLdcInsn(
+          "@Method-Exit:" + methodName + "~" + methodDesc
+          //              + "~" + methodSignature
+          );
+      InstrumentThroughMethodVisitor(
+          Opcodes.INVOKESTATIC,
+          "cn/yyx/research/trace_recorder/TraceRecorder",
+          "Append",
+          "(Ljava/lang/String;)V",
+          false);
+      InstrumentThroughMethodVisitor(
+          Opcodes.INVOKESTATIC,
+          "cn/yyx/research/trace_recorder/TraceRecorder",
+          "NewLine",
+          "()V",
+          false);
+      relative_offset = 0; // TODO 啥
+    }
+
     super.visitInsn(arg0);
   }
 
@@ -289,7 +401,7 @@ class MethodAdapter extends MethodVisitor {
       int opc, String qualified_logger, String method, String signature, boolean itf) {
     // System.out.println("instructed_opc:" + opc + ";qualified_logger:" + qualified_logger +
     // ";method:" + method
-    //		+ ";signature:" + signature);
+    //		+ ";methodSignature:" + methodSignature);
     mv.visitMethodInsn(opc, qualified_logger, method, signature, itf);
   }
 }

@@ -2,6 +2,13 @@ package cn.yyx.labtask.test_agent_trace_reader;
 
 import java.io.Serializable;
 
+/**
+ * .class 文件中（一行行 JVM 指令），method 定义块里出现的 CMP 系列指令，我们称为分支结点。this class 记录一个分支结点的属性。每个分支结点的属性有：
+ * <li>所在的 method
+ * <li>是这个 method 里的第几个分支结点：relative_offset
+ * <li>该 CMP 指令对应的 Java 源代码里的运算符是什么（如 >=）TODO 是否一一对应？
+ * <li>该 CMP 指令所比较的两个操作数的值，转成 double TODO null 情况？
+ */
 public class ValuesOfBranch implements Serializable {
 
   private static final long serialVersionUID = 8325093925948900533L;

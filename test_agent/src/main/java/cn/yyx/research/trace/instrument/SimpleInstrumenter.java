@@ -149,7 +149,7 @@ class SimpleMethodAdapter extends MethodVisitor {
       int opc, String qualified_logger, String method, String signature, boolean itf) {
     // System.out.println("instructed_opc:" + opc + ";qualified_logger:" +
     // qualified_logger + ";method:" + method
-    // + ";signature:" + signature);
+    // + ";methodSignature:" + methodSignature);
     mv.visitMethodInsn(opc, qualified_logger, method, signature, itf);
   }
 }

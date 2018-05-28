@@ -10,6 +10,8 @@ import cn.yyx.research.trace.instrument.CmpInstrumenter;
 
 public class CmpTransformer implements ClassFileTransformer {
 
+  boolean enabled = false;
+
   // 没有使用……准备干啥的？（似乎曾经准备接收 agent 参数） 啊InFlower，过滤吗？
   private List<String> flowers = new LinkedList<>();
 
@@ -29,9 +31,17 @@ public class CmpTransformer implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
     //		if (InFlower(className)) {
-    return CmpInstrumenter.InstrumentOneClass(className, classfileBuffer);
+
+    if (className.contains("yyx")) { // 超级临时！！！TODO
+      enabled = true;
+      System.out.println("遇见 yyx：" + className + ", 本类及之后插桩 enabled！");
+    }
+    if (enabled) {
+      return CmpInstrumenter.InstrumentOneClass(className, classfileBuffer);
+    }
+
     //		}
-    //		return classfileBuffer;
+    return classfileBuffer; // 不插的原样返回
   }
 
   //	protected boolean InFlower(String class_name) {

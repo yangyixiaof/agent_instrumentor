@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import cn.yyx.labtask.runtime.memory.state.BranchState;
 import cn.yyx.labtask.runtime.round.testgen.TestModel;
 
+/** 从 trace 文本文件，解析出各个分支结点的信息 */
 public class TraceReader {
 
   private static final String default_trace_file =
@@ -24,63 +25,69 @@ public class TraceReader {
   String previous_sequence_identify = null;
   String sequence_identify = null;
 
-  public TraceReader(TestModel model, String previous_sequence_identify, String sequence_identify) {
-    this(model, previous_sequence_identify, sequence_identify, default_trace_file);
+  public TraceReader(
+      TestModel model, String previous_sequence_identifier, String current_sequence_identifier) {
+    this(model, previous_sequence_identifier, current_sequence_identifier, default_trace_file);
   }
 
   public TraceReader(
       TestModel model,
-      String previous_sequence_identify,
-      String sequence_identify,
+      String previous_sequence_identifier,
+      String current_sequence_identifier,
       String traceFilePath) {
     this.model = model;
-    this.previous_sequence_identify = previous_sequence_identify;
-    this.sequence_identify = sequence_identify;
+    this.previous_sequence_identify = previous_sequence_identifier;
+    this.sequence_identify = current_sequence_identifier;
     this.specific_file = traceFilePath;
   }
 
-  static int enter = 0, exit = 0, operand = 0;
-  static int currentLineFrom1 = 0; // start from 1
-  static String lastPop = null;
+  //  static int enter = 0, exit = 0, operand = 0; // debug 时为了查配对的计数
+  //  static int currentLineFrom1 = 0; // start from 1
+  //  static String lastPop = null;
 
-  public void ReadFromTraceFile() {
-    Stack<String> runtime_stack = new Stack<String>();
-    Map<String, ValuesOfBranch> branch_signature = new TreeMap<String, ValuesOfBranch>();
+  public Map<String, ValuesOfBranch> ReadFromTraceFile(String specific_file) {
+    Stack<String> runtime_stack = new Stack<>();
+    // deprecated - 垫进去一个 main。啊啊啊这里似乎预设了测试入口是 被测类的 main…… // 实际上也将会是我们用 JUnit tests 拼起来的 main……
+    //    runtime_stack.push("MMMMMMMMMMain");
+    Map<String, ValuesOfBranch> branch_signature_to_info = new TreeMap<>();
     BufferedReader br = null;
     try {
       br = new BufferedReader(new FileReader(new File(specific_file)));
-      String one_line = null;
+      String one_line;
       while ((one_line = br.readLine()) != null) {
-        currentLineFrom1++;
+        //        currentLineFrom1++;
         one_line = one_line.trim();
         if (!one_line.equals("")) {
           String[] parts = one_line.split(":");
           if (one_line.startsWith("@Method-Enter:")) {
-            enter++;
+            //            enter++;
             ProcessMethodEnter(parts[1], runtime_stack);
           }
           if (one_line.startsWith("@Method-Exit:")) {
-            exit++;
+            //            exit++;
             ProcessMethodExit(parts[1], runtime_stack);
           }
           if (one_line.startsWith("@Branch-Operand:")) {
-            operand++;
+            //            operand++;
             try {
               String operandPart = parts[3];
               String[] operandParts = operandPart.split("#");
-              double b1 = Double.parseDouble(operandParts[1]);
-              double b2 = Double.parseDouble(operandParts[2]);
+              double op1 = Double.parseDouble(operandParts[1]);
+              double op2 = Double.parseDouble(operandParts[2]);
+              String enclosingMethod = runtime_stack.peek();
+              int relativeOffset = Integer.parseInt(parts[1]);
+              String cmpOperator = parts[2];
               ProcessBranchOperand(
-                  runtime_stack.peek(),
-                  Integer.parseInt(parts[1]),
-                  parts[2],
-                  b1,
-                  b2,
+                  enclosingMethod,
+                  relativeOffset,
+                  cmpOperator,
+                  op1,
+                  op2,
                   runtime_stack,
-                  branch_signature);
+                  branch_signature_to_info);
             } catch (Exception e) {
-              System.out.println("lastPop: " + lastPop);
-              System.out.println("currentLineFrom1 " + currentLineFrom1);
+              //              System.out.println("lastPop: " + lastPop);
+              //              System.out.println("currentLineFrom1 " + currentLineFrom1);
               e.printStackTrace();
               System.exit(1);
             }
@@ -89,13 +96,17 @@ public class TraceReader {
           break;
         }
       }
-      TraceSerializer.SerializeByIdentification(sequence_identify, branch_signature);
-      @SuppressWarnings("unchecked")
-      Map<String, ValuesOfBranch> previous_branch_signature =
-          (Map<String, ValuesOfBranch>)
-              TraceSerializer.DeserializeByIdentification(previous_sequence_identify);
 
-      BuildGuidedModel(previous_branch_signature, branch_signature);
+      //      // TODO 做啥的？
+      //      TraceSerializer.SerializeByIdentification(sequence_identify,
+      // branch_signature_to_info);
+      //      // TODO 做啥的？
+      //      @SuppressWarnings("unchecked")
+      //      Map<String, ValuesOfBranch> previous_branch_signature =
+      //          (Map<String, ValuesOfBranch>)
+      //              TraceSerializer.DeserializeByIdentification(previous_sequence_identify);
+      //
+      //      BuildGuidedModel(previous_branch_signature, branch_signature_to_info);
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -108,21 +119,19 @@ public class TraceReader {
         }
       }
     }
-    System.out.printf("!!!!!enter %d, exit %d, operand %d\n", enter, exit, operand);
+    return branch_signature_to_info;
   }
 
   private void ProcessMethodEnter(String method_name, Stack<String> runtime_stack) {
     runtime_stack.push(method_name);
   }
 
-  /**
-   * pop 并检查配对儿。
-   */
+  /** pop 并检查配对儿。 */
   private void ProcessMethodExit(String method_name, Stack<String> runtime_stack) {
     String mname = runtime_stack.pop();
-    lastPop = mname;
+    //    lastPop = mname;
     if (!mname.equals(method_name)) {
-      System.err.println("very strange! stack not valid!");
+      System.err.printf("very strange! stack not valid! !%s.equals(%s)\n", mname, method_name);
       System.exit(1);
     }
   }
@@ -136,6 +145,15 @@ public class TraceReader {
   //		branch_signature.put(catted, vob);
   //	}
 
+  /**
+   * @param enclosing_method
+   * @param relative_offset
+   * @param cmp_optr
+   * @param branch_value1
+   * @param branch_value2
+   * @param runtime_stack
+   * @param branch_signature 存放结果，在这里更新
+   */
   private void ProcessBranchOperand(
       String enclosing_method,
       int relative_offset,
@@ -147,6 +165,8 @@ public class TraceReader {
     ValuesOfBranch vob =
         new ValuesOfBranch(
             enclosing_method, relative_offset, cmp_optr, branch_value1, branch_value2);
+    // 把执行到该分支结点的 method 调用栈串起来，作为该分支的 branch_signature
+    // 这个标识合理吗？？？TODO
     String[] target = new String[runtime_stack.size()];
     runtime_stack.toArray(target);
     String catted = StringUtils.join(target, "#");
@@ -155,8 +175,8 @@ public class TraceReader {
 
   private Map<String, Integer> BuildGuidedModel(
       Map<String, ValuesOfBranch> previous_branch_signature,
-      Map<String, ValuesOfBranch> branch_signature) {
-    Map<String, Integer> influcnce = new TreeMap<String, Integer>();
+      Map<String, ValuesOfBranch> current_branch_signature) {
+    Map<String, Integer> influence = new TreeMap<String, Integer>();
 
     BranchState branch_state = model.GetState();
 
@@ -168,8 +188,8 @@ public class TraceReader {
         continue;
       }
       ValuesOfBranch previous_vob = previous_branch_signature.get(sig);
-      ValuesOfBranch vob = branch_signature.get(sig);
-      influcnce.put(sig, -1);
+      ValuesOfBranch vob = current_branch_signature.get(sig);
+      influence.put(sig, -1);
       if (vob != null) {
         switch (vob.GetCmpOptr()) {
           case "D$CMPG":
@@ -207,7 +227,7 @@ public class TraceReader {
                       {
                         double gap = (v1 - v2) - (prev_v1 - prev_v2);
                         if (gap > 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -216,7 +236,7 @@ public class TraceReader {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -224,7 +244,7 @@ public class TraceReader {
                       {
                         double gap = (v1 - v2) - (prev_v1 - prev_v2);
                         if (gap < 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -269,7 +289,7 @@ public class TraceReader {
                       {
                         double gap = v1 - v2;
                         if (gap != 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -278,7 +298,7 @@ public class TraceReader {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -318,7 +338,7 @@ public class TraceReader {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap < 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -327,7 +347,7 @@ public class TraceReader {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -368,7 +388,7 @@ public class TraceReader {
                           double gap = v1 - v2;
                           double prev_gap = prev_v1 - prev_v2;
                           if (prev_gap - gap < 0) {
-                            influcnce.put(sig, 1);
+                            influence.put(sig, 1);
                           }
                         }
                         break;
@@ -377,7 +397,7 @@ public class TraceReader {
                           double gap = v1 - v2;
                           double prev_gap = prev_v1 - prev_v2;
                           if (prev_gap - gap > 0) {
-                            influcnce.put(sig, 1);
+                            influence.put(sig, 1);
                           }
                         }
                         break;
@@ -418,7 +438,7 @@ public class TraceReader {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap < 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -427,7 +447,7 @@ public class TraceReader {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -467,7 +487,7 @@ public class TraceReader {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap < 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -476,7 +496,7 @@ public class TraceReader {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influcnce.put(sig, 1);
+                          influence.put(sig, 1);
                         }
                       }
                       break;
@@ -490,6 +510,6 @@ public class TraceReader {
         }
       }
     }
-    return influcnce;
+    return influence;
   }
 }
