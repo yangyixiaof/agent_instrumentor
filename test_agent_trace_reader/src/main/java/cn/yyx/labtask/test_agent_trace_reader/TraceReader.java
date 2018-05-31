@@ -47,8 +47,6 @@ public class TraceReader {
 
   public Map<String, ValuesOfBranch> ReadFromTraceFile(String specific_file) {
     Stack<String> runtime_stack = new Stack<>();
-    // deprecated - 垫进去一个 main。啊啊啊这里似乎预设了测试入口是 被测类的 main…… // 实际上也将会是我们用 JUnit tests 拼起来的 main……
-    //    runtime_stack.push("MMMMMMMMMMain");
     Map<String, ValuesOfBranch> branch_signature_to_info = new TreeMap<>();
     BufferedReader br = null;
     try {
