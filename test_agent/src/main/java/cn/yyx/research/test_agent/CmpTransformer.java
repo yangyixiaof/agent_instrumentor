@@ -10,7 +10,7 @@ import cn.yyx.research.trace.instrument.CmpInstrumenter;
 
 public class CmpTransformer implements ClassFileTransformer {
 
-  boolean enabled = false;
+  boolean instrumentEnabled = false; // 改成 true 则脏脏地关闭过滤策略
 
   // 没有使用……准备干啥的？（似乎曾经准备接收 agent 参数） 啊InFlower，过滤吗？
   private List<String> flowers = new LinkedList<>();
@@ -33,10 +33,10 @@ public class CmpTransformer implements ClassFileTransformer {
     //		if (InFlower(className)) {
 
     if (className.contains("yyx")) { // 超级临时！！！TODO
-      enabled = true;
+      instrumentEnabled = true;
       System.out.println("遇见 yyx：" + className + ", 本类及之后插桩 enabled！");
     }
-    if (enabled) {
+    if (instrumentEnabled) {
       return CmpInstrumenter.InstrumentOneClass(className, classfileBuffer);
     }
 
