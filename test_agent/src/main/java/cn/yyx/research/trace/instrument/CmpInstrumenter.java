@@ -326,7 +326,7 @@ class MethodAdapter extends MethodVisitor {
     if (opcode == Opcodes.IFLT) {
       PrintBranchTwoValues("IZ$<", 1, 1, "0", false);
     }
-    super.visitJumpInsn(opcode, label); // 放这个位置的原因？TODO 箫说我看下
+    super.visitJumpInsn(opcode, label); // Why here？TODO yyx let me see see
     if (opcode == Opcodes.IFNONNULL) {
       PrintBranchTwoValues("N$!=", 1, 1, "1", false);
     }
@@ -337,21 +337,29 @@ class MethodAdapter extends MethodVisitor {
 
   @Override
   public void visitInsn(int arg0) {
-    // 比较
+    // pop 2 values (must be of certain type), compare,
+    // push int 0 if ==, push int 1 if >, push int -1 if <.
+
+    // long
+    if (arg0 == Opcodes.LCMP) {
+      PrintBranchTwoValues("L$CMP", 2, 2, null, false);
+    }
+
+    // double
+    // G version: if at least one of the two operands is NaN, push 1.
+    // L version: if at least one of the two operands is NaN, push -1.
     if (arg0 == Opcodes.DCMPG) {
       PrintBranchTwoValues("D$CMPG", 2, 2, null, true);
     }
     if (arg0 == Opcodes.DCMPL) {
       PrintBranchTwoValues("D$CMPL", 2, 2, null, true);
     }
+    // float. G/L version like double's
     if (arg0 == Opcodes.FCMPG) {
       PrintBranchTwoValues("F$CMPG", 1, 2, null, true);
     }
-    if (arg0 == Opcodes.FCMPG) {
+    if (arg0 == Opcodes.FCMPL) {
       PrintBranchTwoValues("F$CMPL", 1, 2, null, true);
-    }
-    if (arg0 == Opcodes.LCMP) {
-      PrintBranchTwoValues("L$CMP", 2, 2, null, false);
     }
 
     // 插到 method 的返回指令之前
@@ -362,8 +370,9 @@ class MethodAdapter extends MethodVisitor {
             Opcodes.LRETURN,
             Opcodes.FRETURN,
             Opcodes.DRETURN,
-            Opcodes.ARETURN,
-            Opcodes.RETURN);
+            Opcodes.ARETURN, // return a reference
+            Opcodes.RETURN // return void
+            );
     if (returns.contains(arg0)) {
       InstrumentLdcInsn(
           "@Method-Exit:" + methodName + "~" + methodDesc
