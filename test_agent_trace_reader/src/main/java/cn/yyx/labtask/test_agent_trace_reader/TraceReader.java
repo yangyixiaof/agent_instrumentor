@@ -4,38 +4,41 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 
-import cn.yyx.labtask.runtime.memory.state.BranchState;
-import cn.yyx.labtask.runtime.round.testgen.TestModel;
-
-/** 从 trace 文本文件，解析出各个分支结点的信息 */
+/**
+ * 从 trace 文本文件，解析出各个分支结点的信息
+ *
+ * <p>以前似乎试图让 this class 负责产生 reward，现在只做 parsing
+ */
 public class TraceReader {
 
   private static final String default_trace_file =
       System.getProperty("user.home") + "/" + "trace.txt";
   String specific_file = null;
-  TestModel model = null;
+
   String previous_sequence_identify = null;
   String sequence_identify = null;
 
-  public TraceReader(
-      TestModel model, String previous_sequence_identifier, String current_sequence_identifier) {
-    this(model, previous_sequence_identifier, current_sequence_identifier, default_trace_file);
+  /**
+   * 读默认位置的 trace 文件的 wrapper constructor
+   *
+   * @param previous_sequence_identifier
+   * @param current_sequence_identifier
+   */
+  public TraceReader(String previous_sequence_identifier, String current_sequence_identifier) {
+    this(previous_sequence_identifier, current_sequence_identifier, default_trace_file);
   }
 
   public TraceReader(
-      TestModel model,
       String previous_sequence_identifier,
       String current_sequence_identifier,
       String traceFilePath) {
-    this.model = model;
+
     this.previous_sequence_identify = previous_sequence_identifier;
     this.sequence_identify = current_sequence_identifier;
     this.specific_file = traceFilePath;
@@ -45,6 +48,12 @@ public class TraceReader {
   //  static int currentLineFrom1 = 0; // start from 1
   //  static String lastPop = null;
 
+  /**
+   * Main entry of this class.
+   *
+   * @param specific_file
+   * @return
+   */
   public Map<String, ValuesOfBranch> ReadFromTraceFile(String specific_file) {
     Stack<String> runtime_stack = new Stack<>();
     Map<String, ValuesOfBranch> branch_signature_to_info = new TreeMap<>();
@@ -169,345 +178,5 @@ public class TraceReader {
     runtime_stack.toArray(target);
     String catted = StringUtils.join(target, "#");
     branch_signature.put(catted, vob);
-  }
-
-  private Map<String, Integer> BuildGuidedModel(
-      Map<String, ValuesOfBranch> previous_branch_signature,
-      Map<String, ValuesOfBranch> current_branch_signature) {
-    Map<String, Integer> influence = new TreeMap<String, Integer>();
-
-    BranchState branch_state = model.GetState();
-
-    Set<String> pset = previous_branch_signature.keySet();
-    Iterator<String> pitr = pset.iterator();
-    while (pitr.hasNext()) {
-      String sig = pitr.next();
-      if (branch_state.BranchHasBeenIteratedOver(sig)) {
-        continue;
-      }
-      ValuesOfBranch previous_vob = previous_branch_signature.get(sig);
-      ValuesOfBranch vob = current_branch_signature.get(sig);
-      influence.put(sig, -1);
-      if (vob != null) {
-        switch (vob.GetCmpOptr()) {
-          case "D$CMPG":
-          case "D$CMPL":
-          case "F$CMPG":
-          case "F$CMPL":
-          case "L$CMP":
-            {
-              Integer state = branch_state.GetBranchState(sig);
-              if (state == null) {
-                state = 0b111;
-              }
-              double prev_v1 = previous_vob.GetBranchValue1();
-              double prev_v2 = previous_vob.GetBranchValue2();
-
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
-              if (v1 == v2) {
-                state &= 0b101;
-              } else {
-                if (v1 > v2) {
-                  state &= 0b110;
-                } else {
-                  state &= 0b011;
-                }
-              }
-              branch_state.PutBranchState(sig, state);
-              int state_copy = state;
-              int position = 1;
-              while (state_copy > 0) {
-                int bit = state_copy & 0b1;
-                if (bit == 1) {
-                  switch (position) {
-                    case 1:
-                      {
-                        double gap = (v1 - v2) - (prev_v1 - prev_v2);
-                        if (gap > 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                    case 2:
-                      {
-                        double gap = v1 - v2;
-                        double prev_gap = prev_v1 - prev_v2;
-                        if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                    case 3:
-                      {
-                        double gap = (v1 - v2) - (prev_v1 - prev_v2);
-                        if (gap < 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                  }
-                }
-                state_copy >>= 1;
-                position++;
-              }
-            }
-            break;
-          case "I$==":
-          case "I$!=":
-          case "A$==":
-          case "A$!=":
-          case "IZ$==":
-          case "IZ$!=":
-          case "N$!=":
-          case "N$==":
-            {
-              Integer state = branch_state.GetBranchState(sig);
-              if (state == null) {
-                state = 0b11;
-              }
-              double prev_v1 = previous_vob.GetBranchValue1();
-              double prev_v2 = previous_vob.GetBranchValue2();
-
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
-              if (v1 == v2) {
-                state &= 0b01;
-              } else {
-                state &= 0b10;
-              }
-              branch_state.PutBranchState(sig, state);
-              int state_copy = state;
-              int position = 1;
-              while (state_copy > 0) {
-                int bit = state_copy & 0b1;
-                if (bit == 1) {
-                  switch (position) {
-                    case 1:
-                      {
-                        double gap = v1 - v2;
-                        if (gap != 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                    case 2:
-                      {
-                        double gap = v1 - v2;
-                        double prev_gap = prev_v1 - prev_v2;
-                        if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                  }
-                }
-                state_copy >>= 1;
-                position++;
-              }
-            }
-            break;
-          case "I$>=":
-          case "IZ$>=":
-            {
-              Integer state = branch_state.GetBranchState(sig);
-              if (state == null) {
-                state = 0b11;
-              }
-              double prev_v1 = previous_vob.GetBranchValue1();
-              double prev_v2 = previous_vob.GetBranchValue2();
-
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
-              if (v1 >= v2) {
-                state &= 0b10;
-              } else {
-                state &= 0b01;
-              }
-              branch_state.PutBranchState(sig, state);
-              int state_copy = state;
-              int position = 1;
-              while (state_copy > 0) {
-                int bit = state_copy & 0b1;
-                if (bit == 1) {
-                  switch (position) {
-                    case 1:
-                      {
-                        double gap = v1 - v2;
-                        double prev_gap = prev_v1 - prev_v2;
-                        if (prev_gap - gap < 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                    case 2:
-                      {
-                        double gap = v1 - v2;
-                        double prev_gap = prev_v1 - prev_v2;
-                        if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                  }
-                }
-                state_copy >>= 1;
-                position++;
-              }
-            }
-            break;
-          case "I$<=":
-          case "IZ$<=":
-            {
-              {
-                Integer state = branch_state.GetBranchState(sig);
-                if (state == null) {
-                  state = 0b11;
-                }
-                double prev_v1 = previous_vob.GetBranchValue1();
-                double prev_v2 = previous_vob.GetBranchValue2();
-
-                double v1 = vob.GetBranchValue1();
-                double v2 = vob.GetBranchValue2();
-                if (v1 <= v2) {
-                  state &= 0b01;
-                } else {
-                  state &= 0b10;
-                }
-                branch_state.PutBranchState(sig, state);
-                int state_copy = state;
-                int position = 1;
-                while (state_copy > 0) {
-                  int bit = state_copy & 0b1;
-                  if (bit == 1) {
-                    switch (position) {
-                      case 1:
-                        {
-                          double gap = v1 - v2;
-                          double prev_gap = prev_v1 - prev_v2;
-                          if (prev_gap - gap < 0) {
-                            influence.put(sig, 1);
-                          }
-                        }
-                        break;
-                      case 2:
-                        {
-                          double gap = v1 - v2;
-                          double prev_gap = prev_v1 - prev_v2;
-                          if (prev_gap - gap > 0) {
-                            influence.put(sig, 1);
-                          }
-                        }
-                        break;
-                    }
-                  }
-                  state_copy >>= 1;
-                  position++;
-                }
-              }
-            }
-            break;
-          case "I$>":
-          case "IZ$>":
-            {
-              Integer state = branch_state.GetBranchState(sig);
-              if (state == null) {
-                state = 0b11;
-              }
-              double prev_v1 = previous_vob.GetBranchValue1();
-              double prev_v2 = previous_vob.GetBranchValue2();
-
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
-              if (v1 > v2) {
-                state &= 0b10;
-              } else {
-                state &= 0b01;
-              }
-              branch_state.PutBranchState(sig, state);
-              int state_copy = state;
-              int position = 1;
-              while (state_copy > 0) {
-                int bit = state_copy & 0b1;
-                if (bit == 1) {
-                  switch (position) {
-                    case 1:
-                      {
-                        double gap = v1 - v2;
-                        double prev_gap = prev_v1 - prev_v2;
-                        if (prev_gap - gap < 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                    case 2:
-                      {
-                        double gap = v1 - v2;
-                        double prev_gap = prev_v1 - prev_v2;
-                        if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                  }
-                }
-                state_copy >>= 1;
-                position++;
-              }
-            }
-            break;
-          case "I$<":
-          case "IZ$<":
-            {
-              Integer state = branch_state.GetBranchState(sig);
-              if (state == null) {
-                state = 0b11;
-              }
-              double prev_v1 = previous_vob.GetBranchValue1();
-              double prev_v2 = previous_vob.GetBranchValue2();
-
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
-              if (v1 < v2) {
-                state &= 0b01;
-              } else {
-                state &= 0b10;
-              }
-              branch_state.PutBranchState(sig, state);
-              int state_copy = state;
-              int position = 1;
-              while (state_copy > 0) {
-                int bit = state_copy & 0b1;
-                if (bit == 1) {
-                  switch (position) {
-                    case 1:
-                      {
-                        double gap = v1 - v2;
-                        double prev_gap = prev_v1 - prev_v2;
-                        if (prev_gap - gap < 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                    case 2:
-                      {
-                        double gap = v1 - v2;
-                        double prev_gap = prev_v1 - prev_v2;
-                        if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
-                        }
-                      }
-                      break;
-                  }
-                }
-                state_copy >>= 1;
-                position++;
-              }
-            }
-            break;
-        }
-      }
-    }
-    return influence;
   }
 }
