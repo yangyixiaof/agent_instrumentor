@@ -7,9 +7,14 @@ import java.util.TreeMap;
 public class BranchNodesState {
 
   // TODO 替换成 BranchNodeState
-  private Map<String, Integer> branch_state = new TreeMap<String, Integer>();
+  private Map<String, Integer> branch_state = new TreeMap<>();
+  private Map<BranchNodeID, BranchNodeState> states = new TreeMap<>();
 
   public BranchNodesState() {}
+
+  public BranchNodeState getBranchState(BranchNodeID sig) {
+    return states.get(sig);
+  }
 
   public Integer GetBranchState(String sig) {
     return branch_state.get(sig);
@@ -21,9 +26,6 @@ public class BranchNodesState {
 
   public boolean BranchHasBeenIteratedOver(String sig) {
     Integer state = branch_state.get(sig);
-    if (state != null && state == 0) {
-      return true;
-    }
-    return false;
+    return state != null && state == 0;
   }
 }

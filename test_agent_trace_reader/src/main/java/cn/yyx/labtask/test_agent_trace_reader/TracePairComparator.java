@@ -37,6 +37,8 @@ public class TracePairComparator {
   /**
    * YYX Old wisdom...
    *
+   * <p>何必在这儿搞位运算过早优化呢！
+   *
    * @param previous_branch_signature
    * @param current_branch_signature
    * @return
@@ -44,7 +46,7 @@ public class TracePairComparator {
   private Map<String, Integer> BuildGuidedModel(
       Map<String, ValuesOfBranch> previous_branch_signature,
       Map<String, ValuesOfBranch> current_branch_signature) {
-    Map<String, Integer> influence = new TreeMap<String, Integer>();
+    Map<String, Integer> influence = new TreeMap<>();
 
     BranchNodesState branch_state = model.GetState();
 
@@ -60,6 +62,7 @@ public class TracePairComparator {
       influence.put(sig, -1);
       if (vob != null) {
         switch (vob.GetCmpOptr()) {
+            // ``compare then store'' series
           case "D$CMPG":
           case "D$CMPL":
           case "F$CMPG":
@@ -123,6 +126,7 @@ public class TracePairComparator {
               }
             }
             break;
+            // eq neq series...
           case "I$==":
           case "I$!=":
           case "A$==":
@@ -177,6 +181,7 @@ public class TracePairComparator {
               }
             }
             break;
+            // ge, ge 0
           case "I$>=":
           case "IZ$>=":
             {
@@ -226,6 +231,7 @@ public class TracePairComparator {
               }
             }
             break;
+            // le, le 0
           case "I$<=":
           case "IZ$<=":
             {
@@ -277,6 +283,7 @@ public class TracePairComparator {
               }
             }
             break;
+            // gt, gt 0
           case "I$>":
           case "IZ$>":
             {
@@ -326,6 +333,7 @@ public class TracePairComparator {
               }
             }
             break;
+            // lt, lt 0
           case "I$<":
           case "IZ$<":
             {
