@@ -1,0 +1,21 @@
+Reward 算法设计
+
+必须记录一些历史。不然要奖励“快要成真”还是“快要成假”呢？
+
+branchCoverage: Map<分支结点标识string, BranchStatus>
+    分支结点指字节码分支结点。循环在在字节码里也是分支。
+
+class BranchStatus{
+    boolean 成真分支被覆盖;
+    boolean 成假分支被覆盖;
+}
+
+于是每个分支有 2*2=4 种状态
+(false,false) 的就是尚未执行到过，将直接不出现在上述 map 里面
+
+--- 情形 1/2 ：所比较的两个 trace 的分支结点集合一样 ---
+
+
+
+
+

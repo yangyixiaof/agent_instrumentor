@@ -51,9 +51,7 @@ public class TracePairComparator {
     BranchNodesState branch_state = model.GetState();
 
     Set<String> pset = previous_branch_signature.keySet();
-    Iterator<String> pitr = pset.iterator();
-    while (pitr.hasNext()) {
-      String sig = pitr.next();
+    for (String sig : pset) {
       if (branch_state.BranchHasBeenIteratedOver(sig)) {
         continue;
       }
