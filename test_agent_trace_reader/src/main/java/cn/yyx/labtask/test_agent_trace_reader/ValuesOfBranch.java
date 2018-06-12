@@ -32,6 +32,8 @@ public class ValuesOfBranch implements Serializable {
     this.setBranch_value2(branch_value2);
   }
 
+
+
   public double GetBranchValue1() {
     return branch_value1;
   }

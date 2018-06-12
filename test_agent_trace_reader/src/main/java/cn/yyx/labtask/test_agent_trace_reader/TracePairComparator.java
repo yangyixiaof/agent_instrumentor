@@ -12,7 +12,8 @@ import java.util.*;
  */
 public class TracePairComparator {
 
-  TestModel model = null;
+  TestModel model = new TestModel();
+  private double v1;
 
   /**
    * 大问题是 before after 里的 key 集不一样时怎么办 :(
@@ -29,7 +30,9 @@ public class TracePairComparator {
     commonKeys.retainAll(after.keySet()); // in-place sets intersection.
 
     TreeMap<String, Double> result = new TreeMap<>();
-    for (String b : commonKeys) {}
+    for (String b : commonKeys) {
+
+    }
 
     return null;
   }
@@ -43,10 +46,10 @@ public class TracePairComparator {
    * @param current_branch_signature
    * @return
    */
-  private Map<String, Integer> BuildGuidedModel(
+  public Map<String, Double> BuildGuidedModel(
       Map<String, ValuesOfBranch> previous_branch_signature,
       Map<String, ValuesOfBranch> current_branch_signature) {
-    Map<String, Integer> influence = new TreeMap<>();
+    Map<String, Double> influence = new TreeMap<>();
 
     BranchNodesState branch_state = model.GetState();
 
@@ -56,10 +59,10 @@ public class TracePairComparator {
         continue;
       }
       ValuesOfBranch previous_vob = previous_branch_signature.get(sig);
-      ValuesOfBranch vob = current_branch_signature.get(sig);
-      influence.put(sig, -1);
-      if (vob != null) {
-        switch (vob.GetCmpOptr()) {
+      ValuesOfBranch current_vob = current_branch_signature.get(sig);
+      influence.put(sig, -1.);
+      if (current_vob != null) {
+        switch (current_vob.GetCmpOptr()) {
             // ``compare then store'' series
           case "D$CMPG":
           case "D$CMPL":
@@ -74,8 +77,8 @@ public class TracePairComparator {
               double prev_v1 = previous_vob.GetBranchValue1();
               double prev_v2 = previous_vob.GetBranchValue2();
 
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
+              double v1 = current_vob.GetBranchValue1();
+              double v2 = current_vob.GetBranchValue2();
               if (v1 == v2) {
                 state &= 0b101;
               } else {
@@ -96,7 +99,7 @@ public class TracePairComparator {
                       {
                         double gap = (v1 - v2) - (prev_v1 - prev_v2);
                         if (gap > 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -105,7 +108,7 @@ public class TracePairComparator {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -113,7 +116,7 @@ public class TracePairComparator {
                       {
                         double gap = (v1 - v2) - (prev_v1 - prev_v2);
                         if (gap < 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -122,9 +125,9 @@ public class TracePairComparator {
                 state_copy >>= 1;
                 position++;
               }
-            }
+            } // // ``compare then store'' series BLOCK
             break;
-            // eq neq series...
+            // eq neq series... *8
           case "I$==":
           case "I$!=":
           case "A$==":
@@ -141,8 +144,8 @@ public class TracePairComparator {
               double prev_v1 = previous_vob.GetBranchValue1();
               double prev_v2 = previous_vob.GetBranchValue2();
 
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
+              double v1 = current_vob.GetBranchValue1();
+              double v2 = current_vob.GetBranchValue2();
               if (v1 == v2) {
                 state &= 0b01;
               } else {
@@ -159,7 +162,7 @@ public class TracePairComparator {
                       {
                         double gap = v1 - v2;
                         if (gap != 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -168,7 +171,7 @@ public class TracePairComparator {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -179,7 +182,7 @@ public class TracePairComparator {
               }
             }
             break;
-            // ge, ge 0
+            // ge, ge 0 *2
           case "I$>=":
           case "IZ$>=":
             {
@@ -190,8 +193,8 @@ public class TracePairComparator {
               double prev_v1 = previous_vob.GetBranchValue1();
               double prev_v2 = previous_vob.GetBranchValue2();
 
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
+              double v1 = current_vob.GetBranchValue1();
+              double v2 = current_vob.GetBranchValue2();
               if (v1 >= v2) {
                 state &= 0b10;
               } else {
@@ -209,7 +212,7 @@ public class TracePairComparator {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap < 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -218,7 +221,7 @@ public class TracePairComparator {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -241,8 +244,8 @@ public class TracePairComparator {
                 double prev_v1 = previous_vob.GetBranchValue1();
                 double prev_v2 = previous_vob.GetBranchValue2();
 
-                double v1 = vob.GetBranchValue1();
-                double v2 = vob.GetBranchValue2();
+                double v1 = current_vob.GetBranchValue1();
+                double v2 = current_vob.GetBranchValue2();
                 if (v1 <= v2) {
                   state &= 0b01;
                 } else {
@@ -260,7 +263,7 @@ public class TracePairComparator {
                           double gap = v1 - v2;
                           double prev_gap = prev_v1 - prev_v2;
                           if (prev_gap - gap < 0) {
-                            influence.put(sig, 1);
+                            influence.put(sig, 1.);
                           }
                         }
                         break;
@@ -269,7 +272,7 @@ public class TracePairComparator {
                           double gap = v1 - v2;
                           double prev_gap = prev_v1 - prev_v2;
                           if (prev_gap - gap > 0) {
-                            influence.put(sig, 1);
+                            influence.put(sig, 1.);
                           }
                         }
                         break;
@@ -292,8 +295,8 @@ public class TracePairComparator {
               double prev_v1 = previous_vob.GetBranchValue1();
               double prev_v2 = previous_vob.GetBranchValue2();
 
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
+              double v1 = current_vob.GetBranchValue1();
+              double v2 = current_vob.GetBranchValue2();
               if (v1 > v2) {
                 state &= 0b10;
               } else {
@@ -311,7 +314,7 @@ public class TracePairComparator {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap < 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -320,7 +323,7 @@ public class TracePairComparator {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -342,8 +345,8 @@ public class TracePairComparator {
               double prev_v1 = previous_vob.GetBranchValue1();
               double prev_v2 = previous_vob.GetBranchValue2();
 
-              double v1 = vob.GetBranchValue1();
-              double v2 = vob.GetBranchValue2();
+              double v1 = current_vob.GetBranchValue1();
+              double v2 = current_vob.GetBranchValue2();
               if (v1 < v2) {
                 state &= 0b01;
               } else {
@@ -361,7 +364,7 @@ public class TracePairComparator {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap < 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -370,7 +373,7 @@ public class TracePairComparator {
                         double gap = v1 - v2;
                         double prev_gap = prev_v1 - prev_v2;
                         if (prev_gap - gap > 0) {
-                          influence.put(sig, 1);
+                          influence.put(sig, 1.);
                         }
                       }
                       break;
@@ -381,9 +384,9 @@ public class TracePairComparator {
               }
             }
             break;
-        }
-      }
-    }
+        } // switch (current_vob.GetCmpOptr())
+      } // if (current_vob != null)
+    } // for (String sig : pset)
     return influence;
   }
 }

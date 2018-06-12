@@ -6,10 +6,13 @@ import java.util.Map;
 
 public class UseTraceReaderComparator {
   public static void main(String[] args) {
-    TraceReader tr = new TraceReader("seqBefore.txt", "seqAfter.txt");
+    TraceReader tr = new TraceReader("traceLoop-1", "traceLoop-2");
     Map<String, ValuesOfBranch> branchesInfo1 =
-        tr.ReadFromTraceFile(System.getProperty("user.home") + "/trace1.txt");
+        tr.ReadFromTraceFile(System.getProperty("user.home") + "/traceLoop-1.txt");
     Map<String, ValuesOfBranch> branchesInfo2 =
-        tr.ReadFromTraceFile(System.getProperty("user.home") + "/trace2.txt");
+        tr.ReadFromTraceFile(System.getProperty("user.home") + "/traceLoop-2.txt");
+
+    TracePairComparator cmpor = new TracePairComparator();
+
   }
 }

@@ -6,8 +6,16 @@ import java.util.TreeMap;
 /** A data repository class, storing the coverage states of all visited (bytecode) branch nodes. */
 public class BranchNodesState {
 
-  // TODO 替换成 BranchNodeState
+  //
+  /**
+   * TODO 替换成 BranchNodeState
+   *
+   * <p>state 含义：
+   *
+   * <p>0: HasBeenIteratedOver
+   */
   private Map<String, Integer> branch_state = new TreeMap<>();
+
   private Map<BranchNodeID, BranchNodeState> states = new TreeMap<>();
 
   public BranchNodesState() {}
