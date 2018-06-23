@@ -28,6 +28,8 @@ public class ByteExample extends TestCase {
 		if (p > b) {
 			System.err.println("hahhaha.");
 		}
+		String r = "sd";
+		System.err.println(r);
 		System.exit(1);
 	}
 	
