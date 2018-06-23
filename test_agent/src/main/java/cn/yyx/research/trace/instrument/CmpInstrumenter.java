@@ -81,10 +81,10 @@ class MethodAdapter extends MethodVisitor {
 	
 	@Override
 	public void visitVarInsn(int arg0, int arg1) {
-		if (class_name.equals("YYX_RDQ_TEST")) {
+		if (class_name.equals("test/HaHaJ")) {// YYX_RDQ_TEST
 			switch (arg0) {
 			case Opcodes.ISTORE:
-				InstrumentLdcInsn("@Var:int:");
+				InstrumentLdcInsn("@Var#int");
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(Ljava/lang/String;)V", false);
 				InstrumentInsn(Opcodes.DUP);
@@ -94,7 +94,7 @@ class MethodAdapter extends MethodVisitor {
 						"()V", false);
 				break;
 			case Opcodes.LSTORE:
-				InstrumentLdcInsn("@Var:long");
+				InstrumentLdcInsn("@Var#long");
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(Ljava/lang/String;)V", false);
 				InstrumentInsn(Opcodes.DUP2);
@@ -104,7 +104,7 @@ class MethodAdapter extends MethodVisitor {
 						"()V", false);
 				break;
 			case Opcodes.FSTORE:
-				InstrumentLdcInsn("@Var:float");
+				InstrumentLdcInsn("@Var#float");
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(Ljava/lang/String;)V", false);
 				InstrumentInsn(Opcodes.DUP);
@@ -114,7 +114,7 @@ class MethodAdapter extends MethodVisitor {
 						"()V", false);
 				break;
 			case Opcodes.DSTORE:
-				InstrumentLdcInsn("@Var:double");
+				InstrumentLdcInsn("@Var#double");
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(Ljava/lang/String;)V", false);
 				InstrumentInsn(Opcodes.DUP2);
@@ -124,7 +124,7 @@ class MethodAdapter extends MethodVisitor {
 						"()V", false);
 				break;
 			case Opcodes.ASTORE:
-				InstrumentLdcInsn("@Var:");
+				InstrumentLdcInsn("@Var");
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(Ljava/lang/String;)V", false);
 				// TODO here exists some doubts

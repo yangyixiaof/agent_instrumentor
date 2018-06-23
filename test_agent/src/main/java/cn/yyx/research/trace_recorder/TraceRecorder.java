@@ -23,7 +23,7 @@ public class TraceRecorder {
 	}
 	
 	public static void Append(Object x) {
-		buffer.append(x.getClass().getName() + ":" + x == null ? "null" : x.toString() + "#");
+		buffer.append(x.getClass().getName() + "#" + x == null ? "null" : x.toString() + "#");
 	}
 	
 	public static void Append(String x) {
