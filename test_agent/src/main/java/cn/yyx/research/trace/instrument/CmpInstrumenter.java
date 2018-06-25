@@ -67,7 +67,8 @@ public class CmpInstrumenter {
       byte[] b = cw.toByteArray();
 
       // print to file.
-      File file = new File(targetClassFile);
+        File file = new File(targetClassFile);
+        File file = new File("test_materials/transformed.class");
       FileOutputStream fout = new FileOutputStream(file);
       fout.write(b);
       fout.close();
@@ -85,6 +86,12 @@ class ClassAdapter extends ClassVisitor {
   public ClassAdapter(final ClassVisitor cw) {
     super(Opcodes.ASM6, cw);
   }
+  String class_name = null;
+
+  public ClassAdapter(final ClassVisitor cw, String class_name) {
+    super(Opcodes.ASM5, cw);
+    this.class_name = class_name;
+  }
 
   // asm 为啥不搞个 AsmMethod 结构呢？( ﾟ∀。)
   @Override
@@ -99,6 +106,16 @@ class ClassAdapter extends ClassVisitor {
     return mv == null ? null : new MethodAdapter(mv, name, desc, signature);
     // 这个先 visit 再返回，TODO 完整看一遍
   }
+  @Override
+  public MethodVisitor visitMethod(
+      final int access,
+      final String name,
+      final String desc,
+      final String signature,
+      final String[] exceptions) {
+    MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
+    return mv == null ? null : new MethodAdapter(mv, this.class_name);
+  }
 }
 
 class MethodAdapter extends MethodVisitor {
@@ -107,9 +124,11 @@ class MethodAdapter extends MethodVisitor {
   String methodName;
   String methodDesc; // descriptor 更有用些
   String methodSignature; // TODO signature 为何经常是 null？
+    String class_name = null;
 
   public MethodAdapter(final MethodVisitor mv) {
     super(Opcodes.ASM6, mv);
+      this.class_name = class_name;
   }
 
   public MethodAdapter(
@@ -118,7 +137,128 @@ class MethodAdapter extends MethodVisitor {
     this.methodName = methodName;
     this.methodDesc = methodDesc;
     this.methodSignature = methodSignature;
+      this.class_name = class_name;
   }
+
+    @Override
+    public void visitVarInsn(int arg0, int arg1) {
+        if (class_name.equals("YYX_RDQ_TEST")) { //
+            switch (arg0) {
+                case Opcodes.ISTORE:
+                    InstrumentLdcInsn("@Var#int");
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(Ljava/lang/String;)V",
+                            false);
+                    InstrumentInsn(Opcodes.DUP);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(I)V",
+                            false);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "NewLine",
+                            "()V",
+                            false);
+                    break;
+                case Opcodes.LSTORE:
+                    InstrumentLdcInsn("@Var#long");
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(Ljava/lang/String;)V",
+                            false);
+                    InstrumentInsn(Opcodes.DUP2);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(L)V",
+                            false);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "NewLine",
+                            "()V",
+                            false);
+                    break;
+                case Opcodes.FSTORE:
+                    InstrumentLdcInsn("@Var#float");
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(Ljava/lang/String;)V",
+                            false);
+                    InstrumentInsn(Opcodes.DUP);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(F)V",
+                            false);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "NewLine",
+                            "()V",
+                            false);
+                    break;
+                case Opcodes.DSTORE:
+                    InstrumentLdcInsn("@Var#double");
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(Ljava/lang/String;)V",
+                            false);
+                    InstrumentInsn(Opcodes.DUP2);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(D)V",
+                            false);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "NewLine",
+                            "()V",
+                            false);
+                    break;
+                case Opcodes.ASTORE:
+                    InstrumentLdcInsn("@Var");
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(Ljava/lang/String;)V",
+                            false);
+                    // TODO here exists some doubts
+                    InstrumentInsn(Opcodes.DUP);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "Append",
+                            "(Ljava/lang/Object;)V",
+                            false);
+                    InstrumentThroughMethodVisitor(
+                            Opcodes.INVOKESTATIC,
+                            "cn/yyx/research/trace_recorder/TraceRecorder",
+                            "NewLine",
+                            "()V",
+                            false);
+                    break;
+            }
+        }
+        super.visitVarInsn(arg0, arg1);
+    }
 
   @Override
   public void visitCode() {
@@ -410,7 +550,7 @@ class MethodAdapter extends MethodVisitor {
       int opc, String qualified_logger, String method, String signature, boolean itf) {
     // System.out.println("instructed_opc:" + opc + ";qualified_logger:" + qualified_logger +
     // ";method:" + method
-    //		+ ";methodSignature:" + methodSignature);
+    //		+ ";signature:" + signature);
     mv.visitMethodInsn(opc, qualified_logger, method, signature, itf);
   }
 }
