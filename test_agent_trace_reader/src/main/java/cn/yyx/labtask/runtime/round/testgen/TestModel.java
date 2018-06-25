@@ -1,16 +1,14 @@
 package cn.yyx.labtask.runtime.round.testgen;
 
-import cn.yyx.labtask.runtime.memory.state.BranchState;
+import cn.yyx.labtask.runtime.memory.state.BranchNodesState;
 
 public class TestModel {
-	
-	private BranchState state = new BranchState();
-	
-	public TestModel() {
-	}
 
-	public BranchState GetState() {
-		return state;
-	}
-	
+  private BranchNodesState state = new BranchNodesState();
+
+  public TestModel() {}
+
+  public BranchNodesState GetState() {
+    return state;
+  }
 }

@@ -5,7 +5,19 @@
 	<groupId>cn.yyx.labtask</groupId>
 	<artifactId>test_agent_trace_reader</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>7</source>
+                    <target>7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <packaging>jar</packaging>
 
 	<name>test_agent_trace_reader</name>
 	<url>http://maven.apache.org</url>

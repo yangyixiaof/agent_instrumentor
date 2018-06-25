@@ -1,3 +1,7 @@
 /target/
 /DexInstrumentDirectory/
 /InstrumentDirectory/
+
+TraceWorkingDirectory/
+
+test_materials/
