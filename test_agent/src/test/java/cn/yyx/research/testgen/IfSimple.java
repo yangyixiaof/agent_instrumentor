@@ -1,7 +1,5 @@
 package cn.yyx.research.testgen;
 
-import java.util.Scanner;
-
 public class IfSimple {
 
   public static void main(String[] args) {

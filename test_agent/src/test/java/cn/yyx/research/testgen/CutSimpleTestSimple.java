@@ -8,6 +8,7 @@ public class CutSimpleTestSimple {
     CutSimple appMutant0 = new CutSimple();
     int int1 = 114514;
     boolean boolean2 = appMutant0.f(int1);
+    System.out.println(boolean2);
   }
 
   public static void main(String[] args) {

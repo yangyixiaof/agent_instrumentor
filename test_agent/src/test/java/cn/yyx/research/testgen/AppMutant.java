@@ -18,6 +18,7 @@ public class AppMutant {
     AppMutant appMutant0 = new AppMutant();
     int int1 = 145;
     int int2 = appMutant0.cut0(int1);
+    System.out.println(int2);
   }
 
   public static void main(String[] args) {

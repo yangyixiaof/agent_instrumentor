@@ -19,7 +19,7 @@ public class HaHaJ {
     }
   }
 
-  private int testInt(int x) {
+  public int testInt(int x) {
     return x;
   }
 
