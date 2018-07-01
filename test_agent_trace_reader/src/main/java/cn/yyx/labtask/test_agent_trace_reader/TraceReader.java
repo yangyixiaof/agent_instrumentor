@@ -163,8 +163,6 @@ public class TraceReader {
 			Map<String, LinkedList<ValuesOfBranch>> branch_signature) {
 		ValuesOfBranch vob = new ValuesOfBranch(enclosing_method, relative_offset, cmp_optr, branch_value1,
 				branch_value2);
-		// 把执行到该分支结点的 method 调用栈串起来，作为该分支的 branch_signature
-		// 这个标识合理吗？？？TODO
 		String[] target = new String[runtime_stack.size() + 1];
 		runtime_stack.toArray(target);
 		target[runtime_stack.size()] = String.valueOf(relative_offset);
