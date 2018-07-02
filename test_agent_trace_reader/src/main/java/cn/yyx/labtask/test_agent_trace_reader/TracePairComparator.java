@@ -16,7 +16,6 @@ public class TracePairComparator {
 	private BranchNodesState branch_state = new BranchNodesState();
 
 	/**
-	 *
 	 * @param previous_branch_signature
 	 * @param current_branch_signature
 	 * @return
