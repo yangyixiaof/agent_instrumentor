@@ -179,13 +179,12 @@ class MethodAdapter extends MethodVisitor {
 						"NewLine", "()V", false);
 				break;
 			case Opcodes.ASTORE:
-				InstrumentLdcInsn("@Var");
+				InstrumentLdcInsn("@Var#");
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(Ljava/lang/String;)V", false);
-				// TODO here exists some doubts
 				InstrumentInsn(Opcodes.DUP);
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(Ljava/lang/Object;)V", false);
+						"AppendObjectVar", "(Ljava/lang/Object;)V", false);
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"NewLine", "()V", false);
 				break;
@@ -196,13 +195,13 @@ class MethodAdapter extends MethodVisitor {
 
 	@Override
 	public void visitCode() {
-		InstrumentLdcInsn("@Method-Enter:" + methodName + "~" + methodDesc
-		// + "~" + methodSignature
-		);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/String;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-				"()V", false);
+//		InstrumentLdcInsn("@Method-Enter:" + methodName + "~" + methodDesc
+//		// + "~" + methodSignature
+//		);
+//		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+//				"(Ljava/lang/String;)V", false);
+//		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+//				"()V", false);
 		relative_offset = 0;
 		super.visitCode();
 	}

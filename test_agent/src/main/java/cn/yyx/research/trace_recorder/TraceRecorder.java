@@ -20,7 +20,7 @@ public class TraceRecorder {
 		}));
 	}
 
-	public static void Append(Object x) {
+	public static void AppendObjectVar(Object x) {
 		buffer.append(x.getClass().getName() + "#" + x == null ? "null" : x.toString() + "#");
 	}
 
