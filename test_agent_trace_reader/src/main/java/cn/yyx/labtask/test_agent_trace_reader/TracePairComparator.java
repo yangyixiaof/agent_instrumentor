@@ -9,10 +9,7 @@ import java.util.TreeMap;
 import cn.yyx.labtask.runtime.memory.state.BranchNodesState;
 
 /**
- * 比较两个 Trace——这两个 trace 应是一个 sequence 变异前和变异后的版本分别执行产生的——产生 reward。
- *
- * <p>
- * 可以产生
+ * compare two traces —— generating reward.
  */
 public class TracePairComparator {
 
@@ -200,7 +197,8 @@ public class TracePairComparator {
 		return state;
 	}
 
-	private double ComputeInfluenceForBranch(String sig, int state, ValuesOfBranch previous_vob, ValuesOfBranch current_vob) {
+	private double ComputeInfluenceForBranch(String sig, int state, ValuesOfBranch previous_vob,
+			ValuesOfBranch current_vob) {
 		double influence = 0.0;
 		double prev_v1 = previous_vob.GetBranchValue1();
 		double prev_v2 = previous_vob.GetBranchValue2();
