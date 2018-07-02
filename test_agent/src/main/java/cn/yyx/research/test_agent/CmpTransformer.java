@@ -10,9 +10,6 @@ import cn.yyx.research.trace.instrument.CmpInstrumenter;
 
 public class CmpTransformer implements ClassFileTransformer {
 
-	boolean instrumentEnabled = true; // 改成 true 则脏脏地关闭过滤策略
-
-	// 没有使用……准备干啥的？（似乎曾经准备接收 agent 参数） 啊InFlower，过滤吗？
 	private List<String> flowers = new LinkedList<>();
 
 	public CmpTransformer(List<String> flowers) {
@@ -25,10 +22,7 @@ public class CmpTransformer implements ClassFileTransformer {
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-		if (instrumentEnabled) {
-			return CmpInstrumenter.InstrumentOneClass(className, classfileBuffer);
-		}
-		return classfileBuffer; // 不插的原样返回
+		return CmpInstrumenter.InstrumentOneClass(className, classfileBuffer);
 	}
 
 	// protected boolean InFlower(String class_name) {
