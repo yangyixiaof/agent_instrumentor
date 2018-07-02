@@ -10,47 +10,34 @@ import cn.yyx.research.trace.instrument.CmpInstrumenter;
 
 public class CmpTransformer implements ClassFileTransformer {
 
-  boolean instrumentEnabled = true; // 改成 true 则脏脏地关闭过滤策略
+	boolean instrumentEnabled = true; // 改成 true 则脏脏地关闭过滤策略
 
-  // 没有使用……准备干啥的？（似乎曾经准备接收 agent 参数） 啊InFlower，过滤吗？
-  private List<String> flowers = new LinkedList<>();
+	// 没有使用……准备干啥的？（似乎曾经准备接收 agent 参数） 啊InFlower，过滤吗？
+	private List<String> flowers = new LinkedList<>();
 
-  public CmpTransformer(List<String> flowers) {
-    //		for (String fileter : filters) {
-    //			System.out.println("filter:" + fileter);
-    //		}
-    this.flowers.addAll(flowers);
-  }
+	public CmpTransformer(List<String> flowers) {
+		// for (String fileter : filters) {
+		// System.out.println("filter:" + fileter);
+		// }
+		this.flowers.addAll(flowers);
+	}
 
-  @Override
-  public byte[] transform(
-      ClassLoader loader,
-      String className,
-      Class<?> classBeingRedefined,
-      ProtectionDomain protectionDomain,
-      byte[] classfileBuffer)
-      throws IllegalClassFormatException {
-    //		if (InFlower(className)) {
+	@Override
+	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
+			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+		if (instrumentEnabled) {
+			return CmpInstrumenter.InstrumentOneClass(className, classfileBuffer);
+		}
+		return classfileBuffer; // 不插的原样返回
+	}
 
-    if (className.contains("yyx")) { // 超级临时！！！TODO
-      instrumentEnabled = true;
-      System.out.println("遇见 yyx：" + className + ", 本类及之后插桩 enabled！");
-    }
-    if (instrumentEnabled) {
-      return CmpInstrumenter.InstrumentOneClass(className, classfileBuffer);
-    }
-
-    //		}
-    return classfileBuffer; // 不插的原样返回
-  }
-
-  //	protected boolean InFlower(String class_name) {
-  //		for (String flower : flowers) {
-  //			if (class_name.startsWith(flower)) {
-  //				return true;
-  //			}
-  //		}
-  //		return false;
-  //	}
+	// protected boolean InFlower(String class_name) {
+	// for (String flower : flowers) {
+	// if (class_name.startsWith(flower)) {
+	// return true;
+	// }
+	// }
+	// return false;
+	// }
 
 }
