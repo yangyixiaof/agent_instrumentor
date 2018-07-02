@@ -201,9 +201,7 @@ class MethodAdapter extends MethodVisitor {
 				"(Ljava/lang/String;)V", false);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
 				"()V", false);
-		relative_offset = 0; // TODO 啥
-
-		// 原句
+		relative_offset = 0;
 		super.visitCode();
 	}
 
@@ -409,7 +407,7 @@ class MethodAdapter extends MethodVisitor {
 					"Append", "(Ljava/lang/String;)V", false);
 			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 					"NewLine", "()V", false);
-			relative_offset = 0; // TODO 啥
+			relative_offset = 0;
 		}
 
 		super.visitInsn(arg0);
