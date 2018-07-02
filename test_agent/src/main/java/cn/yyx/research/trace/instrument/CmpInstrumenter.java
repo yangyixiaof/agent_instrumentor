@@ -179,7 +179,7 @@ class MethodAdapter extends MethodVisitor {
 						"NewLine", "()V", false);
 				break;
 			case Opcodes.ASTORE:
-				InstrumentLdcInsn("@Var#");
+				InstrumentLdcInsn("@Var");
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(Ljava/lang/String;)V", false);
 				InstrumentInsn(Opcodes.DUP);
