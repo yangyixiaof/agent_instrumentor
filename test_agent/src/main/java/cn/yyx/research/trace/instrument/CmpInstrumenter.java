@@ -84,7 +84,7 @@ public class CmpInstrumenter {
 class ClassAdapter extends ClassVisitor {
 
 	private String class_name = null;
-	
+
 	public ClassAdapter(final ClassVisitor cw, String class_name) {
 		super(Opcodes.ASM5, cw);
 		this.class_name = class_name;
@@ -94,9 +94,9 @@ class ClassAdapter extends ClassVisitor {
 	@Override
 	public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature,
 			final String[] exceptions) {
-//		System.out.println("---- visitMethod, name = " + name);
+		// System.out.println("---- visitMethod, name = " + name);
 		MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
-		return mv == null ? null : new MethodAdapter(mv, this.class_name, name, desc, signature);
+		return mv == null ? null : new MethodAdapter(mv, name, desc, signature, this.class_name);
 	}
 
 	// @Override
@@ -119,13 +119,14 @@ class MethodAdapter extends MethodVisitor {
 	String methodSignature; // TODO signature 为何经常是 null？
 	String class_name = null;
 
-//	public MethodAdapter(final MethodVisitor mv, String class_name) {
-//		super(Opcodes.ASM6, mv);
-//		this.class_name = class_name;
-//	}
+	// public MethodAdapter(final MethodVisitor mv, String class_name) {
+	// super(Opcodes.ASM6, mv);
+	// this.class_name = class_name;
+	// }
 
-	public MethodAdapter(final MethodVisitor mv, String methodName, String methodDesc, String methodSignature, String class_name) {
-		super(Opcodes.ASM6, mv); // 该放前？后？TODO
+	public MethodAdapter(final MethodVisitor mv, String methodName, String methodDesc, String methodSignature,
+			String class_name) {
+		super(Opcodes.ASM6, mv);
 		this.methodName = methodName;
 		this.methodDesc = methodDesc;
 		this.methodSignature = methodSignature;
@@ -134,7 +135,8 @@ class MethodAdapter extends MethodVisitor {
 
 	@Override
 	public void visitVarInsn(int arg0, int arg1) {
-		if (class_name.equals("YYX_RDQ_TEST")) { //
+		// TODO remember to recover to normal
+		if (class_name.endsWith("HaHaJ")) { // class_name.equals("YYX_RDQ_TEST")
 			switch (arg0) {
 			case Opcodes.ISTORE:
 				InstrumentLdcInsn("@Var#int");
