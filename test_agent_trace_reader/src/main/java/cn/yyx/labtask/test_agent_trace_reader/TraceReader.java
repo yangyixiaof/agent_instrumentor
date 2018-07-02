@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.Stack;
-import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -52,9 +49,10 @@ public class TraceReader {
 	 * @param specific_file
 	 * @return
 	 */
-	public Map<String, LinkedList<ValuesOfBranch>> ReadFromTraceFile(String specific_file) {
+	public TraceInfo ReadFromTraceFile(String specific_file) {
 		Stack<String> runtime_stack = new Stack<>();
-		Map<String, LinkedList<ValuesOfBranch>> branch_signature_to_info = new TreeMap<>();
+		TraceInfo ti = new TraceInfo();
+//		Map<String, LinkedList<ValuesOfBranch>> branch_signature_to_info = new TreeMap<>();
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(new File(specific_file)));
@@ -63,16 +61,18 @@ public class TraceReader {
 				currentLineFrom1++;
 				one_line = one_line.trim();
 				if (!one_line.equals("")) {
-					String[] parts = one_line.split(":");
 					if (one_line.startsWith("@Method-Enter:")) {
+						String[] parts = one_line.split(":");
 						enter++;
 						ProcessMethodEnter(parts[1], runtime_stack);
 					}
 					if (one_line.startsWith("@Method-Exit:")) {
+						String[] parts = one_line.split(":");
 						exit++;
 						ProcessMethodExit(parts[1], runtime_stack);
 					}
 					if (one_line.startsWith("@Branch-Operand:")) {
+						String[] parts = one_line.split(":");
 						branch_operand++;
 						try {
 							String operandPart = parts[3];
@@ -83,7 +83,7 @@ public class TraceReader {
 							int relativeOffset = Integer.parseInt(parts[1]);
 							String cmpOperator = parts[2];
 							ProcessBranchOperand(enclosingMethod, relativeOffset, cmpOperator, op1, op2, runtime_stack,
-									branch_signature_to_info);
+									ti);
 						} catch (Exception e) {
 							// System.out.println("lastPop: " + lastPop);
 							// System.out.println("currentLineFrom1 " + currentLineFrom1);
@@ -91,15 +91,21 @@ public class TraceReader {
 							System.exit(1);
 						}
 					}
+					if (one_line.startsWith("@Var")) {
+						String[] parts = one_line.split("#");
+						String var_type = parts[1];
+						String var_value = parts[2];
+						Class<?> var_class = Class.forName(var_type);
+						ti.AddOneReturnOfStatement(new StatementReturn(var_class, var_value));
+					}
 				} else {
 					break;
 				}
 			}
-
-			// // TODO 做啥的？
+			
 			// TraceSerializer.SerializeByIdentification(current_sequence_identifier,
 			// branch_signature_to_info);
-			// // TODO 做啥的？
+			
 			// @SuppressWarnings("unchecked")
 			// Map<String, ValuesOfBranch> previous_branch_signature =
 			// (Map<String, ValuesOfBranch>)
@@ -118,7 +124,7 @@ public class TraceReader {
 				}
 			}
 		}
-		return branch_signature_to_info;
+		return ti;
 	}
 
 	private void ProcessMethodEnter(String method_name, Stack<String> runtime_stack) {
@@ -160,18 +166,13 @@ public class TraceReader {
 	 */
 	private void ProcessBranchOperand(String enclosing_method, int relative_offset, String cmp_optr,
 			double branch_value1, double branch_value2, Stack<String> runtime_stack,
-			Map<String, LinkedList<ValuesOfBranch>> branch_signature) {
+			TraceInfo ti) {
 		ValuesOfBranch vob = new ValuesOfBranch(enclosing_method, relative_offset, cmp_optr, branch_value1,
 				branch_value2);
 		String[] target = new String[runtime_stack.size() + 1];
 		runtime_stack.toArray(target);
 		target[runtime_stack.size()] = String.valueOf(relative_offset);
 		String catted = StringUtils.join(target, "#");
-		LinkedList<ValuesOfBranch> vob_list = branch_signature.get(catted);
-		if (vob_list == null) {
-			vob_list = new LinkedList<ValuesOfBranch>();
-			branch_signature.put(catted, vob_list);
-		}
-		vob_list.add(vob);
+		ti.AddOneValueOfBranch(catted, vob);
 	}
 }
