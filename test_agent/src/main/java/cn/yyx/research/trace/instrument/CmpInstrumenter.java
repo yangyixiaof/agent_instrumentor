@@ -135,8 +135,7 @@ class MethodAdapter extends MethodVisitor {
 
 	@Override
 	public void visitVarInsn(int arg0, int arg1) {
-		// TODO remember to recover to normal
-		if (class_name.endsWith("HaHaJ")) { // class_name.equals("YYX_RDQ_TEST")
+		if (class_name.equals("YYX_RDQ_TEST") || class_name.endsWith("HaHaJ")) {
 			switch (arg0) {
 			case Opcodes.ISTORE:
 				InstrumentLdcInsn("@Var#int");
