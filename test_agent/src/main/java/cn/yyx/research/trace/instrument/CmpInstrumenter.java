@@ -4,7 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -191,18 +192,24 @@ class MethodAdapter extends MethodVisitor {
 		}
 		super.visitVarInsn(arg0, arg1);
 	}
+	
+//	private void med() {
+//		System.out.println("as");
+//		int a = -1;
+//		System.out.println(a);
+//	}
 
 	@Override
 	public void visitCode() {
-//		InstrumentLdcInsn("@Method-Enter:" + methodName + "~" + methodDesc
-//		// + "~" + methodSignature
-//		);
-//		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-//				"(Ljava/lang/String;)V", false);
-//		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-//				"()V", false);
 		relative_offset = 0;
 		super.visitCode();
+		InstrumentLdcInsn("@Method-Enter:" + this.class_name + "~" + methodName + "~" + methodDesc
+				// + "~" + methodSignature
+				);
+				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+						"(Ljava/lang/String;)V", false);
+				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+						"()V", false);
 	}
 
 	// // owner 是类名！！
@@ -400,7 +407,7 @@ class MethodAdapter extends MethodVisitor {
 				Opcodes.RETURN // return void
 		);
 		if (returns.contains(arg0)) {
-			InstrumentLdcInsn("@Method-Exit:" + methodName + "~" + methodDesc
+			InstrumentLdcInsn("@Method-Exit:" + this.class_name + "~" + methodName + "~" + methodDesc
 			// + "~" + methodSignature
 			);
 			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
