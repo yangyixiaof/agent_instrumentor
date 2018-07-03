@@ -34,9 +34,11 @@ public class HaHaJ2 {
 		try {
 			Class<?> c = Class.forName("cn.yyx.research.trace_recorder.TraceRecorder");
 			Field f = c.getDeclaredField("now_record");
-			Boolean f_v = (Boolean)f.get(null);
+			Boolean f_v1 = (Boolean)f.get(null);
+			System.out.println("testing f_v1:" + f_v1);
 			f.set(null, Boolean.TRUE);
-			System.out.println("testing f_v:" + f_v);
+			Boolean f_v2 = (Boolean)f.get(null);
+			System.out.println("testing f_v2:" + f_v2);
 		} catch (ClassNotFoundException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
