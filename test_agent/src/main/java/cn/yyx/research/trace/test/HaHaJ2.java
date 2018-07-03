@@ -2,7 +2,7 @@ package cn.yyx.research.trace.test;
 
 import java.lang.reflect.Field;
 
-public class HaHaJ {
+public class HaHaJ2 {
 
 	static {
 		int n = 1;
@@ -13,7 +13,7 @@ public class HaHaJ {
 		}
 	}
 
-	public HaHaJ() {
+	public HaHaJ2() {
 	}
 
 	public void test2(int x, int y) {
@@ -34,7 +34,8 @@ public class HaHaJ {
 		try {
 			Class<?> c = Class.forName("cn.yyx.research.trace_recorder.TraceRecorder");
 			Field f = c.getDeclaredField("now_record");
-			Object f_v = f.get(null);
+			Boolean f_v = (Boolean)f.get(null);
+			f.set(null, Boolean.TRUE);
 			System.out.println("testing f_v:" + f_v);
 		} catch (ClassNotFoundException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
@@ -45,6 +46,6 @@ public class HaHaJ {
 		if (args.length > x) {
 			System.err.println("hahah");
 		}
-		new HaHaJ().test2(x, 100);
+		new HaHaJ2().test2(x, 100);
 	}
 }
