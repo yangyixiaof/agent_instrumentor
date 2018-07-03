@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/** Hello world! */
 public class TraceRecorder {
-
+	
+	public static boolean now_record = false;
 	public static String trace_dir;
 	// = System.getProperty("user.home") + "/" + "trace.txt";
 
