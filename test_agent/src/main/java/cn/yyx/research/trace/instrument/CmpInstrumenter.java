@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -116,8 +114,8 @@ class MethodAdapter extends MethodVisitor {
 
 	int relative_offset = 0;
 	String methodName;
-	String methodDesc; // descriptor 更有用些
-	String methodSignature; // TODO signature 为何经常是 null？
+	String methodDesc; // descriptor contains more useful information.
+	String methodSignature; // why signature is often null?
 	String class_name = null;
 
 	// public MethodAdapter(final MethodVisitor mv, String class_name) {
@@ -203,13 +201,13 @@ class MethodAdapter extends MethodVisitor {
 	public void visitCode() {
 		relative_offset = 0;
 		super.visitCode();
-		InstrumentLdcInsn("@Method-Enter:" + this.class_name + "~" + methodName + "~" + methodDesc
-				// + "~" + methodSignature
-				);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-						"(Ljava/lang/String;)V", false);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-						"()V", false);
+//		InstrumentLdcInsn("@Method-Enter:" + this.class_name + "~" + methodName + "~" + methodDesc
+//				// + "~" + methodSignature
+//				);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+//						"(Ljava/lang/String;)V", false);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+//						"()V", false);
 	}
 
 	// // owner 是类名！！
@@ -266,7 +264,7 @@ class MethodAdapter extends MethodVisitor {
 			String second_operand_default_value, boolean take_as_float_point) {
 		// print tag information.
 		relative_offset++;
-		InstrumentLdcInsn("@Branch-Operand:" + relative_offset + ":" + cmp + ":");
+		InstrumentLdcInsn("@Branch-Operand_" + this.class_name + "_" + this.methodName + "_" + this.methodDesc + ":" + relative_offset + ":" + cmp + ":");
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/String;)V", false);
 
@@ -402,21 +400,20 @@ class MethodAdapter extends MethodVisitor {
 
 		// 插到 method 的返回指令之前
 		// IRETURN, LRETURN, FRETURN, DRETURN, ARETURN, RETURN TODO 风险：这些还没见全。
-		List<Integer> returns = Arrays.asList(Opcodes.IRETURN, Opcodes.LRETURN, Opcodes.FRETURN, Opcodes.DRETURN,
-				Opcodes.ARETURN, // return a reference
-				Opcodes.RETURN // return void
-		);
-		if (returns.contains(arg0)) {
-			InstrumentLdcInsn("@Method-Exit:" + this.class_name + "~" + methodName + "~" + methodDesc
-			// + "~" + methodSignature
-			);
-			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-					"Append", "(Ljava/lang/String;)V", false);
-			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-					"NewLine", "()V", false);
-			relative_offset = 0;
-		}
-
+//		List<Integer> returns = Arrays.asList(Opcodes.IRETURN, Opcodes.LRETURN, Opcodes.FRETURN, Opcodes.DRETURN,
+//				Opcodes.ARETURN, // return a reference
+//				Opcodes.RETURN // return void
+//		);
+//		if (returns.contains(arg0)) {
+//			InstrumentLdcInsn("@Method-Exit:" + this.class_name + "~" + methodName + "~" + methodDesc
+//			// + "~" + methodSignature
+//			);
+//			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//					"Append", "(Ljava/lang/String;)V", false);
+//			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//					"NewLine", "()V", false);
+//			relative_offset = 0;
+//		}
 		super.visitInsn(arg0);
 	}
 
