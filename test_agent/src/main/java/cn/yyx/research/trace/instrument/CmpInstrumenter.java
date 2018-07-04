@@ -45,7 +45,6 @@ public class CmpInstrumenter {
 	public static void main(String[] args) {
 		// TestInstrumentOneClass("cn/yyx/research/trace/test/HaHaJ",
 		// "test_materials/HaHaJ.class");
-		// 嘿，只能读到代码目录里的类，读不到测试目录里的类。暂且先 copy 到代码目录 TODO
 		TestInstrumentOneClass("cn/yyx/research/trace/test/IfDNF", "test_materials/IfDNF.class");
 	}
 
