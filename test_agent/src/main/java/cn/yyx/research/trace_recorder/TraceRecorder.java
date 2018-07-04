@@ -54,7 +54,7 @@ public class TraceRecorder {
 
 		FileWriter writer = null;
 		try {
-			System.out.println("buffer.toString():" + buffer.toString());
+//			System.out.println("buffer.toString():" + buffer.toString());
 			writer = new FileWriter(f);
 			writer.write(buffer.toString());
 		} catch (IOException e) {
