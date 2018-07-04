@@ -132,64 +132,64 @@ class MethodAdapter extends MethodVisitor {
 		this.class_name = class_name;
 	}
 
-	@Override
-	public void visitVarInsn(int arg0, int arg1) {
-		if (class_name.equals("YYX_RDQ_TEST") || class_name.endsWith("HaHaJ")) {
-			switch (arg0) {
-			case Opcodes.ISTORE:
-				InstrumentLdcInsn("@Var#int");
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(Ljava/lang/String;)V", false);
-				InstrumentInsn(Opcodes.DUP);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(I)V", false);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"NewLine", "()V", false);
-				break;
-			case Opcodes.LSTORE:
-				InstrumentLdcInsn("@Var#long");
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(Ljava/lang/String;)V", false);
-				InstrumentInsn(Opcodes.DUP2);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(L)V", false);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"NewLine", "()V", false);
-				break;
-			case Opcodes.FSTORE:
-				InstrumentLdcInsn("@Var#float");
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(Ljava/lang/String;)V", false);
-				InstrumentInsn(Opcodes.DUP);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(F)V", false);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"NewLine", "()V", false);
-				break;
-			case Opcodes.DSTORE:
-				InstrumentLdcInsn("@Var#double");
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(Ljava/lang/String;)V", false);
-				InstrumentInsn(Opcodes.DUP2);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(D)V", false);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"NewLine", "()V", false);
-				break;
-			case Opcodes.ASTORE:
-				InstrumentLdcInsn("@Var");
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(Ljava/lang/String;)V", false);
-				InstrumentInsn(Opcodes.DUP);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"AppendObjectVar", "(Ljava/lang/Object;)V", false);
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"NewLine", "()V", false);
-				break;
-			}
-		}
-		super.visitVarInsn(arg0, arg1);
-	}
+//	@Override
+//	public void visitVarInsn(int arg0, int arg1) {
+//		if (class_name.equals("YYX_RDQ_TEST") || class_name.endsWith("HaHaJ")) {
+//			switch (arg0) {
+//			case Opcodes.ISTORE:
+//				InstrumentLdcInsn("@Var#int");
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"Append", "(Ljava/lang/String;)V", false);
+//				InstrumentInsn(Opcodes.DUP);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"Append", "(I)V", false);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"NewLine", "()V", false);
+//				break;
+//			case Opcodes.LSTORE:
+//				InstrumentLdcInsn("@Var#long");
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"Append", "(Ljava/lang/String;)V", false);
+//				InstrumentInsn(Opcodes.DUP2);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"Append", "(L)V", false);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"NewLine", "()V", false);
+//				break;
+//			case Opcodes.FSTORE:
+//				InstrumentLdcInsn("@Var#float");
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"Append", "(Ljava/lang/String;)V", false);
+//				InstrumentInsn(Opcodes.DUP);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"Append", "(F)V", false);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"NewLine", "()V", false);
+//				break;
+//			case Opcodes.DSTORE:
+//				InstrumentLdcInsn("@Var#double");
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"Append", "(Ljava/lang/String;)V", false);
+//				InstrumentInsn(Opcodes.DUP2);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"Append", "(D)V", false);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"NewLine", "()V", false);
+//				break;
+//			case Opcodes.ASTORE:
+//				InstrumentLdcInsn("@Var");
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"Append", "(Ljava/lang/String;)V", false);
+//				InstrumentInsn(Opcodes.DUP);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"AppendObjectVar", "(Ljava/lang/Object;)V", false);
+//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+//						"NewLine", "()V", false);
+//				break;
+//			}
+//		}
+//		super.visitVarInsn(arg0, arg1);
+//	}
 	
 //	private void med() {
 //		System.out.println("as");
@@ -435,4 +435,5 @@ class MethodAdapter extends MethodVisitor {
 		// + ";signature:" + signature);
 		mv.visitMethodInsn(opc, qualified_logger, method, signature, itf);
 	}
+	
 }
