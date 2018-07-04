@@ -397,8 +397,8 @@ class MethodAdapter extends MethodVisitor {
 			PrintBranchTwoValues("F$CMPL", 1, 2, null, true);
 		}
 
-		// 插到 method 的返回指令之前
-		// IRETURN, LRETURN, FRETURN, DRETURN, ARETURN, RETURN TODO 风险：这些还没见全。
+		// insert before method return instruction
+		// IRETURN, LRETURN, FRETURN, DRETURN, ARETURN, RETURN
 //		List<Integer> returns = Arrays.asList(Opcodes.IRETURN, Opcodes.LRETURN, Opcodes.FRETURN, Opcodes.DRETURN,
 //				Opcodes.ARETURN, // return a reference
 //				Opcodes.RETURN // return void

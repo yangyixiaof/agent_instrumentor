@@ -20,6 +20,7 @@ public class CmpTransformer implements ClassFileTransformer {
 		// }
 //		this.flowers.addAll(flowers);
 		forbids.add("sun/");
+		forbids.add("randoop/");
 		forbids.add("java/io/");
 		forbids.add("java/util/concurrent/atomic/");
 	}
