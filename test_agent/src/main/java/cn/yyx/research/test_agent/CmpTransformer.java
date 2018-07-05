@@ -23,12 +23,14 @@ public class CmpTransformer implements ClassFileTransformer {
 		forbids.add("java/lang/");
 		forbids.add("com/google/");
 		forbids.add("com/github/");
+		forbids.add("com/sun/");
 		forbids.add("java/net/");
 		forbids.add("java/nio/");
 		forbids.add("java/security/");
 		forbids.add("java/util/concurrent/atomic/");
 		forbids.add("java/util/jar/");
 		forbids.add("java/util/zip/");
+		forbids.add("javax/");
 		forbids.add("jdk/");
 		forbids.add("org/plumelib/");
 		forbids.add("randoop/");
