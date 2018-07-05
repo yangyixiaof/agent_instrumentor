@@ -19,17 +19,29 @@ public class CmpTransformer implements ClassFileTransformer {
 		// System.out.println("filter:" + fileter);
 		// }
 //		this.flowers.addAll(flowers);
-		forbids.add("sun/");
-		forbids.add("randoop/");
 		forbids.add("java/io/");
+		forbids.add("java/lang/Class");
+		forbids.add("java/lang/ClassValue");
+		forbids.add("java/lang/Package");
+		forbids.add("java/lang/Void");
+		forbids.add("java/lang/invoke/");
+		forbids.add("java/net/");
+		forbids.add("java/nio/");
+		forbids.add("java/security/");
 		forbids.add("java/util/concurrent/atomic/");
+		forbids.add("java/util/jar/");
+		forbids.add("java/util/zip/");
+		forbids.add("jdk/");
+		forbids.add("org/plumelib/");
+		forbids.add("randoop/");
+		forbids.add("sun/");
 	}
 
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 		for (String forbid : forbids) {
-			if (className.startsWith(forbid)) {
+			if (className.startsWith(forbid) || (className.startsWith("java/") && (className.endsWith("Exception") || className.endsWith("Error")))) {
 				return classfileBuffer;
 			}
 		}
