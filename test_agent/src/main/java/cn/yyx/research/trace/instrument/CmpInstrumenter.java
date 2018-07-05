@@ -362,10 +362,10 @@ class MethodAdapter extends MethodVisitor {
 			PrintBranchTwoValues("IZ$<", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFNONNULL) {
-			PrintBranchTwoValues("N$!=", 1, 1, "1", false);
+			PrintBranchTwoValues("N$!=", 1, 1, "0", false);
 		}
 		if (opcode == Opcodes.IFNULL) {
-			PrintBranchTwoValues("N$==", 1, 1, "1", false);
+			PrintBranchTwoValues("N$==", 1, 1, "0", false);
 		}
 		super.visitJumpInsn(opcode, label);
 	}
