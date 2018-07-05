@@ -361,13 +361,13 @@ class MethodAdapter extends MethodVisitor {
 		if (opcode == Opcodes.IFLT) {
 			PrintBranchTwoValues("IZ$<", 1, 1, "0", false);
 		}
-		super.visitJumpInsn(opcode, label); // Why here？TODO yyx let me see see
 		if (opcode == Opcodes.IFNONNULL) {
 			PrintBranchTwoValues("N$!=", 1, 1, "1", false);
 		}
 		if (opcode == Opcodes.IFNULL) {
 			PrintBranchTwoValues("N$==", 1, 1, "1", false);
 		}
+		super.visitJumpInsn(opcode, label);
 	}
 
 	@Override
