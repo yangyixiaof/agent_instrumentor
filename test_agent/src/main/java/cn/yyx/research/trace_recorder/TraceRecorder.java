@@ -8,7 +8,7 @@ public class TraceRecorder {
 	public static String trace_dir = ".";
 	// = System.getProperty("user.home") + "/" + "trace.txt";
 
-	private static StringBuffer buffer = new StringBuffer();
+	public static StringBuffer buffer = new StringBuffer();
 
 	static {
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {

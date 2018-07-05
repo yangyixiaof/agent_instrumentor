@@ -21,8 +21,10 @@ public class CmpTransformer implements ClassFileTransformer {
 //		this.flowers.addAll(flowers);
 		forbids.add("java/io/");
 		forbids.add("java/lang/");
-		forbids.add("com/google/");
+		forbids.add("cern/colt/");
+		forbids.add("cn/yyx/");
 		forbids.add("com/github/");
+		forbids.add("com/google/");
 		forbids.add("com/sun/");
 		forbids.add("java/net/");
 		forbids.add("java/nio/");
