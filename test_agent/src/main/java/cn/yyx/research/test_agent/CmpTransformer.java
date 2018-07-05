@@ -17,7 +17,7 @@ public class CmpTransformer implements ClassFileTransformer {
 
 	public CmpTransformer() {
 		// set up flowers
-		flowers.add("randoop/generation/date/test/SequenceGenerator");
+		flowers.add("randoop/generation/date/test/StaticSimpleBranchFile");
 		// set up forbids
 		forbids.add("java/io/");
 		forbids.add("java/lang/");
