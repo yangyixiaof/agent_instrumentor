@@ -4,6 +4,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,14 +12,13 @@ import cn.yyx.research.trace.instrument.CmpInstrumenter;
 
 public class CmpTransformer implements ClassFileTransformer {
 
-//	private List<String> flowers = new LinkedList<>();
+	private List<String> flowers = new LinkedList<String>();
 	private Set<String> forbids = new HashSet<String>();
 
-	public CmpTransformer(List<String> flowers) {
-		// for (String fileter : filters) {
-		// System.out.println("filter:" + fileter);
-		// }
-//		this.flowers.addAll(flowers);
+	public CmpTransformer() {
+		// set up flowers
+		flowers.add("randoop/generation/date/test/SequenceGenerator");
+		// set up forbids
 		forbids.add("java/io/");
 		forbids.add("java/lang/");
 		forbids.add("cern/colt/");
@@ -42,9 +42,19 @@ public class CmpTransformer implements ClassFileTransformer {
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 			ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-		for (String forbid : forbids) {
-			if (className.startsWith(forbid) || (className.startsWith("java/") && (className.endsWith("Exception") || className.endsWith("Error")))) {
-				return classfileBuffer;
+		boolean must_flow = false;
+		for (String flow : flowers) {
+			if (className.startsWith(flow)) {
+				must_flow = true;
+				break;
+			}
+		}
+		if (!must_flow) {
+			for (String forbid : forbids) {
+				if (className.startsWith(forbid) || (className.startsWith("java/")
+						&& (className.endsWith("Exception") || className.endsWith("Error")))) {
+					return classfileBuffer;
+				}
 			}
 		}
 		return CmpInstrumenter.InstrumentOneClass(className, classfileBuffer);
