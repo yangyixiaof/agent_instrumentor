@@ -20,11 +20,9 @@ public class CmpTransformer implements ClassFileTransformer {
 		// }
 //		this.flowers.addAll(flowers);
 		forbids.add("java/io/");
-		forbids.add("java/lang/Class");
-		forbids.add("java/lang/ClassValue");
-		forbids.add("java/lang/Package");
-		forbids.add("java/lang/Void");
-		forbids.add("java/lang/invoke/");
+		forbids.add("java/lang/");
+		forbids.add("com/google/");
+		forbids.add("com/github/");
 		forbids.add("java/net/");
 		forbids.add("java/nio/");
 		forbids.add("java/security/");
