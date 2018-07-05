@@ -7,7 +7,7 @@ public class OIf {
 	}
 	
 	public static void main(String[] args) {
-		Object o = OIf.ReturnObject();
+		Object o = ReturnObject();
 		if (o == null) {
 			System.out.println("null judgement executed!");
 		}
