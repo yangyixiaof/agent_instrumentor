@@ -21,6 +21,7 @@ public class CmpTransformer implements ClassFileTransformer {
 		// set up forbids
 		forbids.add("java/io/");
 		forbids.add("java/lang/");
+		forbids.add("java/util/ResourceBundle");
 		forbids.add("cern/colt/");
 		forbids.add("cn/yyx/");
 		forbids.add("com/github/");
