@@ -17,19 +17,24 @@ public class CmpTransformer implements ClassFileTransformer {
 
 	public CmpTransformer() {
 		// set up flowers
+		flowers.add("java/lang/String");
 		flowers.add("randoop/generation/date/test/StaticSimpleBranchFile");
 		// set up forbids
 		forbids.add("java/io/");
 		forbids.add("java/lang/");
+		forbids.add("java/text/DecimalFormat");
+		forbids.add("java/text/DecimalFormatSymbols");
 		forbids.add("java/text/spi/");
 		forbids.add("java/util/Date");
 		forbids.add("java/util/Formatter");
 		forbids.add("java/util/function/");
+		forbids.add("java/util/ListResourceBundle");
 		forbids.add("java/util/Locale");
 		forbids.add("java/util/logging/");
 		forbids.add("java/util/Properties");
 		forbids.add("java/util/Random");
 		forbids.add("java/util/ResourceBundle");
+		forbids.add("java/util/ServiceLoader");
 		forbids.add("java/util/spi/");
 		forbids.add("java/util/stream/");
 		forbids.add("java/util/TimeZone");
