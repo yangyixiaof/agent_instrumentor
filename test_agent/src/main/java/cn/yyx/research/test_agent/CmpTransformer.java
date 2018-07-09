@@ -21,7 +21,18 @@ public class CmpTransformer implements ClassFileTransformer {
 		// set up forbids
 		forbids.add("java/io/");
 		forbids.add("java/lang/");
+		forbids.add("java/text/spi/");
+		forbids.add("java/util/Date");
+		forbids.add("java/util/Formatter");
+		forbids.add("java/util/function/");
+		forbids.add("java/util/Locale");
+		forbids.add("java/util/logging/");
+		forbids.add("java/util/Properties");
+		forbids.add("java/util/Random");
 		forbids.add("java/util/ResourceBundle");
+		forbids.add("java/util/spi/");
+		forbids.add("java/util/stream/");
+		forbids.add("java/util/TimeZone");
 		forbids.add("cern/colt/");
 		forbids.add("cn/yyx/");
 		forbids.add("com/github/");
@@ -35,6 +46,7 @@ public class CmpTransformer implements ClassFileTransformer {
 		forbids.add("java/util/zip/");
 		forbids.add("javax/");
 		forbids.add("jdk/");
+		forbids.add("org/apache/commons/");
 		forbids.add("org/plumelib/");
 		forbids.add("randoop/");
 		forbids.add("sun/");
