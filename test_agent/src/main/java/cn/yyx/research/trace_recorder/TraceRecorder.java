@@ -24,7 +24,7 @@ public class TraceRecorder {
 		}
 	}
 
-	public static void Append(String x) {
+	public static void Append(Object x) {
 		if (now_record) {
 			buffer.append(x + "#");
 		}
@@ -61,7 +61,7 @@ public class TraceRecorder {
 	}
 	
 	public static void Flush() {
-		System.out.println("The last TraceRecorder.buffer.toString():" + line_separator + buffer.toString());
+		System.out.println(line_separator + "The last TraceRecorder.buffer.toString():" + line_separator + buffer.toString());
 //		File f = new File(trace_dir + "/" + "trace.txt");
 //		FileWriter writer = null;
 //		try {

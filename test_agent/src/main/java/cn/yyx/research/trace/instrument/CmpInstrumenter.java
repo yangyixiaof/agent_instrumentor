@@ -265,7 +265,7 @@ class MethodAdapter extends MethodVisitor {
 		relative_offset++;
 		InstrumentLdcInsn("@Branch-Operand_" + this.class_name + "_" + this.methodName + "_" + this.methodDesc + ":" + relative_offset + ":" + cmp + ":");
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/String;)V", false);
+				"(Ljava/lang/Object;)V", false);
 
 		// duplicate top of stack.
 		if (num_of_operands == 1) {
@@ -277,7 +277,7 @@ class MethodAdapter extends MethodVisitor {
 			PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
 			InstrumentLdcInsn("" + second_operand_default_value);
 			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-					"Append", "(Ljava/lang/String;)V", false);
+					"Append", "(Ljava/lang/Object;)V", false);
 		} else {
 			if (length_for_two_words == 1) {
 				InstrumentInsn(Opcodes.DUP_X1);
@@ -310,7 +310,7 @@ class MethodAdapter extends MethodVisitor {
 						"Append", "(D)V", false);
 			} else {
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(L)V", false);
+						"Append", "(J)V", false);
 			}
 		}
 	}
@@ -377,6 +377,7 @@ class MethodAdapter extends MethodVisitor {
 
 		// long
 		if (arg0 == Opcodes.LCMP) {
+//			System.out.println("executed! LCMP");
 			PrintBranchTwoValues("L$CMP", 2, 2, null, false);
 		}
 
