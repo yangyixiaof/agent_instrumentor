@@ -55,6 +55,7 @@ public class CmpTransformer implements ClassFileTransformer {
 		forbids.add("javax/");
 		forbids.add("jdk/");
 		forbids.add("org/apache/commons/");
+		forbids.add("org/eclipse/");
 		forbids.add("org/plumelib/");
 		forbids.add("randoop/");
 		forbids.add("sun/");
