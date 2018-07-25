@@ -20,17 +20,28 @@ public class CmpTransformer implements ClassFileTransformer {
 		flowers.add("java/lang/String");
 		flowers.add("randoop/generation/date/test/StaticSimpleBranchFile");
 		// set up forbids
+		forbids.add("cern/colt/");
+		forbids.add("cn/yyx/");
+		forbids.add("com/github/");
+		forbids.add("com/google/");
+		forbids.add("com/sun/");
 		forbids.add("java/io/");
-		
 		forbids.add("java/lang/");
+		forbids.add("java/net/");
+		forbids.add("java/nio/");
+		forbids.add("java/security/");
+		forbids.add("java/sql/");
+		forbids.add("java/text/");
 		forbids.add("java/text/DecimalFormat");
 		forbids.add("java/text/DecimalFormatSymbols");
 		forbids.add("java/text/spi/");
 		forbids.add("java/util/Currency");
+		forbids.add("java/util/concurrent/");
 		forbids.add("java/util/Date");
 		forbids.add("java/util/Formattable");
 		forbids.add("java/util/Formatter");
 		forbids.add("java/util/function/");
+		forbids.add("java/util/jar/");
 		forbids.add("java/util/ListResourceBundle");
 		forbids.add("java/util/Locale");
 		forbids.add("java/util/logging/");
@@ -41,16 +52,6 @@ public class CmpTransformer implements ClassFileTransformer {
 		forbids.add("java/util/spi/");
 		forbids.add("java/util/stream/");
 		forbids.add("java/util/TimeZone");
-		forbids.add("cern/colt/");
-		forbids.add("cn/yyx/");
-		forbids.add("com/github/");
-		forbids.add("com/google/");
-		forbids.add("com/sun/");
-		forbids.add("java/net/");
-		forbids.add("java/nio/");
-		forbids.add("java/security/");
-		forbids.add("java/util/concurrent/atomic/");
-		forbids.add("java/util/jar/");
 		forbids.add("java/util/zip/");
 		forbids.add("javax/");
 		forbids.add("jdk/");
