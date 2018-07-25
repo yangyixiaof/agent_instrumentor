@@ -21,10 +21,12 @@ public class CmpTransformer implements ClassFileTransformer {
 		flowers.add("randoop/generation/date/test/StaticSimpleBranchFile");
 		// set up forbids
 		forbids.add("java/io/");
+		
 		forbids.add("java/lang/");
 		forbids.add("java/text/DecimalFormat");
 		forbids.add("java/text/DecimalFormatSymbols");
 		forbids.add("java/text/spi/");
+		forbids.add("java/util/Currency");
 		forbids.add("java/util/Date");
 		forbids.add("java/util/Formattable");
 		forbids.add("java/util/Formatter");
