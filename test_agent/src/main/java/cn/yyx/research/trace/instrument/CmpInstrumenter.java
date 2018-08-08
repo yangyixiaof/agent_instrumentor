@@ -15,8 +15,6 @@ import org.objectweb.asm.Opcodes;
 public class CmpInstrumenter {
 
 	/**
-	 * 用于 java.lang.instrument 插桩框架。
-	 *
 	 * @param class_name
 	 * @param input_class
 	 * @return
@@ -38,8 +36,6 @@ public class CmpInstrumenter {
 	}
 
 	/**
-	 * 仅为了调起 TestInstrumentOneClass(String,String)。
-	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -49,9 +45,7 @@ public class CmpInstrumenter {
 	}
 
 	/**
-	 * 用 ClassAdapter 所指定的插桩配置，插桩 sourceClassName 输出到文件 targetClassFile。
-	 *
-	 * <p>
+	 * 
 	 * E.g. TestInstrumentOneClass("cn/yyx/research/trace/test/HaHaJ",
 	 * "test_materials/HaHaJ.class");
 	 *
@@ -87,8 +81,7 @@ class ClassAdapter extends ClassVisitor {
 		super(Opcodes.ASM5, cw);
 		this.class_name = class_name;
 	}
-
-	// asm 为啥不搞个 AsmMethod 结构呢？( ﾟ∀。)
+	
 	@Override
 	public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature,
 			final String[] exceptions) {
@@ -441,7 +434,7 @@ class MethodAdapter extends MethodVisitor {
 	public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
 		super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
 //		System.out.println("visitMethodInsn:" + descriptor);
-		if (descriptor != null && !descriptor.trim().endsWith(")V")) {
+		if (descriptor != null && !descriptor.trim().endsWith(")V") && !descriptor.trim().endsWith(")Z") && !descriptor.trim().endsWith(")B") && !descriptor.trim().endsWith(")C") && !descriptor.trim().endsWith(")S") && !descriptor.trim().endsWith(")I") && !descriptor.trim().endsWith(")J") && !descriptor.trim().endsWith(")F") && !descriptor.trim().endsWith(")D")) {
 			PrintObjectAddress();
 		}
 	}
