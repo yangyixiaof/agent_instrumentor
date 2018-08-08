@@ -13,7 +13,9 @@ public class TraceRecorder {
 	static {
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
-				Flush();
+				if (trace_dir == null) {
+					Flush();
+				}
 			}
 		}));
 	}
