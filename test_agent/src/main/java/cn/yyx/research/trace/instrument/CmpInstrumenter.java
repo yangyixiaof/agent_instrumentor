@@ -111,7 +111,8 @@ class ClassAdapter extends ClassVisitor {
 
 class MethodAdapter extends MethodVisitor {
 
-	int relative_offset = 0;
+	int object_relative_offset = 0;
+	int branch_relative_offset = 0;
 	String methodName;
 	String methodDesc; // descriptor contains more useful information.
 	String methodSignature; // why signature is often null?
@@ -198,7 +199,8 @@ class MethodAdapter extends MethodVisitor {
 
 	@Override
 	public void visitCode() {
-		relative_offset = 0;
+		object_relative_offset = 0;
+		branch_relative_offset = 0;
 		super.visitCode();
 //		InstrumentLdcInsn("@Method-Enter:" + this.class_name + "~" + methodName + "~" + methodDesc
 //				// + "~" + methodSignature
@@ -262,8 +264,8 @@ class MethodAdapter extends MethodVisitor {
 	private void PrintBranchTwoValues(String cmp, int length_for_two_words, int num_of_operands,
 			String second_operand_default_value, boolean take_as_float_point) {
 		// print tag information.
-		relative_offset++;
-		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + relative_offset + ":" + cmp + ":");
+		branch_relative_offset++;
+		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + branch_relative_offset + ":" + cmp + ":");
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/Object;)V", false);
 
@@ -316,8 +318,9 @@ class MethodAdapter extends MethodVisitor {
 	}
 	
 	private void PrintObjectAddress() {
+		object_relative_offset++;
 		InstrumentInsn(Opcodes.DUP);
-		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + relative_offset + ":");
+		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + object_relative_offset + ":");
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
 				"(Ljava/lang/Object;)V", false);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
@@ -436,8 +439,11 @@ class MethodAdapter extends MethodVisitor {
 	
 	@Override
 	public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-		System.out.println("visitMethodInsn:" + descriptor);
 		super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+//		System.out.println("visitMethodInsn:" + descriptor);
+		if (descriptor != null && !descriptor.trim().endsWith(")V")) {
+			PrintObjectAddress();
+		}
 	}
 
 	protected void InstrumentInsn(int opc) {
