@@ -20,7 +20,7 @@ public class CmpInstrumenter {
 	 * @return
 	 */
 	public static byte[] InstrumentOneClass(String class_name, byte[] input_class) {
-		System.out.println("class_name:" + class_name);
+		System.out.println("agent instrument class_name:" + class_name);
 		byte[] b = input_class;
 		ByteArrayInputStream is = new ByteArrayInputStream(input_class);
 		try {
@@ -311,7 +311,7 @@ class MethodAdapter extends MethodVisitor {
 	}
 	
 	private void PrintObjectAddress() {
-		System.out.println("executed!");
+//		System.out.println("executed!");
 		object_relative_offset++;
 		InstrumentInsn(Opcodes.DUP);
 		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + object_relative_offset + ":");
