@@ -35,6 +35,7 @@ public class CmpTransformer implements ClassFileTransformer {
 		forbids.add("java/text/DecimalFormat");
 		forbids.add("java/text/DecimalFormatSymbols");
 		forbids.add("java/text/spi/");
+		forbids.add("java/util/");
 		forbids.add("java/util/Currency");
 		forbids.add("java/util/concurrent/");
 		forbids.add("java/util/Date");
