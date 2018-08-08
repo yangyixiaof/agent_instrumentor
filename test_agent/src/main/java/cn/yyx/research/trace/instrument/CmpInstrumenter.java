@@ -428,8 +428,8 @@ class MethodAdapter extends MethodVisitor {
 	@Override
 	public void visitVarInsn(int opcode, int var) {
 		super.visitVarInsn(opcode, var);
-		boolean is_init_with_uninitialized_var = (var == 0) && (this.methodName.equals("<init>") && this.methodName.equals("<clinit>"));
-		if (opcode == Opcodes.ALOAD && is_init_with_uninitialized_var) {
+		boolean is_init_with_uninitialized_var = (var == 0) && this.methodName.equals("<init>");
+		if (opcode == Opcodes.ALOAD && !is_init_with_uninitialized_var) {
 			PrintObjectAddress();
 		}
 	}
