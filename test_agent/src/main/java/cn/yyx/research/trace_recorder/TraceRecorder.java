@@ -5,7 +5,8 @@ public class TraceRecorder {
 	public static final String line_separator = System.getProperty("line.separator");
 	
 	public static boolean now_record = false;
-	public static String trace_dir = ".";
+	public static boolean print_buffer_to_console = false;
+//	public static String trace_dir = ".";
 	// = System.getProperty("user.home") + "/" + "trace.txt";
 
 	public static StringBuffer buffer = new StringBuffer();
@@ -13,8 +14,8 @@ public class TraceRecorder {
 	static {
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
-				if (trace_dir == null) {
-					Flush();
+				if (print_buffer_to_console) {
+					FlushToConsole();
 				}
 			}
 		}));
@@ -70,7 +71,7 @@ public class TraceRecorder {
 		}
 	}
 	
-	public static void Flush() {
+	public static void FlushToConsole() {
 		System.out.println(line_separator + "The last TraceRecorder.buffer.toString():" + line_separator + buffer.toString());
 //		File f = new File(trace_dir + "/" + "trace.txt");
 //		FileWriter writer = null;
