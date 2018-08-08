@@ -41,7 +41,7 @@ public class CmpInstrumenter {
 	public static void main(String[] args) {
 		// TestInstrumentOneClass("cn/yyx/research/trace/test/HaHaJ",
 		// "test_materials/HaHaJ.class");
-		TestInstrumentOneClass("cn/yyx/research/trace/test/IfDNF", "test_materials/IfDNF.class");
+		TestInstrumentOneClass("cn/yyx/research/trace/test/HaHaJ", "test_materials/HaHaJ.class");
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class CmpInstrumenter {
 	public static void TestInstrumentOneClass(String sourceClassName, String targetClassFile) {
 		try {
 			ClassReader cr = new ClassReader(sourceClassName);
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 			ClassVisitor classAdapter = new ClassAdapter(cw, sourceClassName);
 			cr.accept(classAdapter, ClassReader.SKIP_DEBUG);
 			byte[] b = cw.toByteArray();
@@ -428,7 +428,8 @@ class MethodAdapter extends MethodVisitor {
 	@Override
 	public void visitVarInsn(int opcode, int var) {
 		super.visitVarInsn(opcode, var);
-		if (opcode == Opcodes.ALOAD) {
+		boolean is_init_with_uninitialized_var = (var == 0) && (this.methodName.equals("<init>") && this.methodName.equals("<clinit>"));
+		if (opcode == Opcodes.ALOAD && is_init_with_uninitialized_var) {
 			PrintObjectAddress();
 		}
 	}
