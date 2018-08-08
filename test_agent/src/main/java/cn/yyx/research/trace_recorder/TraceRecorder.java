@@ -30,7 +30,6 @@ public class TraceRecorder {
 	public static void AppendObjectAddress(Object x) {
 		if (now_record) {
 			int x_hash_code_like_address = System.identityHashCode(x);
-//			String x_hash_code_like_address = x.toString();
 			buffer.append(x_hash_code_like_address);
 		}
 	}
