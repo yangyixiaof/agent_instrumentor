@@ -23,6 +23,13 @@ public class TraceRecorder {
 			buffer.append(x.getClass().getName() + "#" + (x == null ? "null" : x.toString() + "#"));
 		}
 	}
+	
+	public static void AppendObjectAddress(Object x) {
+		if (now_record) {
+			int x_hash_code_like_address = System.identityHashCode(x);
+			buffer.append(x_hash_code_like_address);
+		}
+	}
 
 	public static void Append(Object x) {
 		if (now_record) {

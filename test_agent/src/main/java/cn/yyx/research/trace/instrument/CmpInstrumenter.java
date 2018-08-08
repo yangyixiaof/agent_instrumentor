@@ -263,7 +263,7 @@ class MethodAdapter extends MethodVisitor {
 			String second_operand_default_value, boolean take_as_float_point) {
 		// print tag information.
 		relative_offset++;
-		InstrumentLdcInsn("@Branch-Operand_" + this.class_name + "_" + this.methodName + "_" + this.methodDesc + ":" + relative_offset + ":" + cmp + ":");
+		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + relative_offset + ":" + cmp + ":");
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/Object;)V", false);
 
@@ -313,6 +313,15 @@ class MethodAdapter extends MethodVisitor {
 						"Append", "(J)V", false);
 			}
 		}
+	}
+	
+	private void PrintObjectAddress() {
+		InstrumentInsn(Opcodes.DUP);
+		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + relative_offset + ":");
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
+				"(Ljava/lang/Object;)V", false);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+				"()V", false);
 	}
 
 	@Override
@@ -415,6 +424,20 @@ class MethodAdapter extends MethodVisitor {
 //			relative_offset = 0;
 //		}
 		super.visitInsn(arg0);
+	}
+	
+	@Override
+	public void visitVarInsn(int opcode, int var) {
+		super.visitVarInsn(opcode, var);
+		if (opcode == Opcodes.ALOAD) {
+			PrintObjectAddress();
+		}
+	}
+	
+	@Override
+	public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
+		System.out.println("visitMethodInsn:" + descriptor);
+		super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
 	}
 
 	protected void InstrumentInsn(int opc) {
