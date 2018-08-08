@@ -311,9 +311,12 @@ class MethodAdapter extends MethodVisitor {
 	}
 	
 	private void PrintObjectAddress() {
+		System.out.println("executed!");
 		object_relative_offset++;
 		InstrumentInsn(Opcodes.DUP);
 		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + object_relative_offset + ":");
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+				"(Ljava/lang/Object;)V", false);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
 				"(Ljava/lang/Object;)V", false);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
@@ -433,7 +436,6 @@ class MethodAdapter extends MethodVisitor {
 	@Override
 	public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
 		super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
-//		System.out.println("visitMethodInsn:" + descriptor);
 		if (descriptor != null && !descriptor.trim().endsWith(")V") && !descriptor.trim().endsWith(")Z") && !descriptor.trim().endsWith(")B") && !descriptor.trim().endsWith(")C") && !descriptor.trim().endsWith(")S") && !descriptor.trim().endsWith(")I") && !descriptor.trim().endsWith(")J") && !descriptor.trim().endsWith(")F") && !descriptor.trim().endsWith(")D")) {
 			PrintObjectAddress();
 		}
