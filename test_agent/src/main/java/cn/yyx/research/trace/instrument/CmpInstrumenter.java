@@ -258,7 +258,7 @@ class MethodAdapter extends MethodVisitor {
 			String second_operand_default_value, boolean take_as_float_point) {
 		// print tag information.
 		branch_relative_offset++;
-		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + branch_relative_offset + ":" + cmp + ":");
+		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + branch_relative_offset + "#" + cmp);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/Object;)V", false);
 
@@ -314,7 +314,7 @@ class MethodAdapter extends MethodVisitor {
 //		System.out.println("executed!");
 		object_relative_offset++;
 		InstrumentInsn(Opcodes.DUP);
-		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + ":" + object_relative_offset + ":");
+		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + object_relative_offset);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/Object;)V", false);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
