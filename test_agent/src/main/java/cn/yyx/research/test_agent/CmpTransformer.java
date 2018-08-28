@@ -28,6 +28,7 @@ public class CmpTransformer implements ClassFileTransformer {
 		forbids.add("com/sun/");
 		forbids.add("java/io/");
 		forbids.add("java/lang/");
+		forbids.add("java/math/");
 		forbids.add("java/net/");
 		forbids.add("java/nio/");
 		forbids.add("java/security/");
