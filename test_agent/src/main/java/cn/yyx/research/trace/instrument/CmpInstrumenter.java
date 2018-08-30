@@ -105,6 +105,7 @@ class ClassAdapter extends ClassVisitor {
 class MethodAdapter extends MethodVisitor {
 
 	int object_relative_offset = 0;
+	int object_cast_relative_offset = 0;
 	int branch_relative_offset = 0;
 	String methodName;
 	String methodDesc; // descriptor contains more useful information.
@@ -193,6 +194,7 @@ class MethodAdapter extends MethodVisitor {
 	@Override
 	public void visitCode() {
 		object_relative_offset = 0;
+		object_cast_relative_offset = 0;
 		branch_relative_offset = 0;
 		super.visitCode();
 //		InstrumentLdcInsn("@Method-Enter:" + this.class_name + "~" + methodName + "~" + methodDesc
@@ -202,6 +204,26 @@ class MethodAdapter extends MethodVisitor {
 //						"(Ljava/lang/String;)V", false);
 //				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
 //						"()V", false);
+	}
+	
+	@Override
+	public void visitTypeInsn(int opcode, String type) {
+		if (opcode == Opcodes.CHECKCAST || opcode == Opcodes.INSTANCEOF) {
+			PrintObjectType(type);
+		}
+		super.visitTypeInsn(opcode, type);
+	}
+	
+	private void PrintObjectType(String type) {
+		object_cast_relative_offset++;
+		InstrumentInsn(Opcodes.DUP);
+		InstrumentLdcInsn("@Object-Type#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + object_cast_relative_offset + "#" + type);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+				"(Ljava/lang/Object;)V", false);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
+				"(Ljava/lang/Object;)V", false);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+				"()V", false);
 	}
 
 	// // owner 是类名！！
@@ -308,19 +330,6 @@ class MethodAdapter extends MethodVisitor {
 						"Append", "(J)V", false);
 			}
 		}
-	}
-	
-	private void PrintObjectAddress() {
-//		System.out.println("executed!");
-		object_relative_offset++;
-		InstrumentInsn(Opcodes.DUP);
-		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + object_relative_offset);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/Object;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
-				"(Ljava/lang/Object;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-				"()V", false);
 	}
 
 	@Override
@@ -440,6 +449,19 @@ class MethodAdapter extends MethodVisitor {
 		if (descriptor != null && !descriptor.trim().endsWith(")V") && !descriptor.trim().endsWith(")Z") && !descriptor.trim().endsWith(")B") && !descriptor.trim().endsWith(")C") && !descriptor.trim().endsWith(")S") && !descriptor.trim().endsWith(")I") && !descriptor.trim().endsWith(")J") && !descriptor.trim().endsWith(")F") && !descriptor.trim().endsWith(")D")) {
 			PrintObjectAddress();
 		}
+	}
+	
+	private void PrintObjectAddress() {
+//		System.out.println("executed!");
+		object_relative_offset++;
+		InstrumentInsn(Opcodes.DUP);
+		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + object_relative_offset);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+				"(Ljava/lang/Object;)V", false);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
+				"(Ljava/lang/Object;)V", false);
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+				"()V", false);
 	}
 
 	protected void InstrumentInsn(int opc) {
