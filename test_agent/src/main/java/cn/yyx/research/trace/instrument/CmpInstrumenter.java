@@ -209,15 +209,22 @@ class MethodAdapter extends MethodVisitor {
 	@Override
 	public void visitTypeInsn(int opcode, String type) {
 		if (opcode == Opcodes.CHECKCAST || opcode == Opcodes.INSTANCEOF) {
-			PrintObjectType(type);
+			String op = null;
+			if (opcode == Opcodes.CHECKCAST) {
+				op = "checkcast";
+			}
+			if (opcode == Opcodes.INSTANCEOF) {
+				op = "instanceof";
+			}
+			PrintObjectType(op, type);
 		}
 		super.visitTypeInsn(opcode, type);
 	}
 	
-	private void PrintObjectType(String type) {
+	private void PrintObjectType(String op, String type) {
 		object_cast_relative_offset++;
 		InstrumentInsn(Opcodes.DUP);
-		InstrumentLdcInsn("@Object-Type#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + object_cast_relative_offset + "#" + type);
+		InstrumentLdcInsn("@Object-Type#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + object_cast_relative_offset + "#" + op + "#" + type);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/Object;)V", false);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
