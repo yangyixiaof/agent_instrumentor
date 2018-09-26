@@ -19,7 +19,7 @@ public class CmpTransformer implements ClassFileTransformer {
 		// set up flowers
 //		flowers.add("java/lang/String");
 		flowers.add("randoop/generation/date/test/");
-		flowers.add("randoop/generation/date/test/resource/");
+//		flowers.add("randoop/generation/date/test/resource/");
 		// set up forbids
 		forbids.add("cern/colt/");
 		forbids.add("cn/yyx/");
