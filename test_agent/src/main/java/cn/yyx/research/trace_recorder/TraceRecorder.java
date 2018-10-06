@@ -76,6 +76,12 @@ public class TraceRecorder {
 		}
 	}
 	
+//	public static void PrintOperationFinish() {
+//		if (now_record) {
+//			buffer.append("$OperationFinish$" + line_separator);
+//		}
+//	}
+	
 	public static void FlushToConsole() {
 		System.out.println(line_separator + "The last TraceRecorder.buffer.toString():" + line_separator + buffer.toString());
 //		File f = new File(trace_dir + "/" + "trace.txt");
