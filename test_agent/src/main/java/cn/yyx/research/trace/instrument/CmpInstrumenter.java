@@ -81,7 +81,7 @@ class ClassAdapter extends ClassVisitor {
 		super(Opcodes.ASM5, cw);
 		this.class_name = class_name;
 	}
-	
+
 	@Override
 	public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature,
 			final String[] exceptions) {
@@ -104,8 +104,8 @@ class ClassAdapter extends ClassVisitor {
 
 class MethodAdapter extends MethodVisitor {
 
-	int object_relative_offset = 0;
-	int object_cast_relative_offset = 0;
+	// int object_relative_offset = 0;
+	// int object_cast_relative_offset = 0;
 	int branch_relative_offset = 0;
 	String methodName;
 	String methodDesc; // descriptor contains more useful information.
@@ -126,112 +126,135 @@ class MethodAdapter extends MethodVisitor {
 		this.class_name = class_name;
 	}
 
-//	@Override
-//	public void visitVarInsn(int arg0, int arg1) {
-//		if (class_name.equals("YYX_RDQ_TEST") || class_name.endsWith("HaHaJ")) {
-//			switch (arg0) {
-//			case Opcodes.ISTORE:
-//				InstrumentLdcInsn("@Var#int");
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"Append", "(Ljava/lang/String;)V", false);
-//				InstrumentInsn(Opcodes.DUP);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"Append", "(I)V", false);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"NewLine", "()V", false);
-//				break;
-//			case Opcodes.LSTORE:
-//				InstrumentLdcInsn("@Var#long");
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"Append", "(Ljava/lang/String;)V", false);
-//				InstrumentInsn(Opcodes.DUP2);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"Append", "(L)V", false);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"NewLine", "()V", false);
-//				break;
-//			case Opcodes.FSTORE:
-//				InstrumentLdcInsn("@Var#float");
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"Append", "(Ljava/lang/String;)V", false);
-//				InstrumentInsn(Opcodes.DUP);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"Append", "(F)V", false);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"NewLine", "()V", false);
-//				break;
-//			case Opcodes.DSTORE:
-//				InstrumentLdcInsn("@Var#double");
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"Append", "(Ljava/lang/String;)V", false);
-//				InstrumentInsn(Opcodes.DUP2);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"Append", "(D)V", false);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"NewLine", "()V", false);
-//				break;
-//			case Opcodes.ASTORE:
-//				InstrumentLdcInsn("@Var");
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"Append", "(Ljava/lang/String;)V", false);
-//				InstrumentInsn(Opcodes.DUP);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"AppendObjectVar", "(Ljava/lang/Object;)V", false);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//						"NewLine", "()V", false);
-//				break;
-//			}
-//		}
-//		super.visitVarInsn(arg0, arg1);
-//	}
-	
-//	private void med() {
-//		System.out.println("as");
-//		int a = -1;
-//		System.out.println(a);
-//	}
+	// @Override
+	// public void visitVarInsn(int arg0, int arg1) {
+	// if (class_name.equals("YYX_RDQ_TEST") || class_name.endsWith("HaHaJ")) {
+	// switch (arg0) {
+	// case Opcodes.ISTORE:
+	// InstrumentLdcInsn("@Var#int");
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "Append", "(Ljava/lang/String;)V", false);
+	// InstrumentInsn(Opcodes.DUP);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "Append", "(I)V", false);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "NewLine", "()V", false);
+	// break;
+	// case Opcodes.LSTORE:
+	// InstrumentLdcInsn("@Var#long");
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "Append", "(Ljava/lang/String;)V", false);
+	// InstrumentInsn(Opcodes.DUP2);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "Append", "(L)V", false);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "NewLine", "()V", false);
+	// break;
+	// case Opcodes.FSTORE:
+	// InstrumentLdcInsn("@Var#float");
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "Append", "(Ljava/lang/String;)V", false);
+	// InstrumentInsn(Opcodes.DUP);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "Append", "(F)V", false);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "NewLine", "()V", false);
+	// break;
+	// case Opcodes.DSTORE:
+	// InstrumentLdcInsn("@Var#double");
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "Append", "(Ljava/lang/String;)V", false);
+	// InstrumentInsn(Opcodes.DUP2);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "Append", "(D)V", false);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "NewLine", "()V", false);
+	// break;
+	// case Opcodes.ASTORE:
+	// InstrumentLdcInsn("@Var");
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "Append", "(Ljava/lang/String;)V", false);
+	// InstrumentInsn(Opcodes.DUP);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "AppendObjectVar", "(Ljava/lang/Object;)V", false);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder",
+	// "NewLine", "()V", false);
+	// break;
+	// }
+	// }
+	// super.visitVarInsn(arg0, arg1);
+	// }
+
+	// private void med() {
+	// System.out.println("as");
+	// int a = -1;
+	// System.out.println(a);
+	// }
 
 	@Override
 	public void visitCode() {
-		object_relative_offset = 0;
-		object_cast_relative_offset = 0;
+		// object_relative_offset = 0;
+		// object_cast_relative_offset = 0;
 		branch_relative_offset = 0;
 		super.visitCode();
-//		InstrumentLdcInsn("@Method-Enter:" + this.class_name + "~" + methodName + "~" + methodDesc
-//				// + "~" + methodSignature
-//				);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-//						"(Ljava/lang/String;)V", false);
-//				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-//						"()V", false);
+		// InstrumentLdcInsn("@Method-Enter:" + this.class_name + "~" + methodName + "~"
+		// + methodDesc
+		// // + "~" + methodSignature
+		// );
+		// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+		// "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+		// "(Ljava/lang/String;)V", false);
+		// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+		// "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+		// "()V", false);
 	}
-	
-	@Override
-	public void visitTypeInsn(int opcode, String type) {
-		if (opcode == Opcodes.CHECKCAST || opcode == Opcodes.INSTANCEOF) {
-			String op = null;
-			if (opcode == Opcodes.CHECKCAST) {
-				op = "checkcast";
-			}
-			if (opcode == Opcodes.INSTANCEOF) {
-				op = "instanceof";
-			}
-			PrintObjectType(op, type);
-		}
-		super.visitTypeInsn(opcode, type);
-	}
-	
-	private void PrintObjectType(String op, String type) {
-		object_cast_relative_offset++;
-		InstrumentInsn(Opcodes.DUP);
-		InstrumentLdcInsn("@Object-Type#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + object_cast_relative_offset + "#" + op + "#" + type);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/Object;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
-				"(Ljava/lang/Object;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-				"()V", false);
-	}
+
+	// @Override
+	// public void visitTypeInsn(int opcode, String type) {
+	// if (opcode == Opcodes.CHECKCAST || opcode == Opcodes.INSTANCEOF) {
+	// String op = null;
+	// if (opcode == Opcodes.CHECKCAST) {
+	// op = "checkcast";
+	// }
+	// if (opcode == Opcodes.INSTANCEOF) {
+	// op = "instanceof";
+	// }
+	// PrintObjectType(op, type);
+	// }
+	// super.visitTypeInsn(opcode, type);
+	// }
+
+	// private void PrintObjectType(String op, String type) {
+	// object_cast_relative_offset++;
+	// InstrumentInsn(Opcodes.DUP);
+	// InstrumentLdcInsn("@Object-Type#" + this.class_name + "#" + this.methodName +
+	// "#" + this.methodDesc + "#" + object_cast_relative_offset + "#" + op + "#" +
+	// type);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+	// "(Ljava/lang/Object;)V", false);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
+	// "(Ljava/lang/Object;)V", false);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+	// "()V", false);
+	// }
 
 	// // owner 是类名！！
 	// @Override
@@ -287,7 +310,8 @@ class MethodAdapter extends MethodVisitor {
 			String second_operand_default_value, boolean take_as_float_point) {
 		// print tag information.
 		branch_relative_offset++;
-		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + branch_relative_offset + "#" + cmp);
+		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#"
+				+ branch_relative_offset + "#" + cmp);
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
 				"(Ljava/lang/Object;)V", false);
 
@@ -401,7 +425,7 @@ class MethodAdapter extends MethodVisitor {
 
 		// long
 		if (arg0 == Opcodes.LCMP) {
-//			System.out.println("executed! LCMP");
+			// System.out.println("executed! LCMP");
 			PrintBranchTwoValues("L$CMP", 2, 2, null, false);
 		}
 
@@ -424,52 +448,66 @@ class MethodAdapter extends MethodVisitor {
 
 		// insert before method return instruction
 		// IRETURN, LRETURN, FRETURN, DRETURN, ARETURN, RETURN
-//		List<Integer> returns = Arrays.asList(Opcodes.IRETURN, Opcodes.LRETURN, Opcodes.FRETURN, Opcodes.DRETURN,
-//				Opcodes.ARETURN, // return a reference
-//				Opcodes.RETURN // return void
-//		);
-//		if (returns.contains(arg0)) {
-//			InstrumentLdcInsn("@Method-Exit:" + this.class_name + "~" + methodName + "~" + methodDesc
-//			// + "~" + methodSignature
-//			);
-//			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//					"Append", "(Ljava/lang/String;)V", false);
-//			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-//					"NewLine", "()V", false);
-//			relative_offset = 0;
-//		}
+		// List<Integer> returns = Arrays.asList(Opcodes.IRETURN, Opcodes.LRETURN,
+		// Opcodes.FRETURN, Opcodes.DRETURN,
+		// Opcodes.ARETURN, // return a reference
+		// Opcodes.RETURN // return void
+		// );
+		// if (returns.contains(arg0)) {
+		// InstrumentLdcInsn("@Method-Exit:" + this.class_name + "~" + methodName + "~"
+		// + methodDesc
+		// // + "~" + methodSignature
+		// );
+		// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+		// "cn/yyx/research/trace_recorder/TraceRecorder",
+		// "Append", "(Ljava/lang/String;)V", false);
+		// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+		// "cn/yyx/research/trace_recorder/TraceRecorder",
+		// "NewLine", "()V", false);
+		// relative_offset = 0;
+		// }
 		super.visitInsn(arg0);
 	}
-	
-	@Override
-	public void visitVarInsn(int opcode, int var) {
-		super.visitVarInsn(opcode, var);
-		boolean is_init_with_uninitialized_var = (var == 0) && this.methodName.equals("<init>");
-		if (opcode == Opcodes.ALOAD && !is_init_with_uninitialized_var) {
-			PrintObjectAddress();
-		}
-	}
-	
-	@Override
-	public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-		super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
-		if (descriptor != null && !descriptor.trim().endsWith(")V") && !descriptor.trim().endsWith(")Z") && !descriptor.trim().endsWith(")B") && !descriptor.trim().endsWith(")C") && !descriptor.trim().endsWith(")S") && !descriptor.trim().endsWith(")I") && !descriptor.trim().endsWith(")J") && !descriptor.trim().endsWith(")F") && !descriptor.trim().endsWith(")D")) {
-			PrintObjectAddress();
-		}
-	}
-	
-	private void PrintObjectAddress() {
-//		System.out.println("executed!");
-		object_relative_offset++;
-		InstrumentInsn(Opcodes.DUP);
-		InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#" + object_relative_offset);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/Object;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
-				"(Ljava/lang/Object;)V", false);
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-				"()V", false);
-	}
+
+	// @Override
+	// public void visitVarInsn(int opcode, int var) {
+	// super.visitVarInsn(opcode, var);
+	// boolean is_init_with_uninitialized_var = (var == 0) &&
+	// this.methodName.equals("<init>");
+	// if (opcode == Opcodes.ALOAD && !is_init_with_uninitialized_var) {
+	// PrintObjectAddress();
+	// }
+	// }
+	//
+	// @Override
+	// public void visitMethodInsn(int opcode, String owner, String name, String
+	// descriptor, boolean isInterface) {
+	// super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+	// if (descriptor != null && !descriptor.trim().endsWith(")V") &&
+	// !descriptor.trim().endsWith(")Z") && !descriptor.trim().endsWith(")B") &&
+	// !descriptor.trim().endsWith(")C") && !descriptor.trim().endsWith(")S") &&
+	// !descriptor.trim().endsWith(")I") && !descriptor.trim().endsWith(")J") &&
+	// !descriptor.trim().endsWith(")F") && !descriptor.trim().endsWith(")D")) {
+	// PrintObjectAddress();
+	// }
+	// }
+
+	// private void PrintObjectAddress() {
+	// System.out.println("executed!");
+	// object_relative_offset++;
+	// InstrumentInsn(Opcodes.DUP);
+	// InstrumentLdcInsn("@Object-Address#" + this.class_name + "#" +
+	// this.methodName + "#" + this.methodDesc + "#" + object_relative_offset);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
+	// "(Ljava/lang/Object;)V", false);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder", "AppendObjectAddress",
+	// "(Ljava/lang/Object;)V", false);
+	// InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC,
+	// "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
+	// "()V", false);
+	// }
 
 	protected void InstrumentInsn(int opc) {
 		// System.out.println("instructed_insn_opc:" + opc);
@@ -489,5 +527,5 @@ class MethodAdapter extends MethodVisitor {
 		// + ";signature:" + signature);
 		mv.visitMethodInsn(opc, qualified_logger, method, signature, itf);
 	}
-	
+
 }
