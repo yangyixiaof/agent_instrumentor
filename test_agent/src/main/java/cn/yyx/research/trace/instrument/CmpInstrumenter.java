@@ -311,16 +311,13 @@ class MethodAdapter extends MethodVisitor {
 	
 	private void PrintBranchOneValueWithFixedCandidatesForSwitch(int[] candidates) {
 		branch_relative_offset++;
-		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#"
-				+ branch_relative_offset + "#" + "SWITCH" + "#" + StringUtil.IntArrayJoinToString(candidates, '#'));
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "Append",
-				"(Ljava/lang/Object;)V", false);
-		
-		InstrumentInsn(Opcodes.DUP);
-		PrintValueAccordingToLength(1, false);
 
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
-				"()V", false);
+		InstrumentInsn(Opcodes.DUP);
+		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#"
+				+ branch_relative_offset + "#" + "SWITCH");
+		InstrumentLdcInsn(StringUtil.IntArrayJoinToString(candidates, '#'));
+		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendSwitchTablesEndWithNewLine",
+				"(ILjava/lang/String;Ljava/lang/String;)V", false);
 	}
 
 	private void PrintBranchTwoValues(String cmp, int length_for_two_words, int num_of_operands,

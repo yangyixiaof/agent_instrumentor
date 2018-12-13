@@ -33,6 +33,17 @@ public class TraceRecorder {
 			buffer.append(x_hash_code_like_address);
 		}
 	}
+	
+	public static void AppendSwitchTablesEndWithNewLine(int value, String prefix, String case_values) {
+		String[] cases = case_values.split("#");
+		int i_len = cases.length;
+		for (int i=0; i<i_len; i++) {
+			String one_case = cases[i];
+			String one_branch = prefix + i + "#" + value + "#" + one_case + "#";
+			buffer.append(one_branch);
+			buffer.append(line_separator);
+		}
+	}
 
 	public static void Append(Object x) {
 		if (now_record) {
