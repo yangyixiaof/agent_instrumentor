@@ -9,7 +9,7 @@ package cn.yyx.research.bitmap;
  * @author rodykers
  *
  */
-public class Mem {
+public class YYXHaHaStrangeMem {
 	
 	public static final int SIZE = 65536;
 	public static byte mem[] = new byte[SIZE];

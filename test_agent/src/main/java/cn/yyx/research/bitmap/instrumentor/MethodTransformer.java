@@ -18,7 +18,7 @@ import java.util.Random;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
-import cn.yyx.research.bitmap.Mem;
+import cn.yyx.research.bitmap.YYXHaHaStrangeMem;
 
 /**
  * @author rodykers
@@ -53,7 +53,7 @@ public class MethodTransformer extends MethodVisitor {
 		int id;
 		int tries = 0;
 		do {
-			id = r.nextInt(Mem.SIZE);
+			id = r.nextInt(YYXHaHaStrangeMem.SIZE);
 			tries++;
 		} while (tries <= 10 && ids.contains(id));
 		ids.add(id);

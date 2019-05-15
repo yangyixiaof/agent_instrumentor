@@ -91,7 +91,7 @@ public class Instrumentor {
 //				"edu/cmu/sv/kelinci/Kelinci$ApplicationCall.class",
 //				"edu/cmu/sv/kelinci/Kelinci$FuzzRequest.class",
 //				"edu/cmu/sv/kelinci/Kelinci$NullOutputStream.class",
-				"edu/cmu/sv/kelinci/Mem.class"
+				"cn/yyx/research/bitmap/YYXHaHaStrangeMem.class"
 				};
 		for (String resource : resources) {
 			loadAndWriteResource(resource);
