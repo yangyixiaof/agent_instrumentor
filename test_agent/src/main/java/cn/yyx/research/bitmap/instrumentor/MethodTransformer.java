@@ -72,9 +72,9 @@ public class MethodTransformer extends MethodVisitor {
 	 */
 	private void instrumentLocation() {
 		Integer id = getNewLocationId();
-		mv.visitFieldInsn(GETSTATIC, "edu/cmu/sv/kelinci/Mem", "mem", "[B");
+		mv.visitFieldInsn(GETSTATIC, "cn/yyx/research/bitmap/YYXHaHaStrangeMem", "mem", "[B");
 		mv.visitLdcInsn(id);
-		mv.visitFieldInsn(GETSTATIC, "edu/cmu/sv/kelinci/Mem", "prev_location", "I");
+		mv.visitFieldInsn(GETSTATIC, "cn/yyx/research/bitmap/YYXHaHaStrangeMem", "prev_location", "I");
 		mv.visitInsn(IXOR);
 		mv.visitInsn(DUP2);
 		mv.visitInsn(BALOAD);
@@ -83,7 +83,7 @@ public class MethodTransformer extends MethodVisitor {
 		mv.visitInsn(I2B);
 		mv.visitInsn(BASTORE);
 		mv.visitIntInsn(SIPUSH, (id >> 1));
-		mv.visitFieldInsn(PUTSTATIC, "edu/cmu/sv/kelinci/Mem", "prev_location", "I");
+		mv.visitFieldInsn(PUTSTATIC, "cn/yyx/research/bitmap/YYXHaHaStrangeMem", "prev_location", "I");
 	}
 
 	@Override
