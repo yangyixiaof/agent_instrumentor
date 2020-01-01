@@ -20,11 +20,13 @@ public class CmpTransformer implements ClassFileTransformer {
 //		flowers.add("java/lang/String");
 		flowers.add("randoop/generation/date/test/runtime/");
 		flowers.add("randoop/generation/date/test/resource/");
+		flowers.add("java/lang/String");
 		// set up forbids
 		forbids.add("cern/colt/");
 		forbids.add("cn/yyx/");
-		forbids.add("com/github/");
-		forbids.add("com/google/");
+//		forbids.add("com/github/");
+		forbids.add("com/github/javaparser/");
+		forbids.add("com/google/gson/");
 		forbids.add("com/sun/");
 		forbids.add("java/io/");
 		forbids.add("java/lang/");
@@ -34,8 +36,8 @@ public class CmpTransformer implements ClassFileTransformer {
 		forbids.add("java/security/");
 		forbids.add("java/sql/");
 		forbids.add("java/text/");
-		forbids.add("java/text/DecimalFormat");
-		forbids.add("java/text/DecimalFormatSymbols");
+//		forbids.add("java/text/DecimalFormat");
+//		forbids.add("java/text/DecimalFormatSymbols");
 		forbids.add("java/text/spi/");
 		forbids.add("java/util/");
 		forbids.add("java/util/Currency");
@@ -58,8 +60,13 @@ public class CmpTransformer implements ClassFileTransformer {
 		forbids.add("java/util/zip/");
 		forbids.add("javax/");
 		forbids.add("jdk/");
+		forbids.add("junit/");
 		forbids.add("org/apache/commons/");
 		forbids.add("org/eclipse/");
+		forbids.add("org/hamcrest/");
+		forbids.add("org/junit/");
+		forbids.add("org/kohsuke/");
+		forbids.add("org/objectweb/");
 		forbids.add("org/plumelib/");
 		forbids.add("randoop/");
 		forbids.add("sun/");

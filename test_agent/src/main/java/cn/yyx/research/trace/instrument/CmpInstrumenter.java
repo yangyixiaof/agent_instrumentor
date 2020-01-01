@@ -12,9 +12,6 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import cn.yyx.research.util.ArrayUtil;
-import cn.yyx.research.util.StringUtil;
-
 public class CmpInstrumenter {
 
 	/**
@@ -309,16 +306,16 @@ class MethodAdapter extends MethodVisitor {
 	// relative_offset = 0;
 	// }
 	
-	private void PrintBranchOneValueWithFixedCandidatesForSwitch(int[] candidates) {
-		branch_relative_offset++;
-
-		InstrumentInsn(Opcodes.DUP);
-		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#"
-				+ branch_relative_offset + "#" + "SWITCH");
-		InstrumentLdcInsn(StringUtil.IntArrayJoinToString(candidates, '#'));
-		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendSwitchTablesEndWithNewLine",
-				"(ILjava/lang/String;Ljava/lang/String;)V", false);
-	}
+//	private void PrintBranchOneValueWithFixedCandidatesForSwitch(int[] candidates) {
+//		branch_relative_offset++;
+//
+//		InstrumentInsn(Opcodes.DUP);
+//		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#"
+//				+ branch_relative_offset + "#" + "SWITCH");
+//		InstrumentLdcInsn(StringUtil.IntArrayJoinToString(candidates, '#'));
+//		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "AppendSwitchTablesEndWithNewLine",
+//				"(ILjava/lang/String;Ljava/lang/String;)V", false);
+//	}
 
 	private void PrintBranchTwoValues(String cmp, int length_for_two_words, int num_of_operands,
 			String second_operand_default_value, boolean take_as_float_point) {
@@ -483,17 +480,17 @@ class MethodAdapter extends MethodVisitor {
 		super.visitInsn(arg0);
 	}
 	
-	@Override
-	public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels) {
-		PrintBranchOneValueWithFixedCandidatesForSwitch(ArrayUtil.GenerateIntArrayAccordingToMinMaxValue(min, max));
-		super.visitTableSwitchInsn(min, max, dflt, labels);
-	}
-	
-	@Override
-	public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels) {
-		PrintBranchOneValueWithFixedCandidatesForSwitch(keys);
-		super.visitLookupSwitchInsn(dflt, keys, labels);
-	}
+//	@Override
+//	public void visitTableSwitchInsn(int min, int max, Label dflt, Label... labels) {
+//		PrintBranchOneValueWithFixedCandidatesForSwitch(ArrayUtil.GenerateIntArrayAccordingToMinMaxValue(min, max));
+//		super.visitTableSwitchInsn(min, max, dflt, labels);
+//	}
+//	
+//	@Override
+//	public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels) {
+//		PrintBranchOneValueWithFixedCandidatesForSwitch(keys);
+//		super.visitLookupSwitchInsn(dflt, keys, labels);
+//	}
 	
 	// @Override
 	// public void visitVarInsn(int opcode, int var) {
@@ -555,3 +552,11 @@ class MethodAdapter extends MethodVisitor {
 	}
 
 }
+
+enum TopStackTreat {
+	take_as_non_float,
+	take_as_float,
+	take_as_ref
+}
+
+
