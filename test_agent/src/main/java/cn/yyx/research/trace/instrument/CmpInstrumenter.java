@@ -318,7 +318,7 @@ class MethodAdapter extends MethodVisitor {
 //	}
 
 	private void PrintBranchTwoValues(String cmp, int length_for_two_words, int num_of_operands,
-			String second_operand_default_value, boolean take_as_float_point) {
+			String second_operand_default_value, TopStackTreat treat) {
 		// print tag information.
 		branch_relative_offset++;
 		InstrumentLdcInsn("@Branch-Operand#" + this.class_name + "#" + this.methodName + "#" + this.methodDesc + "#"
@@ -333,43 +333,61 @@ class MethodAdapter extends MethodVisitor {
 			} else {
 				InstrumentInsn(Opcodes.DUP2);
 			}
-			PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+			PrintValueAccordingToLength(length_for_two_words, treat);
 			InstrumentLdcInsn("" + second_operand_default_value);
 			InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 					"Append", "(Ljava/lang/Object;)V", false);
 		} else {
 			if (length_for_two_words == 1) {
 				InstrumentInsn(Opcodes.DUP_X1);
-				PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+				PrintValueAccordingToLength(length_for_two_words, treat);
 				InstrumentInsn(Opcodes.DUP_X1);
-				PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+				PrintValueAccordingToLength(length_for_two_words, treat);
 			} else {
 				InstrumentInsn(Opcodes.DUP2_X2);
-				PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+				PrintValueAccordingToLength(length_for_two_words, treat);
 				InstrumentInsn(Opcodes.DUP2_X2);
-				PrintValueAccordingToLength(length_for_two_words, take_as_float_point);
+				PrintValueAccordingToLength(length_for_two_words, treat);
 			}
 		}
 		InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder", "NewLine",
 				"()V", false);
 	}
 
-	private void PrintValueAccordingToLength(int length, boolean take_as_float_point) {
+	private void PrintValueAccordingToLength(int length, TopStackTreat treat) {
 		if (length == 1) {
-			if (take_as_float_point) {
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(F)V", false);
-			} else {
+			switch (treat) {
+			case take_as_int:
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(I)V", false);
+				break;
+			case take_as_float:
+				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+						"Append", "(F)V", false);
+				break;
+			case take_as_ref:
+				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+						"Append", "(Ljava/lang/Object;)V", false);
+				break;
+			default:
+				System.err.println("Strange! Wrong TopStackTreat!");
+				System.exit(1);
+				break;
 			}
 		} else {
-			if (take_as_float_point) {
-				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
-						"Append", "(D)V", false);
-			} else {
+			switch (treat) {
+			case take_as_int:
 				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
 						"Append", "(J)V", false);
+				break;
+			case take_as_float:
+				InstrumentThroughMethodVisitor(Opcodes.INVOKESTATIC, "cn/yyx/research/trace_recorder/TraceRecorder",
+						"Append", "(D)V", false);
+				break;
+			default:
+				System.err.println("Strange! Wrong TopStackTreat!");
+				System.exit(1);
+				break;
 			}
 		}
 	}
@@ -378,53 +396,53 @@ class MethodAdapter extends MethodVisitor {
 	public void visitJumpInsn(int opcode, Label label) {
 		// two operands.
 		if (opcode == Opcodes.IF_ICMPEQ) {
-			PrintBranchTwoValues("I$==", 1, 2, null, false);
+			PrintBranchTwoValues("I$==", 1, 2, null, TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IF_ICMPNE) {
-			PrintBranchTwoValues("I$!=", 1, 2, null, false);
+			PrintBranchTwoValues("I$!=", 1, 2, null, TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IF_ACMPEQ) {
-			PrintBranchTwoValues("A$==", 1, 2, null, false);
+			PrintBranchTwoValues("A$==", 1, 2, null, TopStackTreat.take_as_ref);
 		}
 		if (opcode == Opcodes.IF_ACMPNE) {
-			PrintBranchTwoValues("A$!=", 1, 2, null, false);
+			PrintBranchTwoValues("A$!=", 1, 2, null, TopStackTreat.take_as_ref);
 		}
 		if (opcode == Opcodes.IF_ICMPGE) {
-			PrintBranchTwoValues("I$>=", 1, 2, null, false);
+			PrintBranchTwoValues("I$>=", 1, 2, null, TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IF_ICMPGT) {
-			PrintBranchTwoValues("I$>", 1, 2, null, false);
+			PrintBranchTwoValues("I$>", 1, 2, null, TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IF_ICMPLE) {
-			PrintBranchTwoValues("I$<=", 1, 2, null, false);
+			PrintBranchTwoValues("I$<=", 1, 2, null, TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IF_ICMPLT) {
-			PrintBranchTwoValues("I$<", 1, 2, null, false);
+			PrintBranchTwoValues("I$<", 1, 2, null, TopStackTreat.take_as_int);
 		}
 		// one operand.
 		if (opcode == Opcodes.IFEQ) {
-			PrintBranchTwoValues("IZ$==", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$==", 1, 1, "0", TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IFNE) {
-			PrintBranchTwoValues("IZ$!=", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$!=", 1, 1, "0", TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IFGE) {
-			PrintBranchTwoValues("IZ$>=", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$>=", 1, 1, "0", TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IFGT) {
-			PrintBranchTwoValues("IZ$>", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$>", 1, 1, "0", TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IFLE) {
-			PrintBranchTwoValues("IZ$<=", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$<=", 1, 1, "0", TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IFLT) {
-			PrintBranchTwoValues("IZ$<", 1, 1, "0", false);
+			PrintBranchTwoValues("IZ$<", 1, 1, "0", TopStackTreat.take_as_int);
 		}
 		if (opcode == Opcodes.IFNONNULL) {
-			PrintBranchTwoValues("N$!=", 1, 1, "0", false);
+			PrintBranchTwoValues("N$!=", 1, 1, "0", TopStackTreat.take_as_ref);
 		}
 		if (opcode == Opcodes.IFNULL) {
-			PrintBranchTwoValues("N$==", 1, 1, "0", false);
+			PrintBranchTwoValues("N$==", 1, 1, "0", TopStackTreat.take_as_ref);
 		}
 		super.visitJumpInsn(opcode, label);
 	}
@@ -437,24 +455,24 @@ class MethodAdapter extends MethodVisitor {
 		// long
 		if (arg0 == Opcodes.LCMP) {
 			// System.out.println("executed! LCMP");
-			PrintBranchTwoValues("L$CMP", 2, 2, null, false);
+			PrintBranchTwoValues("L$CMP", 2, 2, null, TopStackTreat.take_as_int);
 		}
 
 		// double
 		// G version: if at least one of the two operands is NaN, push 1.
 		// L version: if at least one of the two operands is NaN, push -1.
 		if (arg0 == Opcodes.DCMPG) {
-			PrintBranchTwoValues("D$CMPG", 2, 2, null, true);
+			PrintBranchTwoValues("D$CMPG", 2, 2, null, TopStackTreat.take_as_float);
 		}
 		if (arg0 == Opcodes.DCMPL) {
-			PrintBranchTwoValues("D$CMPL", 2, 2, null, true);
+			PrintBranchTwoValues("D$CMPL", 2, 2, null, TopStackTreat.take_as_float);
 		}
 		// float. G/L version like double's
 		if (arg0 == Opcodes.FCMPG) {
-			PrintBranchTwoValues("F$CMPG", 1, 2, null, true);
+			PrintBranchTwoValues("F$CMPG", 1, 2, null, TopStackTreat.take_as_float);
 		}
 		if (arg0 == Opcodes.FCMPL) {
-			PrintBranchTwoValues("F$CMPL", 1, 2, null, true);
+			PrintBranchTwoValues("F$CMPL", 1, 2, null, TopStackTreat.take_as_float);
 		}
 
 		// insert before method return instruction
@@ -554,7 +572,7 @@ class MethodAdapter extends MethodVisitor {
 }
 
 enum TopStackTreat {
-	take_as_non_float,
+	take_as_int,
 	take_as_float,
 	take_as_ref
 }
